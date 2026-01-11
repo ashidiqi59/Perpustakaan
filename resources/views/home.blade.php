@@ -21,8 +21,20 @@
                 <div class="text-amber-500">KOLEKSI BUKU</div>
                 <div class="font-semibold">PERPUSTAKAAN</div>
             </div>
-            <div class="text-[11px] text-neutral-400">
-                CAREER 1943 — 1993
+            <div class="flex gap-2 items-center">
+                @auth
+                    <span class="text-neutral-400">{{ Auth::user()->name }}</span>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="border border-neutral-600 px-3 py-1 hover:bg-neutral-700 transition-colors">
+                            LOGOUT
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="border border-neutral-600 px-3 py-1 hover:bg-neutral-700 transition-colors">
+                        LOGIN
+                    </a>
+                @endauth
             </div>
         </header>
 
