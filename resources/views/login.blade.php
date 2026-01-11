@@ -427,7 +427,7 @@ button:focus {
 					@if ($errors->has('email_or_npm'))
 						<div class="alert">{{ $errors->first('email_or_npm') }}</div>
 					@endif
-					<!-- <span class="remember">Remember me</span> -->
+					<span class="remember">Remember me</span>
 					<span class="forget">Forgot password?</span>
 					<span class="clearfix"></span>
 					<button type="submit">Log In</button>
@@ -465,7 +465,7 @@ button:focus {
 								<div class="alert">{{ $error }}</div>
 							@endforeach
 						@endif
-							<!-- <span class="remember">I accept terms</span>  -->
+							<span class="remember">I accept terms</span> 
 							<span class="clearfix"></span>
 						<button type="submit">Register</button>
 				 </form>
