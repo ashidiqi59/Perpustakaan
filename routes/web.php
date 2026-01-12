@@ -8,6 +8,11 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('/admin', function () {
+    // Halaman admin dashboard
+    return view('admin');
+})->name('admin.dashboard');
+
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');

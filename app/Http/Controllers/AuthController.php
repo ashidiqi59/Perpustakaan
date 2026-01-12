@@ -33,6 +33,12 @@ class AuthController extends Controller
 
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
+            
+            // Redirect berdasarkan role
+            if ($user->isAdmin()) {
+                return redirect()->route('admin.dashboard')->with('success', 'Login berhasil! Selamat datang, Admin.');
+            }
+            
             return redirect()->route('home')->with('success', 'Login berhasil!');
         }
 
@@ -66,6 +72,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => User::ROLE_PENGUNJUNG, 
         ]);
 
         Auth::login($user);

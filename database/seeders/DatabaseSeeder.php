@@ -15,14 +15,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create admin account
         User::factory()->create([
             'npm' => '12345678',
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
-            'password' => 'password123',
+            'password' => 'Password12',
+            'role' => User::ROLE_ADMIN,
         ]);
-        
-        
-        User::factory(5)->create();
+
+        // Create visitor accounts
+        User::factory()->create([
+            'npm' => '714250017',
+            'name' => 'Riko Rizky',
+            'email' => 'rikorizky20@gmail.com',
+            'password' => 'Mautauaja12',
+            'role' => User::ROLE_PENGUNJUNG,
+        ]);
     }
 }
