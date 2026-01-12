@@ -17,8 +17,8 @@
                 
                 <!-- Navigation Links -->
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-900 font-semibold border-b-2 border-library-primary pb-1">Beranda</a>
-                    <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Koleksi</a>
+                    <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">Beranda</a>
+                    <a href="{{ route('books.collection') }}" class="{{ request()->routeIs('books.collection') || request()->routeIs('books.show') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">Koleksi</a>
                     <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Peminjaman</a>
                     <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Tentang</a>
                     <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Kontak</a>

@@ -136,6 +136,35 @@ class BookController extends Controller
     }
 
     /**
+     * Display all books collection for visitors (public).
+     */
+    public function collection(Request $request)
+    {
+        $search = $request->search ?? '';
+        $category = $request->category ?? '';
+        
+        $query = Book::query();
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('author', 'like', "%{$search}%")
+                  ->orWhere('isbn', 'like', "%{$search}%")
+                  ->orWhere('publisher', 'like', "%{$search}%");
+            });
+        }
+        
+        if ($category) {
+            $query->where('category', $category);
+        }
+        
+        $books = $query->latest()->paginate(12);
+        $categories = Book::select('category')->distinct()->pluck('category')->filter();
+        
+        return view('books.collection', compact('books', 'categories', 'search', 'category'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Book $book)

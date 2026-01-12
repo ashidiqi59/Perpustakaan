@@ -9,6 +9,9 @@ Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 // Public Book Routes
 Route::get('/books/{book}', [BookController::class, 'publicShow'])->name('books.show');
 
+// Public Collection Route
+Route::get('/koleksi', [BookController::class, 'collection'])->name('books.collection');
+
 Route::get('/admin', function () {
     return view('admin');
 })->name('admin.dashboard')->middleware('auth');

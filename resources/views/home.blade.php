@@ -257,7 +257,7 @@
             
             @if($books->count() > 0)
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                    @foreach($books as $index => $book)
+                    @foreach($books->take(5) as $index => $book)
                     <a href="{{ route('books.show', $book->id) }}" class="fade-in-up delay-{{ ($index + 1) * 100 }} book-card block group">
                         <div class="bg-white rounded-lg overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
                             <div class="relative">
@@ -286,9 +286,15 @@
                     @endforeach
                 </div>
                 
-                <!-- Pagination -->
+                <!-- View All Button -->
                 <div class="mt-8 flex justify-center">
-                    {{ $books->appends(['search' => $search, 'category' => $category])->links() }}
+                    <a href="{{ route('books.collection') }}" class="px-8 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-semibold">
+                        <i class="fas fa-book"></i>
+                        Lihat Selengkapnya
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
                 </div>
             @else
                 <div class="text-center py-12">

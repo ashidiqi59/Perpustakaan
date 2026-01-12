@@ -24,10 +24,6 @@
                         <i class="fas fa-clipboard-list w-5"></i>
                         Peminjaman
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
-                        <i class="fas fa-chart-bar w-5"></i>
-                        Laporan
-                    </a>
                 </nav>
 
                 <div class="p-4 border-t border-slate-700">
