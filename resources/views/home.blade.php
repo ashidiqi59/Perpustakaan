@@ -258,16 +258,23 @@
             @if($books->count() > 0)
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                     @foreach($books as $index => $book)
-                    <div class="fade-in-up delay-{{ ($index + 1) * 100 }} book-card">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                    <a href="{{ route('books.show', $book->id) }}" class="fade-in-up delay-{{ ($index + 1) * 100 }} book-card block group">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
                             <div class="relative">
                                 <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-64 object-cover">
                                 <div class="absolute top-2 right-2">
                                     <span class="status-badge {{ $book->stock > 0 ? 'status-available' : 'status-borrowed' }}">{{ $book->stock > 0 ? 'Tersedia' : 'Dipinjam' }}</span>
                                 </div>
+                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
+                                    <div class="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                                        <span class="bg-white text-gray-800 px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                                            <i class="fas fa-eye mr-1"></i> Lihat Detail
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="p-4">
-                                <h3 class="font-semibold text-gray-900 mb-1 text-sm line-clamp-2">{{ $book->title }}</h3>
+                                <h3 class="font-semibold text-gray-900 mb-1 text-sm line-clamp-2 group-hover:text-library-primary transition-colors">{{ $book->title }}</h3>
                                 <p class="text-xs text-gray-500 mb-2">{{ $book->author ?: 'Penulis Tidak Diketahui' }}</p>
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs text-gray-400">ISBN: {{ $book->isbn }}</span>
@@ -275,7 +282,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                     @endforeach
                 </div>
                 

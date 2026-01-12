@@ -6,6 +6,9 @@ use App\Http\Controllers\BookController;
 
 Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 
+// Public Book Routes
+Route::get('/books/{book}', [BookController::class, 'publicShow'])->name('books.show');
+
 Route::get('/admin', function () {
     return view('admin');
 })->name('admin.dashboard')->middleware('auth');

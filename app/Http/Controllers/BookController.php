@@ -120,11 +120,19 @@ class BookController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource (for admin).
      */
     public function show(Book $book)
     {
         return view('admin.books.show', compact('book'));
+    }
+
+    /**
+     * Display the specified resource for visitors (public).
+     */
+    public function publicShow(Book $book)
+    {
+        return view('books.show', compact('book'));
     }
 
     /**
