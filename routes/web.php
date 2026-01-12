@@ -5,7 +5,8 @@ use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     // Halaman utama perpustakaan
-    return view('home');
+    $popularBooks = \App\Models\Book::orderBy('stock', 'desc')->take(5)->get();
+    return view('home', compact('popularBooks'));
 })->name('home');
 
 Route::get('/admin', function () {

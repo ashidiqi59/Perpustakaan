@@ -32,5 +32,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'Mautauaja12',
             'role' => User::ROLE_PENGUNJUNG,
         ]);
+
+        $this->call(BooksSeeder::class);
     }
 }

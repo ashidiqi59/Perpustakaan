@@ -16,7 +16,13 @@ return new class extends Migration
             $table->string('isbn')->unique();
             $table->string('title')->nullable();
             $table->string('author')->nullable();
+            $table->string('publisher')->nullable();
+            $table->string('image')->nullable();
             $table->string('shelf_number')->nullable();
+            $table->string('category')->nullable();
+            $table->integer('stock')->nullable();
+            $table->text('description')->nullable();
+            $table->string('language')->nullable();
             $table->date('published_date')->nullable();
             $table->timestamps();
         });
