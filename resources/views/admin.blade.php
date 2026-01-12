@@ -9,48 +9,7 @@
     </head>
     <body class="min-h-screen bg-slate-100 text-slate-800 font-sans">
         <div class="flex h-screen">
-            <!-- SIDEBAR -->
-            <aside class="w-64 bg-slate-900 text-white flex flex-col">
-                <div class="p-6 border-b border-slate-700">
-                    <h1 class="text-xl font-bold text-amber-400">
-                        <i class="fas fa-book-reader mr-2"></i>PERPUSTAKAAN
-                    </h1>
-                    <p class="text-xs text-slate-400 mt-1">Admin Panel</p>
-                </div>
-                
-                <nav class="flex-1 p-4 space-y-2">
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 bg-amber-500 text-slate-900 rounded-lg font-medium">
-                        <i class="fas fa-home w-5"></i>
-                        Dashboard
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
-                        <i class="fas fa-book w-5"></i>
-                        Kelola Buku
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
-                        <i class="fas fa-users w-5"></i>
-                        Kelola Users
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
-                        <i class="fas fa-clipboard-list w-5"></i>
-                        Peminjaman
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
-                        <i class="fas fa-chart-bar w-5"></i>
-                        Laporan
-                    </a>
-                </nav>
-
-                <div class="p-4 border-t border-slate-700">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="flex items-center gap-3 w-full px-4 py-3 text-red-400 hover:bg-slate-800 rounded-lg transition-colors">
-                            <i class="fas fa-sign-out-alt w-5"></i>
-                            Logout
-                        </button>
-                    </form>
-                </div>
-            </aside>
+            @include('components.sidebar')
 
             <!-- MAIN CONTENT -->
             <main class="flex-1 flex flex-col overflow-hidden">
