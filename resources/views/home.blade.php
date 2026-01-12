@@ -220,44 +220,78 @@
         </div>
     </section>
 
-    <!-- Popular Books Section -->
+    <!-- All Books Section -->
     <section class="bg-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center mb-12 fade-in-up">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 fade-in-up gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Koleksi Populer</h2>
-                    <p class="text-gray-600">Buku-buku yang paling banyak dipinjam</p>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Koleksi Buku</h2>
+                    <p class="text-gray-600">Jelajahi koleksi lengkap buku perpustakaan</p>
                 </div>
-                <a href="#" class="text-library-primary font-semibold hover:underline flex items-center gap-2">
-                    Lihat Semua
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </a>
+                
+                <!-- Search & Filter -->
+                <form action="{{ route('home') }}" method="GET" class="flex flex-wrap gap-2">
+                    <div class="relative">
+                        <input type="text" name="search" value="{{ $search }}" placeholder="Cari buku..." 
+                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <select name="category" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Semua Kategori</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat }}" {{ $category == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="px-4 py-2 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-search mr-1"></i> Cari
+                    </button>
+                    @if($search || $category)
+                        <a href="{{ route('home') }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                            <i class="fas fa-times mr-1"></i> Reset
+                        </a>
+                    @endif
+                </form>
             </div>
             
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                @foreach($popularBooks as $index => $book)
-                <div class="fade-in-up delay-{{ ($index + 1) * 100 }} book-card">
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md">
-                        <div class="relative">
-                            <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-64 object-cover">
-                            <div class="absolute top-2 right-2">
-                                <span class="status-badge {{ $book->stock > 0 ? 'status-available' : 'status-borrowed' }}">{{ $book->stock > 0 ? 'Tersedia' : 'Dipinjam' }}</span>
+            @if($books->count() > 0)
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                    @foreach($books as $index => $book)
+                    <div class="fade-in-up delay-{{ ($index + 1) * 100 }} book-card">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                            <div class="relative">
+                                <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-64 object-cover">
+                                <div class="absolute top-2 right-2">
+                                    <span class="status-badge {{ $book->stock > 0 ? 'status-available' : 'status-borrowed' }}">{{ $book->stock > 0 ? 'Tersedia' : 'Dipinjam' }}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-semibold text-gray-900 mb-1 text-sm line-clamp-2">{{ $book->title }}</h3>
-                            <p class="text-xs text-gray-500 mb-2">{{ $book->author ?: 'Penulis Tidak Diketahui' }}</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs text-gray-400">ISBN: {{ $book->isbn }}</span>
-                                <span class="text-xs text-library-primary font-semibold">{{ $book->stock }} tersedia</span>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-900 mb-1 text-sm line-clamp-2">{{ $book->title }}</h3>
+                                <p class="text-xs text-gray-500 mb-2">{{ $book->author ?: 'Penulis Tidak Diketahui' }}</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-400">ISBN: {{ $book->isbn }}</span>
+                                    <span class="text-xs text-library-primary font-semibold">{{ $book->stock }} tersedia</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
-                @endforeach
-            </div>
+                
+                <!-- Pagination -->
+                <div class="mt-8 flex justify-center">
+                    {{ $books->appends(['search' => $search, 'category' => $category])->links() }}
+                </div>
+            @else
+                <div class="text-center py-12">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-book text-gray-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Tidak ada buku</h3>
+                    <p class="text-gray-500">Tidak ada buku yang sesuai dengan pencarian Anda.</p>
+                </div>
+            @endif
         </div>
     </section>
 

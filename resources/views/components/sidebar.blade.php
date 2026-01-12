@@ -8,11 +8,11 @@
                 </div>
                 
                 <nav class="flex-1 p-4 space-y-2">
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 bg-amber-500 text-slate-900 rounded-lg font-medium">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
                         <i class="fas fa-home w-5"></i>
                         Dashboard
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
+                    <a href="{{ route('admin.books.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.books.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
                         <i class="fas fa-book w-5"></i>
                         Kelola Buku
                     </a>

@@ -2,17 +2,24 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookController;
 
-Route::get('/', function () {
-    // Halaman utama perpustakaan
-    $popularBooks = \App\Models\Book::orderBy('stock', 'desc')->take(5)->get();
-    return view('home', compact('popularBooks'));
-})->name('home');
+Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 
 Route::get('/admin', function () {
-    // Halaman admin dashboard
     return view('admin');
-})->name('admin.dashboard');
+})->name('admin.dashboard')->middleware('auth');
+
+// Admin Books Routes (CRUD)
+Route::resource('/admin/books', BookController::class)->names([
+    'index' => 'admin.books.index',
+    'create' => 'admin.books.create',
+    'store' => 'admin.books.store',
+    'show' => 'admin.books.show',
+    'edit' => 'admin.books.edit',
+    'update' => 'admin.books.update',
+    'destroy' => 'admin.books.destroy',
+])->middleware('auth');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
