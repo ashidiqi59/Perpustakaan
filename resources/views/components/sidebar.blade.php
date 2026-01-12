@@ -17,12 +17,12 @@
                         Kelola Buku
                     </a>
                     <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
-                        <i class="fas fa-users w-5"></i>
-                        Kelola Users
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
                         <i class="fas fa-clipboard-list w-5"></i>
                         Peminjaman
+                    </a>
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
+                        <i class="fas fa-users w-5"></i>
+                        Kelola Users
                     </a>
                 </nav>
 

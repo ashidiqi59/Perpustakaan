@@ -5,10 +5,7 @@
     <meta charset="UTF-8">
     <title>Login/Sign up Form with Flip effect</title>
     <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
-<link rel="stylesheet" href="./style.css">
-
-  </head>
-  <style>
+    <style>
 	@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700");
 *, *::after, *::before {
   margin: 0;
@@ -73,17 +70,24 @@ span {
   font-weight: 100;
 }
 
-span.remember {
+/* Checkbox styles */
+.remember-container {
   float: left;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
-span.remember::before {
-  content: "";
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  border: 2px solid #999;
-  vertical-align: top;
-  margin-right: 4px;
+
+.remember-container input[type="checkbox"] {
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+span.remember-text {
+  margin: 0;
+  font-size: 1.2em;
 }
 
 span.forget {
@@ -412,7 +416,13 @@ button:focus {
   border: 1px solid #cfc;
   color: #060;
 }
-  </style>
+
+.kembali {
+  display: block;
+  margin-top: 1em;
+  font-size: 1.2em;
+}
+    </style>
     
   <body>
 
@@ -427,10 +437,17 @@ button:focus {
 					@if ($errors->has('email_or_npm'))
 						<div class="alert">{{ $errors->first('email_or_npm') }}</div>
 					@endif
-					<span class="remember">Remember me</span>
-					<span class="forget">Forgot password?</span>
+					
+					<label class="remember-container">
+						<input type="checkbox" name="remember" id="remember">
+						<span class="remember-text">Remember me</span>
+					</label>
+					
+					<!-- <span class="forget">Forgot password?</span> -->
 					<span class="clearfix"></span>
+					
 					<button type="submit">Log In</button>
+          <a href="{{url('/')}}" class="kembali">Kembali ke Dashboard</a>
 				</form>
 					</div>
 		</div>
@@ -465,14 +482,18 @@ button:focus {
 								<div class="alert">{{ $error }}</div>
 							@endforeach
 						@endif
-							<span class="remember">I accept terms</span> 
-							<span class="clearfix"></span>
+						
+						<label class="remember-container">
+							<input type="checkbox" name="terms" id="terms">
+							<span class="remember-text">I accept terms</span>
+						</label>
+						
+						<span class="clearfix"></span>
 						<button type="submit">Register</button>
 				 </form>
 			</div>		
 		</div>
 </div>
-    <script  src="./script.js"></script>
 
   </body>
   <script>

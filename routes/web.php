@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 
@@ -15,6 +16,15 @@ Route::get('/koleksi', [BookController::class, 'collection'])->name('books.colle
 Route::get('/admin', function () {
     return view('admin');
 })->name('admin.dashboard')->middleware('auth');
+
+// Admin Users Routes (View, Edit, Delete only - NO Create)
+Route::resource('/admin/users', UserController::class)->names([
+    'index' => 'admin.users.index',
+    'edit' => 'admin.users.edit',
+    'update' => 'admin.users.update',
+    'destroy' => 'admin.users.destroy',
+])->middleware('auth');
+// Note: 'create' and 'store' routes are intentionally omitted
 
 // Admin Books Routes (CRUD)
 Route::resource('/admin/books', BookController::class)->names([

@@ -32,7 +32,9 @@ class AuthController extends Controller
                     ->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
+            // Handle remember me
+            $remember = $request->has('remember');
+            Auth::login($user, $remember);
             
             // Redirect berdasarkan role
             if ($user->isAdmin()) {
