@@ -25,7 +25,6 @@ html {
 body {
   height: 100%;
   background: #e9ebee;
-  color: #1d2129;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -139,8 +138,8 @@ button {
   display: block;
   margin: 1em auto;
   border-radius: 40px;
-  border: 1px solid #ff4b2b;
-  background: #ff4b2b;
+  border: 1px solid black;
+  background: linear-gradient(-45deg, #0F2854 30%, #4988C4 100%) no-repeat 0 0/200%;
   color: #fff;
   font-size: 1.2em;
   font-weight: bold;
@@ -242,12 +241,12 @@ button:focus {
 }
 
 .front {
-  background: linear-gradient(-45deg, #FFCF00 0%, #FC4F4F 100%) no-repeat 0 0/200%;
+  background: linear-gradient(-45deg, #0F2854 30%, #4988C4 100%) no-repeat 0 0/200%;
   z-index: 3;
 }
 
 .back {
-  background: linear-gradient(135deg, #FC4F4F 0%, #FFCF00 100%) no-repeat 0 0/200%;
+  background: linear-gradient(135deg, #4988C4 0%, #0F2854 100%) no-repeat 0 0/200%;
   z-index: 2;
 }
 .back .content {
@@ -422,6 +421,62 @@ button:focus {
   margin-top: 1em;
   font-size: 1.2em;
 }
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 40, 84, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-box {
+  background: #fff;
+  padding: 2.5em;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  animation: popupScale 0.3s ease;
+}
+
+.popup-box h2 {
+  font-size: 2.2em;
+  color: #0F2854;
+  margin-bottom: 0.5em;
+}
+
+.popup-box p {
+  font-size: 1.4em;
+  color: #333;
+  margin-bottom: 1.5em;
+}
+
+.popup-box button {
+  border-radius: 30px;
+  padding: 0.7em 2em;
+  background: linear-gradient(-45deg, #0F2854, #4988C4);
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+
+@keyframes popupScale {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
     </style>
     
   <body>
@@ -446,7 +501,8 @@ button:focus {
 					<!-- <span class="forget">Forgot password?</span> -->
 					<span class="clearfix"></span>
 					
-					<button type="submit">Log In</button>
+					<button type="submit" onclick="return validateLogin()">Log In</button>
+
           <a href="{{url('/')}}" class="kembali">Kembali ke Dashboard</a>
 				</form>
 					</div>
@@ -489,15 +545,23 @@ button:focus {
 						</label>
 						
 						<span class="clearfix"></span>
-						<button type="submit">Register</button>
+						<button type="submit" onclick="return validateLogin()">Register</button>
+
 				 </form>
 			</div>		
 		</div>
 </div>
+<div id="popup-alert" class="popup-overlay">
+  <div class="popup-box">
+    <h2 id="popup-title">Oops!</h2>
+    <p id="popup-message">Pesan error di sini</p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+</div>
 
   </body>
   <script>
-	const registerButton = document.getElementById('register')
+const registerButton = document.getElementById('register')
 const loginButton = document.getElementById('login')
 const container = document.getElementById('container')
  
@@ -507,6 +571,30 @@ registerButton.onclick = function(){
 }
 loginButton.onclick = function(){
 		container.className = 'close'
+}
+
+function showPopup(title, message) {
+  document.getElementById('popup-title').innerText = title
+  document.getElementById('popup-message').innerText = message
+  document.getElementById('popup-alert').style.display = 'flex'
+}
+
+function closePopup() {
+  document.getElementById('popup-alert').style.display = 'none'
+}
+
+function validateLogin() {
+  const email = document.querySelector('input[name="email_or_npm"]').value
+  const password = document.querySelector('input[name="password"]').value
+
+  if (!email || !password) {
+    showPopup(
+      'Form belum lengkap',
+      'Email/NPM dan password wajib diisi dulu ya.'
+    )
+    return false
+  }
+  return true
 }
   </script>
 </html>
