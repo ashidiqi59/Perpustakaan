@@ -174,11 +174,11 @@
                                         <h3 class="font-medium text-gray-900">{{ $loan->book->title }}</h3>
                                         <p class="text-sm text-gray-600">{{ $loan->book->author }}</p>
                                     </div>
-                                    @if($loan->status === 'peminjaman')
+                                    @if($loan->getActualStatus() === 'peminjaman')
                                         <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded-full font-medium whitespace-nowrap ml-2">
                                             Pinjam
                                         </span>
-                                    @elseif($loan->status === 'dikembalikan')
+                                    @elseif($loan->getActualStatus() === 'dikembalikan')
                                         <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium whitespace-nowrap ml-2">
                                             Kembali
                                         </span>
@@ -201,10 +201,10 @@
                                         <p class="text-gray-600 text-xs">Kembali</p>
                                         <p class="font-medium text-gray-900">{{ $loan->return_date ? $loan->return_date->format('d/m/Y') : '-' }}</p>
                                     </div>
-                                    @if($loan->status === 'peminjaman' && now()->isAfter($loan->due_date))
+                                    @if($loan->getActualStatus() === 'terlambat')
                                         <div>
                                             <p class="text-gray-600 text-xs">Terlambat</p>
-                                            <p class="font-medium text-red-600">{{ $loan->getDaysOverdue() }} hari</p>
+                                            <p class="font-medium text-red-600">{{ $loan->getDaysLate() }} hari</p>
                                         </div>
                                     @endif
                                 </div>

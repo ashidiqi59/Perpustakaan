@@ -122,9 +122,9 @@
                                                 </div>
                                             </div>
                                             <div class="text-right">
-                                                @if($loan->status === 'peminjaman')
+                                                @if($loan->getActualStatus() === 'peminjaman')
                                                     <span class="text-sm text-amber-600 font-medium">Dipinjam</span>
-                                                @elseif($loan->status === 'dikembalikan')
+                                                @elseif($loan->getActualStatus() === 'dikembalikan')
                                                     <span class="text-sm text-green-600 font-medium">Dikembalikan</span>
                                                 @else
                                                     <span class="text-sm text-red-600 font-medium">Terlambat</span>
@@ -158,7 +158,7 @@
                                 <div class="space-y-4">
                                     @foreach($overdueLoansList as $loan)
                                         @php
-                                            $daysOverdue = now()->diffInDays($loan->due_date);
+                                            $daysOverdue = $loan->getDaysLate();
                                         @endphp
                                         <div class="flex items-center justify-between py-3 border-b border-slate-100">
                                             <div class="flex items-center gap-3">

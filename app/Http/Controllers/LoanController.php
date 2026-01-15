@@ -244,7 +244,8 @@ class LoanController extends Controller
         $returnDate = now()->toDateString();
         $dueDate = \Carbon\Carbon::parse($loan->due_date)->toDateString();
         
-        // Determine status: terlambat if return date is after due date
+        // Determine status: terlambat if return date is STRICTLY AFTER due date
+        // Returning ON or BEFORE due date = dikembalikan (tepat waktu)
         $status = $returnDate > $dueDate ? Loan::STATUS_TERLAMBAT : Loan::STATUS_DIKEMBALIKAN;
 
         $loan->update([

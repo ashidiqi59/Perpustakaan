@@ -27,14 +27,14 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Get overdue loans (5 loans)
+        // Get overdue loans (5 loans) - yang berstatus terlambat
         $overdueLoansList = Loan::with(['user', 'book'])
             ->where('status', Loan::STATUS_TERLAMBAT)
             ->orderBy('due_date', 'asc')
             ->take(5)
             ->get();
 
-        // Get currently borrowed books (5 loans)
+        // Get currently borrowed books (5 loans) - yang berstatus peminjaman
         $borrowedBooks = Loan::with(['user', 'book'])
             ->where('status', Loan::STATUS_PEMINJAMAN)
             ->orderBy('due_date', 'asc')
