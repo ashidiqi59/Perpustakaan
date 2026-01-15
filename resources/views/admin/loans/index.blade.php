@@ -43,7 +43,7 @@
                                 <div>
                                     <p class="text-sm text-slate-500">Peminjaman Aktif</p>
                                     <p class="text-2xl font-bold text-slate-800">
-                                        {{ $loans->filter(fn($l) => $l->getActualStatus() === 'peminjaman')->count() }}
+                                        {{ $stats['active'] }}
                                     </p>
                                 </div>
                                 <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
@@ -57,7 +57,7 @@
                                 <div>
                                     <p class="text-sm text-slate-500">Terlambat</p>
                                     <p class="text-2xl font-bold text-slate-800">
-                                        {{ $loans->filter(fn($l) => $l->getActualStatus() === 'terlambat')->count() }}
+                                        {{ $stats['overdue'] }}
                                     </p>
                                 </div>
                                 <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
@@ -71,7 +71,7 @@
                                 <div>
                                     <p class="text-sm text-slate-500">Dikembalikan</p>
                                     <p class="text-2xl font-bold text-slate-800">
-                                        {{ $loans->filter(fn($l) => $l->getActualStatus() === 'dikembalikan')->count() }}
+                                        {{ $stats['returned'] }}
                                     </p>
                                 </div>
                                 <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -212,10 +212,10 @@
                                 <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <i class="fas fa-search text-slate-400 text-2xl"></i>
                                 </div>
-                                <h3 class="text-lg font-semibold text-slate-800 mb-2">Tidak ada peminjaman</h3>
+                                <h3 class="text-lg font-semibold text-slate-800 mb-2">Tidak ada Data</h3>
                                 <p class="text-slate-500">
                                     @if(request('search') || (request('status') && request('status') !== ''))
-                                        Tidak ada peminjaman yang sesuai dengan pencarian.
+                                        Tidak ada data yang sesuai dengan pencarian.
                                     @else
                                         Belum ada peminjaman yang dicatat.
                                     @endif

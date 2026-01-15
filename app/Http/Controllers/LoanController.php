@@ -16,6 +16,21 @@ class LoanController extends Controller
      */
     public function adminIndex(Request $request)
     {
+        // Update status for overdue loans FIRST before getting any counts
+        Loan::where('status', Loan::STATUS_PEMINJAMAN)
+            ->where('due_date', '<', now()->toDateString())
+            ->whereNull('return_date')
+            ->update(['status' => Loan::STATUS_TERLAMBAT]);
+
+        // Get UNFILTERED counts for stats cards (always show all data)
+        $allLoans = Loan::all();
+        $stats = [
+            'active' => $allLoans->filter(fn($l) => $l->getActualStatus() === 'peminjaman')->count(),
+            'overdue' => $allLoans->filter(fn($l) => $l->getActualStatus() === 'terlambat')->count(),
+            'returned' => $allLoans->filter(fn($l) => $l->getActualStatus() === 'dikembalikan')->count(),
+        ];
+
+        // Build filtered query for the table
         $query = Loan::with('user', 'book')->orderBy('loan_date', 'desc');
 
         // Filter by search (nama atau NPM user)
@@ -31,15 +46,9 @@ class LoanController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Update status for overdue loans - menggunakan UPDATE query langsung agar lebih efisien
-        Loan::where('status', Loan::STATUS_PEMINJAMAN)
-            ->where('due_date', '<', now()->toDateString())
-            ->whereNull('return_date')
-            ->update(['status' => Loan::STATUS_TERLAMBAT]);
-
         $loans = $query->paginate(10);
 
-        return view('admin.loans.index', compact('loans'));
+        return view('admin.loans.index', compact('loans', 'stats'));
     }
 
     /**
