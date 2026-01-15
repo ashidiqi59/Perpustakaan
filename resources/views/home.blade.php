@@ -137,19 +137,21 @@
                     </p>
 
                     <!-- Search Bar -->
-                    <div class="bg-white rounded-xl shadow-lg p-2 flex gap-2 mb-6">
+                    <form action="{{ route('home') }}#koleksi" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex gap-2 mb-6">
                         <input
                             type="text"
+                            name="search"
+                            value="{{ $search ?? '' }}"
                             placeholder="Cari judul buku, penulis, atau ISBN..."
                             class="flex-1 px-4 py-3 border-0 focus:outline-none focus:ring-0 text-gray-700"
                         >
-                        <button class="bg-library-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2">
+                        <button type="submit" class="bg-library-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                             Cari
                         </button>
-                    </div>
+                    </form>
 
                     <!-- Quick Stats -->
                     <div class="grid grid-cols-3 gap-4">
@@ -201,11 +203,11 @@
 
             <!-- Scroll Indicator -->
             <div class="flex justify-center mt-12 fade-in-up delay-400">
-                <div class="scroll-indicator">
-                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="#koleksi" class="scroll-indicator cursor-pointer">
+                    <svg class="w-6 h-6 text-gray-400 hover:text-library-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -242,7 +244,7 @@
     </section>
 
     <!-- All Books Section -->
-    <section class="bg-white py-16">
+    <section id="koleksi" class="bg-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 fade-in-up gap-4">
                 <div>

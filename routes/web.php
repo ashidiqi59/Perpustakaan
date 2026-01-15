@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 
@@ -20,9 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/borrow', [LoanController::class, 'borrow'])->name('borrow');
 });
 
-Route::get('/admin', function () {
-    return view('admin');
-})->name('admin.dashboard')->middleware('auth');
+Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
 
 // Admin Users Routes (View, Edit, Delete only - NO Create)
 Route::resource('/admin/users', UserController::class)->names([

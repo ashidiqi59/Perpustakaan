@@ -3,9 +3,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="refresh" content="30">
         <title>Perpustakaan | Admin Dashboard</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script>
+            // Auto-refresh every 30 seconds untuk data terbaru
+            setTimeout(function() {
+                window.location.reload(true);
+            }, 30000);
+        </script>
     </head>
     <body class="min-h-screen bg-slate-100 text-slate-800 font-sans">
         <div class="flex h-screen">
@@ -34,7 +41,7 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-sm text-slate-500">Total Buku</p>
-                                    <p class="text-2xl font-bold text-slate-800">1,245</p>
+                                    <p class="text-2xl font-bold text-slate-800">{{ number_format($totalBooks) }}</p>
                                 </div>
                                 <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-book text-blue-500 text-xl"></i>
@@ -46,7 +53,7 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-sm text-slate-500">Total Users</p>
-                                    <p class="text-2xl font-bold text-slate-800">328</p>
+                                    <p class="text-2xl font-bold text-slate-800">{{ number_format($totalUsers) }}</p>
                                 </div>
                                 <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-users text-green-500 text-xl"></i>
@@ -58,7 +65,7 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-sm text-slate-500">Peminjaman Aktif</p>
-                                    <p class="text-2xl font-bold text-slate-800">56</p>
+                                    <p class="text-2xl font-bold text-slate-800">{{ number_format($activeLoans) }}</p>
                                 </div>
                                 <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-hand-holding text-amber-500 text-xl"></i>
@@ -70,7 +77,7 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-sm text-slate-500">Terlambat</p>
-                                    <p class="text-2xl font-bold text-slate-800">8</p>
+                                    <p class="text-2xl font-bold text-slate-800">{{ number_format($overdueLoans) }}</p>
                                 </div>
                                 <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-exclamation-triangle text-red-500 text-xl"></i>
@@ -89,9 +96,6 @@
                             <a href="{{ route('admin.users.index') }}" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
                                 <i class="fas fa-user-plus mr-2"></i>Kelola User
                             </a>
-                            <a href="{{ route('admin.loans.create') }}" class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors">
-                                <i class="fas fa-clipboard-check mr-2"></i>Tambah Peminjaman
-                            </a>
                             <a href="{{ route('admin.loans.index') }}" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
                                 <i class="fas fa-list mr-2"></i>Kelola Peminjaman
                             </a>
@@ -101,83 +105,175 @@
                     <!-- RECENT ACTIVITY -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-xl shadow-sm p-6">
-                            <h3 class="text-lg font-semibold text-slate-800 mb-4">Peminjaman Terbaru</h3>
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-between py-3 border-b border-slate-100">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-user text-slate-500"></i>
+                            <h3 class="text-lg font-semibold text-slate-800 mb-4">
+                                <i class="fas fa-clock text-blue-500 mr-2"></i>Peminjaman Terbaru
+                            </h3>
+                            @if($recentLoans->count() > 0)
+                                <div class="space-y-4">
+                                    @foreach($recentLoans as $loan)
+                                        <div class="flex items-center justify-between py-3 border-b border-slate-100">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-user text-blue-500"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-slate-800">{{ $loan->user->name }}</p>
+                                                    <p class="text-sm text-slate-500">{{ $loan->book->title }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                @if($loan->status === 'peminjaman')
+                                                    <span class="text-sm text-amber-600 font-medium">Dipinjam</span>
+                                                @elseif($loan->status === 'dikembalikan')
+                                                    <span class="text-sm text-green-600 font-medium">Dikembalikan</span>
+                                                @else
+                                                    <span class="text-sm text-red-600 font-medium">Terlambat</span>
+                                                @endif
+                                                <p class="text-xs text-slate-400">{{ $loan->loan_date->format('d/m/Y') }}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="font-medium text-slate-800">Budi Santoso</p>
-                                            <p class="text-sm text-slate-500">Throne of Blood</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-sm text-amber-600">Dipinjam</span>
+                                    @endforeach
                                 </div>
-                                <div class="flex items-center justify-between py-3 border-b border-slate-100">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-user text-slate-500"></i>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-800">Siti Aminah</p>
-                                            <p class="text-sm text-slate-500">1984 - George Orwell</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-sm text-green-600">Dikembalikan</span>
+                                <div class="mt-4 text-center">
+                                    <a href="{{ route('admin.loans.index') }}" class="text-sm text-blue-500 hover:text-blue-600">
+                                        Lihat semua peminjaman <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
                                 </div>
-                                <div class="flex items-center justify-between py-3">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-user text-slate-500"></i>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-800">Ahmad Rizki</p>
-                                            <p class="text-sm text-slate-500">Fahrenheit 451</p>
-                                        </div>
+                            @else
+                                <div class="text-center py-8">
+                                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-inbox text-slate-400 text-2xl"></i>
                                     </div>
-                                    <span class="text-sm text-red-600">Terlambat</span>
+                                    <p class="text-slate-600 font-medium">Belum ada peminjaman</p>
+                                    <p class="text-sm text-slate-400">Peminjaman akan muncul di sini</p>
                                 </div>
-                            </div>
+                            @endif
                         </div>
 
                         <div class="bg-white rounded-xl shadow-sm p-6">
-                            <h3 class="text-lg font-semibold text-slate-800 mb-4">Buku Populer</h3>
-                            <div class="space-y-4">
-                                <div class="flex items-center gap-4 py-3 border-b border-slate-100">
-                                    <span class="text-lg font-bold text-amber-500">1</span>
-                                    <div class="flex-1">
-                                        <p class="font-medium text-slate-800">Throne of Blood</p>
-                                        <p class="text-sm text-slate-500">Kurosawa • 1957</p>
-                                    </div>
-                                    <span class="text-sm text-slate-500">45x dipinjam</span>
+                            <h3 class="text-lg font-semibold text-slate-800 mb-4">
+                                <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>Pinjaman Terlambat
+                            </h3>
+                            @if($overdueLoansList->count() > 0)
+                                <div class="space-y-4">
+                                    @foreach($overdueLoansList as $loan)
+                                        @php
+                                            $daysOverdue = now()->diffInDays($loan->due_date);
+                                        @endphp
+                                        <div class="flex items-center justify-between py-3 border-b border-slate-100">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-exclamation-circle text-red-500"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-slate-800">{{ $loan->user->name }}</p>
+                                                    <p class="text-sm text-slate-500">{{ $loan->book->title }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="text-sm text-red-600 font-medium">{{ $daysOverdue }} hari</span>
+                                                <p class="text-xs text-slate-400">Jatuh tempo: {{ $loan->due_date->format('d/m/Y') }}</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <div class="flex items-center gap-4 py-3 border-b border-slate-100">
-                                    <span class="text-lg font-bold text-slate-400">2</span>
-                                    <div class="flex-1">
-                                        <p class="font-medium text-slate-800">1984</p>
-                                        <p class="text-sm text-slate-500">George Orwell</p>
-                                    </div>
-                                    <span class="text-sm text-slate-500">38x dipinjam</span>
+                                <div class="mt-4 text-center">
+                                    <a href="{{ route('admin.loans.index', ['status' => 'terlambat']) }}" class="text-sm text-blue-500 hover:text-blue-600">
+                                        Lihat semua keterlambatan <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
                                 </div>
-                                <div class="flex items-center gap-4 py-3 border-b border-slate-100">
-                                    <span class="text-lg font-bold text-amber-700">3</span>
-                                    <div class="flex-1">
-                                        <p class="font-medium text-slate-800">Fahrenheit 451</p>
-                                        <p class="text-sm text-slate-500">Ray Bradbury</p>
+                            @else
+                                <div class="text-center py-8">
+                                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-check-circle text-green-500 text-2xl"></i>
                                     </div>
-                                    <span class="text-sm text-slate-500">32x dipinjam</span>
+                                    <p class="text-slate-600 font-medium">Tidak ada keterlambatan</p>
+                                    <p class="text-sm text-slate-400">Semua peminjaman dikembalikan tepat waktu</p>
                                 </div>
-                                <div class="flex items-center gap-4 py-3">
-                                    <span class="text-lg font-bold text-slate-400">4</span>
-                                    <div class="flex-1">
-                                        <p class="font-medium text-slate-800">To Kill a Mockingbird</p>
-                                        <p class="text-sm text-slate-500">Harper Lee</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- BORROWED & RETURNED BOOKS -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h3 class="text-lg font-semibold text-slate-800 mb-4">
+                                <i class="fas fa-book-reader text-amber-500 mr-2"></i>Buku Sedang Dipinjam
+                            </h3>
+                            @if($borrowedBooks->count() > 0)
+                                <div class="space-y-4">
+                                    @foreach($borrowedBooks as $loan)
+                                        <div class="flex items-center justify-between py-3 border-b border-slate-100">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-book text-amber-500"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-slate-800">{{ $loan->book->title }}</p>
+                                                    <p class="text-sm text-slate-500">{{ $loan->user->name }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="text-sm text-amber-600 font-medium">Dipinjam</span>
+                                                <p class="text-xs text-slate-400">Jatuh tempo: {{ $loan->due_date->format('d/m/Y') }}</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <a href="{{ route('admin.loans.index', ['status' => 'peminjaman']) }}" class="text-sm text-blue-500 hover:text-blue-600">
+                                        Lihat semua peminjaman aktif <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
+                            @else
+                                <div class="text-center py-8">
+                                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-book text-slate-400 text-2xl"></i>
                                     </div>
-                                    <span class="text-sm text-slate-500">28x dipinjam</span>
+                                    <p class="text-slate-600 font-medium">Tidak ada buku yang dipinjam</p>
+                                    <p class="text-sm text-slate-400">Belum ada peminjaman aktif</p>
                                 </div>
-                            </div>
+                            @endif
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h3 class="text-lg font-semibold text-slate-800 mb-4">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>Buku Sudah Dikembalikan
+                            </h3>
+                            @if($returnedBooks->count() > 0)
+                                <div class="space-y-4">
+                                    @foreach($returnedBooks as $loan)
+                                        <div class="flex items-center justify-between py-3 border-b border-slate-100">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-slate-800">{{ $loan->book->title }}</p>
+                                                    <p class="text-sm text-slate-500">{{ $loan->user->name }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="text-sm text-green-600 font-medium">Dikembalikan</span>
+                                                <p class="text-xs text-slate-400">{{ $loan->return_date->format('d/m/Y') }}</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <a href="{{ route('admin.loans.index', ['status' => 'dikembalikan']) }}" class="text-sm text-blue-500 hover:text-blue-600">
+                                        Lihat semua riwayat <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
+                            @else
+                                <div class="text-center py-8">
+                                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-history text-slate-400 text-2xl"></i>
+                                    </div>
+                                    <p class="text-slate-600 font-medium">Belum ada yang dikembalikan</p>
+                                    <p class="text-sm text-slate-400">Riwayat peminjaman akan muncul di sini</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
