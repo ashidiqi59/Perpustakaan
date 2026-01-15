@@ -31,13 +31,13 @@ class LoanController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Update status for overdue loans
+        // Update status for overdue loans - menggunakan UPDATE query langsung agar lebih efisien
+        Loan::where('status', Loan::STATUS_PEMINJAMAN)
+            ->where('due_date', '<', now()->toDateString())
+            ->whereNull('return_date')
+            ->update(['status' => Loan::STATUS_TERLAMBAT]);
+
         $loans = $query->paginate(10);
-        foreach ($loans as $loan) {
-            if ($loan->return_date === null && now()->isAfter($loan->due_date)) {
-                $loan->update(['status' => Loan::STATUS_TERLAMBAT]);
-            }
-        }
 
         return view('admin.loans.index', compact('loans'));
     }
@@ -47,18 +47,18 @@ class LoanController extends Controller
      */
     public function myLoans()
     {
+        // Update status for overdue loans - menggunakan UPDATE query langsung agar lebih efisien
+        Loan::where('user_id', Auth::id())
+            ->where('status', Loan::STATUS_PEMINJAMAN)
+            ->where('due_date', '<', now()->toDateString())
+            ->whereNull('return_date')
+            ->update(['status' => Loan::STATUS_TERLAMBAT]);
+
         $user = Auth::user();
         $loans = Loan::where('user_id', $user->id)
             ->with('book')
             ->orderBy('loan_date', 'desc')
             ->paginate(10);
-
-        // Update status for overdue loans
-        foreach ($loans as $loan) {
-            if ($loan->return_date === null && now()->isAfter($loan->due_date)) {
-                $loan->update(['status' => Loan::STATUS_TERLAMBAT]);
-            }
-        }
 
         return view('my-loans', compact('loans'));
     }
@@ -175,19 +175,31 @@ class LoanController extends Controller
             'loan_date' => 'required|date',
             'due_date' => 'required|date|after_or_equal:loan_date',
             'return_date' => 'nullable|date|after_or_equal:loan_date',
-            'status' => 'required|in:peminjaman,dikembalikan,terlambat',
             'notes' => 'nullable|string',
         ]);
 
         $oldBook = $loan->book_id;
         $oldStatus = $loan->status;
 
-        $loan->update($validated);
-
-        // If return date is set and status is not dikembalikan, update status
-        if ($validated['return_date'] && $validated['status'] !== Loan::STATUS_DIKEMBALIKAN) {
-            $loan->update(['status' => Loan::STATUS_DIKEMBALIKAN]);
+        // Determine status based on return_date and due_date
+        $status = $loan->status; // keep existing status by default
+        if ($validated['return_date']) {
+            // If return_date is set, compare with due_date
+            $returnDate = \Carbon\Carbon::parse($validated['return_date']);
+            $dueDate = \Carbon\Carbon::parse($validated['due_date']);
+            $status = $returnDate->isAfter($dueDate) ? Loan::STATUS_TERLAMBAT : Loan::STATUS_DIKEMBALIKAN;
+        } else {
+            // If return_date is null, check if overdue
+            $dueDate = \Carbon\Carbon::parse($validated['due_date']);
+            if ($dueDate->isBefore(now())) {
+                $status = Loan::STATUS_TERLAMBAT;
+            } else {
+                $status = Loan::STATUS_PEMINJAMAN;
+            }
         }
+
+        $validated['status'] = $status;
+        $loan->update($validated);
 
         // Handle stock if book changed
         if ($loan->book_id !== $oldBook) {
@@ -198,8 +210,9 @@ class LoanController extends Controller
             $newBookObj->decrement('stock');
         }
 
-        // Increment stock if returned
-        if ($oldStatus !== Loan::STATUS_DIKEMBALIKAN && $loan->status === Loan::STATUS_DIKEMBALIKAN) {
+        // Increment stock if returned (was not returned before)
+        if (in_array($oldStatus, [Loan::STATUS_PEMINJAMAN, Loan::STATUS_TERLAMBAT]) && 
+            in_array($status, [Loan::STATUS_DIKEMBALIKAN, Loan::STATUS_TERLAMBAT])) {
             $loan->book->increment('stock');
         }
 
@@ -228,9 +241,15 @@ class LoanController extends Controller
      */
     public function return(Loan $loan)
     {
+        $returnDate = now()->toDateString();
+        $dueDate = \Carbon\Carbon::parse($loan->due_date)->toDateString();
+        
+        // Determine status: terlambat if return date is after due date
+        $status = $returnDate > $dueDate ? Loan::STATUS_TERLAMBAT : Loan::STATUS_DIKEMBALIKAN;
+
         $loan->update([
-            'return_date' => now()->toDateString(),
-            'status' => Loan::STATUS_DIKEMBALIKAN,
+            'return_date' => $returnDate,
+            'status' => $status,
         ]);
 
         // Restore book stock

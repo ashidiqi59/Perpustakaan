@@ -63,7 +63,7 @@
                         <div>
                             <p class="text-gray-600 text-sm mb-1">Peminjaman Aktif</p>
                             <p class="text-3xl font-bold text-gray-900">
-                                {{ $loans->where('status', 'peminjaman')->count() }}
+                                {{ $loans->filter(fn($l) => $l->getActualStatus() === 'peminjaman')->count() }}
                             </p>
                         </div>
                         <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
@@ -77,7 +77,7 @@
                         <div>
                             <p class="text-gray-600 text-sm mb-1">Terlambat</p>
                             <p class="text-3xl font-bold text-gray-900">
-                                {{ $loans->where('status', 'terlambat')->count() }}
+                                {{ $loans->filter(fn($l) => $l->getActualStatus() === 'terlambat')->count() }}
                             </p>
                         </div>
                         <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
@@ -91,7 +91,7 @@
                         <div>
                             <p class="text-gray-600 text-sm mb-1">Dikembalikan</p>
                             <p class="text-3xl font-bold text-gray-900">
-                                {{ $loans->where('status', 'dikembalikan')->count() }}
+                                {{ $loans->filter(fn($l) => $l->getActualStatus() === 'dikembalikan')->count() }}
                             </p>
                         </div>
                         <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -131,19 +131,19 @@
                                         </td>
                                         <td class="px-6 py-4 text-sm">
                                             <span class="font-medium text-gray-900">{{ $loan->due_date->format('d/m/Y') }}</span>
-                                            @if($loan->status === 'peminjaman' && now()->isAfter($loan->due_date))
-                                                <p class="text-xs text-red-600 font-semibold">{{ $loan->getDaysOverdue() }} hari terlambat</p>
+                                            @if($loan->getActualStatus() === 'terlambat')
+                                                <p class="text-xs text-red-600 font-semibold">{{ $loan->getDaysLate() }} hari terlambat</p>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-700">
                                             {{ $loan->return_date ? $loan->return_date->format('d/m/Y') : '-' }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            @if($loan->status === 'peminjaman')
+                                            @if($loan->getActualStatus() === 'peminjaman')
                                                 <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs rounded-full font-medium">
                                                     <i class="fas fa-hourglass-half mr-1"></i>Peminjaman
                                                 </span>
-                                            @elseif($loan->status === 'dikembalikan')
+                                            @elseif($loan->getActualStatus() === 'dikembalikan')
                                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
                                                     <i class="fas fa-check-circle mr-1"></i>Dikembalikan
                                                 </span>

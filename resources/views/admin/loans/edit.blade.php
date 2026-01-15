@@ -105,15 +105,22 @@
                                     <label class="block text-sm font-medium text-slate-700 mb-2">
                                         <i class="fas fa-flag mr-2"></i>Status
                                     </label>
-                                    <select name="status" required
-                                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('status') border-red-500 @enderror">
-                                        <option value="peminjaman" {{ old('status', $loan->status) === 'peminjaman' ? 'selected' : '' }}>Peminjaman</option>
-                                        <option value="dikembalikan" {{ old('status', $loan->status) === 'dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
-                                        <option value="terlambat" {{ old('status', $loan->status) === 'terlambat' ? 'selected' : '' }}>Terlambat</option>
-                                    </select>
-                                    @error('status')
-                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                                    <div class="w-full px-4 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-600">
+                                        @if($loan->getActualStatus() === 'peminjaman')
+                                            <span class="text-amber-700 font-medium">
+                                                <i class="fas fa-hourglass-half mr-2"></i>Peminjaman Aktif
+                                            </span>
+                                        @elseif($loan->getActualStatus() === 'dikembalikan')
+                                            <span class="text-green-700 font-medium">
+                                                <i class="fas fa-check-circle mr-2"></i>Dikembalikan (Tepat Waktu)
+                                            </span>
+                                        @else
+                                            <span class="text-red-700 font-medium">
+                                                <i class="fas fa-exclamation-circle mr-2"></i>Terlambat
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-1">Status dihitung otomatis berdasarkan tanggal pengembalian dan tenggat</p>
                                 </div>
 
                                 <div>

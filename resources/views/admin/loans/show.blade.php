@@ -37,11 +37,11 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <h3 class="text-lg font-semibold text-slate-800 mb-2">Status Peminjaman</h3>
-                                    @if($loan->status === 'peminjaman')
+                                    @if($loan->getActualStatus() === 'peminjaman')
                                         <span class="px-4 py-2 bg-amber-100 text-amber-700 rounded-full font-medium text-lg">
                                             <i class="fas fa-hourglass-half mr-2"></i>Peminjaman Aktif
                                         </span>
-                                    @elseif($loan->status === 'dikembalikan')
+                                    @elseif($loan->getActualStatus() === 'dikembalikan')
                                         <span class="px-4 py-2 bg-green-100 text-green-700 rounded-full font-medium text-lg">
                                             <i class="fas fa-check-circle mr-2"></i>Sudah Dikembalikan
                                         </span>
@@ -51,9 +51,9 @@
                                         </span>
                                     @endif
                                 </div>
-                                @if($loan->status === 'peminjaman' && $loan->isOverdue())
+                                @if($loan->getActualStatus() === 'terlambat')
                                     <div class="text-right">
-                                        <p class="text-red-600 font-semibold text-lg">{{ $loan->getDaysOverdue() }} hari terlambat</p>
+                                        <p class="text-red-600 font-semibold text-lg">{{ $loan->getDaysLate() }} hari terlambat</p>
                                     </div>
                                 @endif
                             </div>
@@ -178,7 +178,7 @@
                             <a href="{{ route('admin.loans.edit', $loan->id) }}" class="flex-1 px-6 py-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium text-center">
                                 <i class="fas fa-edit mr-2"></i>Edit Peminjaman
                             </a>
-                            @if($loan->status !== 'dikembalikan')
+                            @if($loan->getActualStatus() !== 'dikembalikan')
                                 <form action="{{ route('admin.loans.return', $loan->id) }}" method="POST" class="flex-1">
                                     @csrf
                                     @method('PUT')

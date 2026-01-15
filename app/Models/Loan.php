@@ -69,4 +69,45 @@ class Loan extends Model
         }
         return now()->diffInDays($this->due_date);
     }
+
+    /**
+     * Get actual status based on comparison between return_date and due_date
+     * This is the displayed status that considers if book was returned late
+     */
+    public function getActualStatus(): string
+    {
+        // If return_date is set, compare with due_date
+        if ($this->return_date !== null) {
+            if ($this->return_date->isAfter($this->due_date)) {
+                return self::STATUS_TERLAMBAT;
+            }
+            return self::STATUS_DIKEMBALIKAN;
+        }
+
+        // If not returned yet, check if overdue
+        if ($this->due_date->isBefore(now())) {
+            return self::STATUS_TERLAMBAT;
+        }
+
+        return self::STATUS_PEMINJAMAN;
+    }
+
+    /**
+     * Get days late (for display purposes)
+     */
+    public function getDaysLate(): int
+    {
+        if ($this->return_date !== null) {
+            if ($this->return_date->isAfter($this->due_date)) {
+                return $this->return_date->diffInDays($this->due_date);
+            }
+            return 0;
+        }
+
+        if ($this->due_date->isBefore(now())) {
+            return now()->diffInDays($this->due_date);
+        }
+
+        return 0;
+    }
 }

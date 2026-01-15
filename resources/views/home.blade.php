@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             font-family: 'Inter', sans-serif;
@@ -253,7 +254,7 @@
                 </div>
 
                 <!-- Search & Filter -->
-                <form action="{{ route('home') }}" method="GET" class="flex flex-wrap gap-2">
+                <form action="{{ route('home') }}#koleksi" method="GET" class="flex flex-wrap gap-2">
                     <div class="relative">
                         <input type="text" name="search" value="{{ $search }}" placeholder="Cari buku..."
                             class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64">
