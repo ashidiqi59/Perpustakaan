@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin account
         User::factory()->create([
             'npm' => '12345678',
             'name' => 'Admin',
@@ -24,12 +23,19 @@ class DatabaseSeeder extends Seeder
             'role' => User::ROLE_ADMIN,
         ]);
 
-        // Create visitor accounts
         User::factory()->create([
             'npm' => '714250017',
             'name' => 'Riko Rizky',
             'email' => 'rikorizky20@gmail.com',
             'password' => 'Mautauaja12',
+            'role' => User::ROLE_PENGUNJUNG,
+        ]);
+
+        User::factory()->create([
+            'npm' => '714250042',
+            'name' => 'Muhammad Aris',
+            'email' => 'aris@gmail.com',
+            'password' => 'Password12',
             'role' => User::ROLE_PENGUNJUNG,
         ]);
 
