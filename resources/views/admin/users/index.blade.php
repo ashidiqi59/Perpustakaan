@@ -39,18 +39,15 @@
 
                     <!-- SEARCH & FILTER -->
                     <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                        <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-wrap gap-4 items-end">
+                        <form action="{{ route('admin.users.index') }}" method="GET" id="searchForm" class="flex flex-wrap gap-4 items-end">
                             <div class="flex-1 min-w-[200px]">
                                 <label class="block text-sm font-medium text-slate-600 mb-1">Cari User</label>
                                 <input type="text" name="search" value="{{ $search }}" placeholder="Nama atau NPM..." 
-                                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 auto-search">
                             </div>
                             <div class="flex gap-2">
-                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                                    <i class="fas fa-search mr-1"></i> Cari
-                                </button>
                                 @if($search)
-                                    <a href="{{ route('admin.users.index') }}" class="px-4 py-2 bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                                    <a href="{{ route('admin.users.index') }}" class="px-4 py-2 bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition-colors flex items-center">
                                         <i class="fas fa-times mr-1"></i> Reset
                                     </a>
                                 @endif
@@ -150,6 +147,18 @@
                 </div>
             </main>
         </div>
+    <script>
+        // Auto-submit search on input with debounce
+        let searchTimeout;
+        document.querySelectorAll('.auto-search').forEach(function(input) {
+            input.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function() {
+                    document.getElementById('searchForm').submit();
+                }, 400);
+            });
+        });
+    </script>
     </body>
 </html>
 

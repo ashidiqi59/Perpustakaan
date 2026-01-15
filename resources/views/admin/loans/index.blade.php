@@ -83,25 +83,20 @@
 
                     <!-- FILTER -->
                     <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                        <form action="{{ route('admin.loans.index') }}" method="GET" class="flex flex-wrap gap-4 items-end">
+                        <form action="{{ route('admin.loans.index') }}" method="GET" id="searchForm" class="flex flex-wrap gap-4 items-end">
                             <div class="flex-1 min-w-[200px]">
                                 <label class="block text-sm font-medium text-slate-600 mb-1">Cari Peminjam</label>
-                                <input type="text" name="search" placeholder="Nama atau NPM peminjam..."
-                                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" name="search" placeholder="Nama atau NPM peminjam..." value="{{ request('search', '') }}"
+                                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 auto-search">
                             </div>
                             <div class="w-48">
                                 <label class="block text-sm font-medium text-slate-600 mb-1">Status</label>
-                                <select name="status" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <select name="status" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 auto-search">
                                     <option value="">Semua Status</option>
-                                    <option value="peminjaman">Peminjaman</option>
-                                    <option value="dikembalikan">Dikembalikan</option>
-                                    <option value="terlambat">Terlambat</option>
+                                    <option value="peminjaman" {{ request('status') === 'peminjaman' ? 'selected' : '' }}>Peminjaman</option>
+                                    <option value="dikembalikan" {{ request('status') === 'dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
+                                    <option value="terlambat" {{ request('status') === 'terlambat' ? 'selected' : '' }}>Terlambat</option>
                                 </select>
-                            </div>
-                            <div class="flex gap-2">
-                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                                    <i class="fas fa-search mr-1"></i> Cari
-                                </button>
                             </div>
                         </form>
                     </div>
@@ -215,19 +210,37 @@
                         @else
                             <div class="p-8 text-center">
                                 <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <i class="fas fa-inbox text-slate-400 text-2xl"></i>
+                                    <i class="fas fa-search text-slate-400 text-2xl"></i>
                                 </div>
-                                <h3 class="text-lg font-semibold text-slate-800 mb-2">Tidak ada data peminjaman</h3>
-                                <p class="text-slate-500 mb-4">Belum ada peminjaman yang dicatat atau sesuai dengan pencarian.</p>
-                                <a href="{{ route('admin.loans.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors inline-flex items-center gap-2">
-                                    <i class="fas fa-plus"></i>
-                                    Tambah Peminjaman
-                                </a>
+                                <h3 class="text-lg font-semibold text-slate-800 mb-2">Tidak ada peminjaman</h3>
+                                <p class="text-slate-500">
+                                    @if(request('search') || (request('status') && request('status') !== ''))
+                                        Tidak ada peminjaman yang sesuai dengan pencarian.
+                                    @else
+                                        Belum ada peminjaman yang dicatat.
+                                    @endif
+                                </p>
                             </div>
                         @endif
                     </div>
                 </div>
             </main>
         </div>
+    <script>
+        // Auto-submit search on input with debounce
+        let searchTimeout;
+        document.querySelectorAll('.auto-search').forEach(function(input) {
+            input.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function() {
+                    document.getElementById('searchForm').submit();
+                }, 400);
+            });
+            input.addEventListener('change', function() {
+                clearTimeout(searchTimeout);
+                document.getElementById('searchForm').submit();
+            });
+        });
+    </script>
     </body>
 </html>

@@ -18,6 +18,14 @@ class LoanController extends Controller
     {
         $query = Loan::with('user', 'book')->orderBy('loan_date', 'desc');
 
+        // Filter by search (nama atau NPM user)
+        if ($request->has('search') && $request->search) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('npm', 'like', '%' . $request->search . '%');
+            });
+        }
+
         // Filter by status
         if ($request->has('status') && $request->status) {
             $query->where('status', $request->status);
