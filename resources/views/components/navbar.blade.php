@@ -14,16 +14,20 @@
                         <p class="text-xs text-gray-500">Sistem Informasi Perpustakaan</p>
                     </div>
                 </div>
-                
+
                 <!-- Navigation Links -->
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">Beranda</a>
                     <a href="{{ route('books.collection') }}" class="{{ request()->routeIs('books.collection') || request()->routeIs('books.show') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">Koleksi</a>
-                    <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Peminjaman</a>
+                    @auth
+                        <a href="{{ route('my-loans') }}" class="{{ request()->routeIs('my-loans') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">
+                            <i class="fas fa-history mr-1"></i>Peminjaman
+                        </a>
+                    @endauth
                     <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Tentang</a>
                     <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Kontak</a>
                 </div>
-                
+
                 <!-- Right Icons -->
                 <div class="flex items-center space-x-4">
                     <button class="md:hidden text-gray-600">

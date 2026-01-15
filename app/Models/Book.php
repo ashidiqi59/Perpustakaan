@@ -22,4 +22,12 @@ class Book extends Model
         'language',
         'published_date',
     ];
+
+    /**
+     * Get the loans for the book
+     */
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
 }

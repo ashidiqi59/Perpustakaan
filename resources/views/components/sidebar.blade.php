@@ -6,7 +6,7 @@
                     </h1>
                     <p class="text-xs text-slate-400 mt-1">Admin Panel</p>
                 </div>
-                
+
                 <nav class="flex-1 p-4 space-y-2">
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
                         <i class="fas fa-home w-5"></i>
@@ -16,9 +16,9 @@
                         <i class="fas fa-book w-5"></i>
                         Kelola Buku
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-lg transition-colors">
+                    <a href="{{ route('admin.loans.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.loans.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
                         <i class="fas fa-clipboard-list w-5"></i>
-                        Peminjaman
+                        Kelola Peminjaman
                     </a>
                     <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
                         <i class="fas fa-users w-5"></i>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoanController;
 
 Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 
@@ -12,6 +13,12 @@ Route::get('/books/{book}', [BookController::class, 'publicShow'])->name('books.
 
 // Public Collection Route
 Route::get('/koleksi', [BookController::class, 'collection'])->name('books.collection');
+
+// User Loan Routes (protected by auth middleware)
+Route::middleware('auth')->group(function () {
+    Route::get('/my-loans', [LoanController::class, 'myLoans'])->name('my-loans');
+    Route::post('/borrow', [LoanController::class, 'borrow'])->name('borrow');
+});
 
 Route::get('/admin', function () {
     return view('admin');
@@ -36,6 +43,18 @@ Route::resource('/admin/books', BookController::class)->names([
     'update' => 'admin.books.update',
     'destroy' => 'admin.books.destroy',
 ])->middleware('auth');
+
+// Admin Loans Routes (CRUD)
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/loans', [LoanController::class, 'adminIndex'])->name('loans.index');
+    Route::get('/loans/create', [LoanController::class, 'adminCreate'])->name('loans.create');
+    Route::post('/loans', [LoanController::class, 'adminStore'])->name('loans.store');
+    Route::get('/loans/{loan}', [LoanController::class, 'adminShow'])->name('loans.show');
+    Route::get('/loans/{loan}/edit', [LoanController::class, 'adminEdit'])->name('loans.edit');
+    Route::put('/loans/{loan}', [LoanController::class, 'adminUpdate'])->name('loans.update');
+    Route::delete('/loans/{loan}', [LoanController::class, 'adminDestroy'])->name('loans.destroy');
+    Route::put('/loans/{loan}/return', [LoanController::class, 'return'])->name('loans.return');
+});
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

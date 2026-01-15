@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
                             <div class="flex justify-between items-center">
                                 <div>
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-amber-500">
                             <div class="flex justify-between items-center">
                                 <div>
@@ -65,7 +65,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-red-500">
                             <div class="flex justify-between items-center">
                                 <div>
@@ -83,18 +83,18 @@
                     <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
                         <h3 class="text-lg font-semibold text-slate-800 mb-4">Aksi Cepat</h3>
                         <div class="flex flex-wrap gap-3">
-                            <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            <a href="{{ route('admin.books.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                                 <i class="fas fa-plus mr-2"></i>Tambah Buku
-                            </button>
-                            <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                                <i class="fas fa-user-plus mr-2"></i>Tambah User
-                            </button>
-                            <button class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors">
-                                <i class="fas fa-clipboard-check mr-2"></i>Peminjaman
-                            </button>
-                            <button class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
-                                <i class="fas fa-file-export mr-2"></i>Export Laporan
-                            </button>
+                            </a>
+                            <a href="{{ route('admin.users.index') }}" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                                <i class="fas fa-user-plus mr-2"></i>Kelola User
+                            </a>
+                            <a href="{{ route('admin.loans.create') }}" class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors">
+                                <i class="fas fa-clipboard-check mr-2"></i>Tambah Peminjaman
+                            </a>
+                            <a href="{{ route('admin.loans.index') }}" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
+                                <i class="fas fa-list mr-2"></i>Kelola Peminjaman
+                            </a>
                         </div>
                     </div>
 

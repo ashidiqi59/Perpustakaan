@@ -478,7 +478,7 @@ button:focus {
 }
 
     </style>
-    
+
   <body>
 
 <div id="container">
@@ -489,18 +489,15 @@ button:focus {
 					@csrf
 					<input type="text" name="email_or_npm" placeholder="Email atau NPM" value="{{ old('email_or_npm') }}">
 					<input type="password" name="password" placeholder="Password">
-					@if ($errors->has('email_or_npm'))
-						<div class="alert">{{ $errors->first('email_or_npm') }}</div>
-					@endif
-					
+
 					<label class="remember-container">
 						<input type="checkbox" name="remember" id="remember">
 						<span class="remember-text">Remember me</span>
 					</label>
-					
+
 					<!-- <span class="forget">Forgot password?</span> -->
 					<span class="clearfix"></span>
-					
+
 					<button type="submit" onclick="return validateLogin()">Log In</button>
 
           <a href="{{url('/')}}" class="kembali">Kembali ke Dashboard</a>
@@ -524,31 +521,26 @@ button:focus {
 			</div>
 		</div>
 		<div class="register">
-			<div class="content">
+				<div class="content">
 					<h1>Sign Up</h1>
-					<form action="{{ route('auth.register') }}" method="POST">
+					<form action="{{ route('auth.register') }}" method="POST" onsubmit="return validateRegister()">
 						@csrf
-						<input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}">
-						<input type="text" name="name" placeholder="Name" value="{{ old('name') }}">
-						<input type="email" name="email" placeholder="Email" value="{{ old('email') }}">
-						<input type="password" name="password" placeholder="Password">
-						<input type="password" name="password_confirmation" placeholder="Confirm Password">
-						@if ($errors->any())
-							@foreach ($errors->all() as $error)
-								<div class="alert">{{ $error }}</div>
-							@endforeach
-						@endif
-						
+						<input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
+						<input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
+						<input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+						<input type="password" name="password" placeholder="Password" required>
+						<input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+
 						<label class="remember-container">
-							<input type="checkbox" name="terms" id="terms">
+							<input type="checkbox" name="terms" id="terms" required>
 							<span class="remember-text">I accept terms</span>
 						</label>
-						
+
 						<span class="clearfix"></span>
-						<button type="submit" onclick="return validateLogin()">Register</button>
+						<button type="submit">Register</button>
 
 				 </form>
-			</div>		
+			</div>
 		</div>
 </div>
 <div id="popup-alert" class="popup-overlay">
@@ -564,7 +556,7 @@ button:focus {
 const registerButton = document.getElementById('register')
 const loginButton = document.getElementById('login')
 const container = document.getElementById('container')
- 
+
 
 registerButton.onclick = function(){
 	 container.className = 'active'
@@ -583,6 +575,17 @@ function closePopup() {
   document.getElementById('popup-alert').style.display = 'none'
 }
 
+// Check for success message from session and display popup
+document.addEventListener('DOMContentLoaded', function() {
+  @if(session('success'))
+    showPopup('Berhasil!', '{{ session('success') }}');
+  @endif
+
+  @if(session('error'))
+    showPopup('Error!', '{{ session('error') }}');
+  @endif
+});
+
 function validateLogin() {
   const email = document.querySelector('input[name="email_or_npm"]').value
   const password = document.querySelector('input[name="password"]').value
@@ -594,6 +597,49 @@ function validateLogin() {
     )
     return false
   }
+  return true
+}
+
+function validateRegister() {
+  const npm = document.querySelector('.register input[name="npm"]').value
+  const name = document.querySelector('.register input[name="name"]').value
+  const email = document.querySelector('.register input[name="email"]').value
+  const password = document.querySelector('.register input[name="password"]').value
+  const passwordConfirm = document.querySelector('.register input[name="password_confirmation"]').value
+  const terms = document.querySelector('.register input[name="terms"]').checked
+
+  if (!npm || !name || !email || !password || !passwordConfirm) {
+    showPopup(
+      'Form belum lengkap',
+      'Semua field wajib diisi terlebih dahulu.'
+    )
+    return false
+  }
+
+  if (password.length < 6) {
+    showPopup(
+      'Password terlalu pendek',
+      'Password harus minimal 6 karakter.'
+    )
+    return false
+  }
+
+  if (password !== passwordConfirm) {
+    showPopup(
+      'Password tidak sesuai',
+      'Password dan konfirmasi password tidak cocok.'
+    )
+    return false
+  }
+
+  if (!terms) {
+    showPopup(
+      'Terms tidak diterima',
+      'Anda harus menerima terms dan conditions untuk mendaftar.'
+    )
+    return false
+  }
+
   return true
 }
   </script>

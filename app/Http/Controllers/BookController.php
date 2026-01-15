@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Loan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,9 +18,9 @@ class BookController extends Controller
     {
         $search = $request->search ?? '';
         $category = $request->category ?? '';
-        
+
         $query = Book::query();
-        
+
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
@@ -26,14 +28,14 @@ class BookController extends Controller
                   ->orWhere('isbn', 'like', "%{$search}%");
             });
         }
-        
+
         if ($category) {
             $query->where('category', $category);
         }
-        
+
         $books = $query->latest()->paginate(10);
         $categories = Book::select('category')->distinct()->pluck('category')->filter();
-        
+
         return view('admin.books.index', compact('books', 'categories', 'search', 'category'));
     }
 
@@ -44,9 +46,9 @@ class BookController extends Controller
     {
         $search = $request->search ?? '';
         $category = $request->category ?? '';
-        
+
         $query = Book::query();
-        
+
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
@@ -55,16 +57,23 @@ class BookController extends Controller
                   ->orWhere('publisher', 'like', "%{$search}%");
             });
         }
-        
+
         if ($category) {
             $query->where('category', $category);
         }
-        
+
         $books = $query->latest()->paginate(12);
         $categories = Book::select('category')->distinct()->pluck('category')->filter();
         $popularBooks = Book::orderBy('stock', 'desc')->take(5)->get();
-        
-        return view('home', compact('books', 'categories', 'search', 'category', 'popularBooks'));
+
+        // Get 3 random featured books with images for hero section
+        $featuredBooks = Book::whereNotNull('image')->inRandomOrder()->take(3)->get();
+        // If not enough books with images, fill with any books
+        if ($featuredBooks->count() < 3) {
+            $featuredBooks = Book::inRandomOrder()->take(3)->get();
+        }
+
+        return view('home', compact('books', 'categories', 'search', 'category', 'popularBooks', 'featuredBooks'));
     }
 
     /**
@@ -132,7 +141,16 @@ class BookController extends Controller
      */
     public function publicShow(Book $book)
     {
-        return view('books.show', compact('book'));
+        $userHasActiveLoan = null;
+
+        if (Auth::check()) {
+            $userHasActiveLoan = Loan::where('user_id', Auth::id())
+                ->where('book_id', $book->id)
+                ->whereIn('status', ['peminjaman', 'terlambat'])
+                ->exists();
+        }
+
+        return view('books.show', compact('book', 'userHasActiveLoan'));
     }
 
     /**
@@ -142,9 +160,9 @@ class BookController extends Controller
     {
         $search = $request->search ?? '';
         $category = $request->category ?? '';
-        
+
         $query = Book::query();
-        
+
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
@@ -153,14 +171,14 @@ class BookController extends Controller
                   ->orWhere('publisher', 'like', "%{$search}%");
             });
         }
-        
+
         if ($category) {
             $query->where('category', $category);
         }
-        
+
         $books = $query->latest()->paginate(12);
         $categories = Book::select('category')->distinct()->pluck('category')->filter();
-        
+
         return view('books.collection', compact('books', 'categories', 'search', 'category'));
     }
 
@@ -208,7 +226,7 @@ class BookController extends Controller
             if ($book->image && file_exists(public_path($book->image))) {
                 unlink(public_path($book->image));
             }
-            
+
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('images/books'), $imageName);
@@ -230,7 +248,7 @@ class BookController extends Controller
         if ($book->image && file_exists(public_path($book->image))) {
             unlink(public_path($book->image));
         }
-        
+
         $book->delete();
 
         return redirect()->route('admin.books.index')

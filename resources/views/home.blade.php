@@ -12,67 +12,67 @@
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         body {
             background-color: #F9FAFB;
             color: #1F2937;
         }
-        
+
         .library-primary {
             color: #2563EB;
         }
-        
+
         .bg-library-primary {
             background-color: #2563EB;
         }
-        
+
         .bg-library-light {
             background-color: #EFF6FF;
         }
-        
+
         .border-library {
             border-color: #2563EB;
         }
-        
+
         /* Scroll Animation */
         .fade-in-up {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        
+
         .fade-in-up.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         /* Stagger animation delay */
         .delay-100 { transition-delay: 0.1s; }
         .delay-200 { transition-delay: 0.2s; }
         .delay-300 { transition-delay: 0.3s; }
         .delay-400 { transition-delay: 0.4s; }
         .delay-500 { transition-delay: 0.5s; }
-        
+
         /* Service card hover effect */
         .service-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .service-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        
+
         /* Book card hover effect */
         .book-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .book-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        
+
         /* Status badge */
         .status-badge {
             font-size: 12px;
@@ -80,22 +80,22 @@
             padding: 4px 12px;
             border-radius: 20px;
         }
-        
+
         .status-available {
             background-color: #D1FAE5;
             color: #059669;
         }
-        
+
         .status-borrowed {
             background-color: #FEE2E2;
             color: #DC2626;
         }
-        
+
         /* Scroll indicator */
         .scroll-indicator {
             animation: bounce 2s infinite;
         }
-        
+
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {
                 transform: translateY(0);
@@ -107,7 +107,7 @@
                 transform: translateY(-5px);
             }
         }
-        
+
         /* Icon background */
         .icon-bg {
             width: 60px;
@@ -135,12 +135,12 @@
                     <p class="text-gray-600 text-lg mb-8 leading-relaxed">
                         Akses ribuan koleksi buku digital, jurnal, dan referensi akademik. Temukan pengetahuan yang Anda butuhkan untuk mendukung pembelajaran dan penelitian.
                     </p>
-                    
+
                     <!-- Search Bar -->
                     <div class="bg-white rounded-xl shadow-lg p-2 flex gap-2 mb-6">
-                        <input 
-                            type="text" 
-                            placeholder="Cari judul buku, penulis, atau ISBN..." 
+                        <input
+                            type="text"
+                            placeholder="Cari judul buku, penulis, atau ISBN..."
                             class="flex-1 px-4 py-3 border-0 focus:outline-none focus:ring-0 text-gray-700"
                         >
                         <button class="bg-library-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2">
@@ -150,7 +150,7 @@
                             Cari
                         </button>
                     </div>
-                    
+
                     <!-- Quick Stats -->
                     <div class="grid grid-cols-3 gap-4">
                         <div class="bg-white rounded-lg p-4 shadow-sm text-center">
@@ -167,17 +167,38 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Right - Featured Books Stack -->
-                <div class="fade-in-up delay-200 flex justify-center">  
+                <div class="fade-in-up delay-200 flex justify-center">
                     <div class="relative h-[500px] w-[300px]">
-                        <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 1" class="absolute top-0 left-0 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[-5deg] z-30 hover:rotate-0 transition-transform duration-300">
-                        <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 2" class="absolute top-6 left-12 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[2deg] z-20 hover:rotate-0 transition-transform duration-300">
-                        <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 3" class="absolute top-12 left-24 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[-3deg] z-10 hover:rotate-0 transition-transform duration-300">
+                        @forelse($featuredBooks as $index => $book)
+                            @php
+                                $rotations = [-5, 2, -3];
+                                $zIndexes = [30, 20, 10];
+                                $topPositions = [0, 6, 12];
+                                $leftPositions = [0, 12, 24];
+                            @endphp
+                            <div class="absolute w-64 h-80 rounded-lg shadow-2xl transform hover:rotate-0 transition-transform duration-300 group cursor-pointer"
+                                style="top: {{ $topPositions[$index] }}px; left: {{ $leftPositions[$index] }}px; transform: rotate({{ $rotations[$index] }}deg); z-index: {{ $zIndexes[$index] }};">
+                                <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-full object-cover rounded-lg shadow-2xl">
+                                <a href="{{ route('books.show', $book->id) }}" class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center">
+                                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span class="bg-white text-gray-800 px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                                            Lihat Detail
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
+                        @empty
+                            <!-- Fallback if no books available -->
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 1" class="absolute top-0 left-0 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[-5deg] z-30 hover:rotate-0 transition-transform duration-300">
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 2" class="absolute top-6 left-12 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[2deg] z-20 hover:rotate-0 transition-transform duration-300">
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 3" class="absolute top-12 left-24 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[-3deg] z-10 hover:rotate-0 transition-transform duration-300">
+                        @endforelse
                     </div>
                 </div>
             </div>
-            
+
             <!-- Scroll Indicator -->
             <div class="flex justify-center mt-12 fade-in-up delay-400">
                 <div class="scroll-indicator">
@@ -195,7 +216,7 @@
             <h2 class="text-3xl font-bold text-gray-900 mb-4">Layanan Perpustakaan</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">Kami menyediakan berbagai layanan untuk mendukung kebutuhan informasi dan pembelajaran Anda</p>
         </div>
-        
+
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             @php
                 $services = [
@@ -205,7 +226,7 @@
                     ['icon' => 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', 'title' => 'Pencarian Katalog', 'desc' => 'Cari buku dari koleksi perpustakaan']
                 ];
             @endphp
-            
+
             @foreach($services as $index => $service)
             <div class="fade-in-up delay-{{ ($index + 1) * 100 }} service-card bg-white rounded-xl p-6 shadow-md hover:shadow-lg">
                 <div class="icon-bg bg-library-light mb-4">
@@ -228,11 +249,11 @@
                     <h2 class="text-3xl font-bold text-gray-900 mb-2">Koleksi Buku</h2>
                     <p class="text-gray-600">Jelajahi koleksi lengkap buku perpustakaan</p>
                 </div>
-                
+
                 <!-- Search & Filter -->
                 <form action="{{ route('home') }}" method="GET" class="flex flex-wrap gap-2">
                     <div class="relative">
-                        <input type="text" name="search" value="{{ $search }}" placeholder="Cari buku..." 
+                        <input type="text" name="search" value="{{ $search }}" placeholder="Cari buku..."
                             class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64">
                         <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -254,7 +275,7 @@
                     @endif
                 </form>
             </div>
-            
+
             @if($books->count() > 0)
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                     @foreach($books->take(5) as $index => $book)
@@ -285,7 +306,7 @@
                     </a>
                     @endforeach
                 </div>
-                
+
                 <!-- View All Button -->
                 <div class="mt-8 flex justify-center">
                     <a href="{{ route('books.collection') }}" class="px-8 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-semibold">
@@ -328,7 +349,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="bg-white rounded-lg p-6 shadow-md flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <div class="icon-bg bg-library-light">
@@ -342,7 +363,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="bg-white rounded-lg p-6 shadow-md flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <div class="icon-bg bg-library-light">
@@ -358,7 +379,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Operating Hours & Contact -->
             <div class="fade-in-up delay-200">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Informasi Perpustakaan</h2>
@@ -384,7 +405,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-white rounded-lg p-6 shadow-md">
                     <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                         <svg class="w-5 h-5 text-library-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">

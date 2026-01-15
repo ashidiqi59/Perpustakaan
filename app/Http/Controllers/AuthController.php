@@ -35,18 +35,16 @@ class AuthController extends Controller
             // Handle remember me
             $remember = $request->has('remember');
             Auth::login($user, $remember);
-            
+
             // Redirect berdasarkan role
             if ($user->isAdmin()) {
                 return redirect()->route('admin.dashboard')->with('success', 'Login berhasil! Selamat datang, Admin.');
             }
-            
+
             return redirect()->route('home')->with('success', 'Login berhasil!');
         }
 
-        return back()->withErrors([
-            'email_or_npm' => 'Email/NPM atau password salah.',
-        ]);
+        return back()->with('error', 'Email/NPM atau password salah.');
     }
 
     /**
@@ -69,16 +67,15 @@ class AuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        $user = User::create([
+        User::create([
             'npm' => $request->npm,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => User::ROLE_PENGUNJUNG, 
+            'role' => User::ROLE_PENGUNJUNG,
         ]);
 
-        Auth::login($user);
-        return redirect()->route('home')->with('success', 'Registrasi berhasil!');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login dengan akun Anda.');
     }
 
     /**

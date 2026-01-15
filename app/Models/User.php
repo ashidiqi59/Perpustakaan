@@ -46,6 +46,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the loans for the user
+     */
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>

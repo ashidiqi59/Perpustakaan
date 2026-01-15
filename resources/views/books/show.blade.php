@@ -13,37 +13,37 @@
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         body {
             background-color: #F9FAFB;
             color: #1F2937;
         }
-        
+
         .library-primary {
             color: #2563EB;
         }
-        
+
         .bg-library-primary {
             background-color: #2563EB;
         }
-        
+
         .bg-library-light {
             background-color: #EFF6FF;
         }
-        
+
         .border-library {
             border-color: #2563EB;
         }
-        
-        .fade-in-up { 
-            animation: fadeInUp 0.6s ease-out; 
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
         }
-        
-        @keyframes fadeInUp { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
+
         /* Status badge */
         .status-badge {
             font-size: 12px;
@@ -51,12 +51,12 @@
             padding: 4px 12px;
             border-radius: 20px;
         }
-        
+
         .status-available {
             background-color: #D1FAE5;
             color: #059669;
         }
-        
+
         .status-borrowed {
             background-color: #FEE2E2;
             color: #DC2626;
@@ -84,8 +84,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-3">
                     <!-- Book Cover -->
                     <div class="bg-gray-100 p-8 flex items-center justify-center">
-                        <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" 
-                            alt="{{ $book->title }}" 
+                        <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}"
+                            alt="{{ $book->title }}"
                             class="w-64 h-96 object-cover rounded-lg shadow-lg">
                     </div>
 
@@ -206,7 +206,12 @@
                                     </div>
                                 </div>
                                 @auth
-                                    @if($book->stock > 0)
+                                    @if($userHasActiveLoan)
+                                    <button disabled class="px-8 py-3 bg-yellow-500 text-white rounded-lg cursor-not-allowed flex items-center gap-2 font-semibold" title="Anda sudah meminjam buku ini">
+                                        <i class="fas fa-check-circle"></i>
+                                        Sudah Dipinjam
+                                    </button>
+                                    @elseif($book->stock > 0)
                                     <button onclick="showBorrowModal()" class="px-8 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-semibold">
                                         <i class="fas fa-hand-holding"></i>
                                         Ajukan Peminjaman
@@ -238,7 +243,7 @@
 
                         <!-- Back Button -->
                         <div class="flex justify-start">
-                            <a href="{{ route('home') }}" class="text-library-primary font-semibold hover:underline flex items-center gap-2">
+                            <a href="{{ route('books.collection') }}" class="text-library-primary font-semibold hover:underline flex items-center gap-2">
                                 <i class="fas fa-arrow-left"></i>
                                 Kembali ke Koleksi
                             </a>
@@ -249,23 +254,59 @@
         </div>
     </section>
 
-    <!-- Borrow Modal (Placeholder) -->
+    <!-- Borrow Modal -->
     <div id="borrowModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 transform transition-all">
-            <div class="text-center">
+            <div>
                 <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-hand-holding text-blue-600 text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Ajukan Peminjaman</h3>
-                <p class="text-gray-600 mb-6">Apakah Anda ingin meminjam buku "{{ $book->title }}"?</p>
-                <div class="flex gap-3 justify-center">
-                    <button onclick="closeBorrowModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                        Batal
-                    </button>
-                    <button onclick="confirmBorrow()" class="px-4 py-2 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        Konfirmasi
-                    </button>
-                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 text-center">Ajukan Peminjaman</h3>
+                <p class="text-gray-600 mb-6 text-center">Atur tanggal tenggat pengembalian</p>
+
+                <form id="borrowForm" action="{{ route('borrow') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <input type="hidden" name="book_id" value="{{ $book->id }}">
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            <i class="fas fa-calendar-check mr-1"></i>Durasi Peminjaman
+                        </label>
+                        <div class="space-y-2">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="duration" value="1" class="w-4 h-4 text-blue-600" onchange="updateDueDate(1)">
+                                <span class="ml-3 flex-1">
+                                    <span class="font-medium text-gray-800">1 Hari</span>
+                                    <p class="text-xs text-gray-500">Kembali pada {{ now()->addDay()->format('d/m/Y') }}</p>
+                                </span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="duration" value="3" class="w-4 h-4 text-blue-600" onchange="updateDueDate(3)">
+                                <span class="ml-3 flex-1">
+                                    <span class="font-medium text-gray-800">3 Hari</span>
+                                    <p class="text-xs text-gray-500">Kembali pada {{ now()->addDays(3)->format('d/m/Y') }}</p>
+                                </span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="duration" value="7" class="w-4 h-4 text-blue-600" checked onchange="updateDueDate(7)">
+                                <span class="ml-3 flex-1">
+                                    <span class="font-medium text-gray-800">7 Hari</span>
+                                    <p class="text-xs text-gray-500">Kembali pada {{ now()->addDays(7)->format('d/m/Y') }}</p>
+                                </span>
+                            </label>
+                        </div>
+                        <input type="hidden" name="due_date" id="dueDateInput" value="{{ now()->addDays(7)->format('Y-m-d') }}">
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" onclick="closeBorrowModal()" class="flex-1 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                            Batal
+                        </button>
+                        <button type="submit" class="flex-1 px-4 py-2 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                            Ajukan
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -283,10 +324,13 @@
             document.getElementById('borrowModal').classList.remove('flex');
         }
 
-        function confirmBorrow() {
-            // Placeholder - sistem peminjaman akan dikembangkan nanti
-            alert('Fitur peminjaman akan segera tersedia!');
-            closeBorrowModal();
+        function updateDueDate(days) {
+            const today = new Date();
+            const dueDate = new Date(today.getTime() + days * 24 * 60 * 60 * 1000);
+            const year = dueDate.getFullYear();
+            const month = String(dueDate.getMonth() + 1).padStart(2, '0');
+            const date = String(dueDate.getDate()).padStart(2, '0');
+            document.getElementById('dueDateInput').value = `${year}-${month}-${date}`;
         }
 
         // Close modal when clicking outside
