@@ -17,9 +17,10 @@ class LoanController extends Controller
     public function adminIndex(Request $request)
     {
         // Update status for overdue loans FIRST before getting any counts
+        // Only update loans that have NOT been returned yet (return_date is null)
         Loan::where('status', Loan::STATUS_PEMINJAMAN)
-            ->where('due_date', '<', now()->toDateString())
             ->whereNull('return_date')
+            ->where('due_date', '<', now()->toDateString())
             ->update(['status' => Loan::STATUS_TERLAMBAT]);
 
         // Get UNFILTERED counts for stats cards (always show all data)
@@ -253,17 +254,17 @@ class LoanController extends Controller
         $returnDate = now()->toDateString();
         $dueDate = \Carbon\Carbon::parse($loan->due_date)->toDateString();
         
-        // Determine status: terlambat if return date is STRICTLY AFTER due date
-        // Returning ON or BEFORE due date = dikembalikan (tepat waktu)
-        $status = $returnDate > $dueDate ? Loan::STATUS_TERLAMBAT : Loan::STATUS_DIKEMBALIKAN;
-
+        // Set status to 'dikembalikan' when book is returned
+        // The actual display status (late or not) is determined by getActualStatus() method
         $loan->update([
             'return_date' => $returnDate,
-            'status' => $status,
+            'status' => Loan::STATUS_DIKEMBALIKAN,
         ]);
 
-        // Restore book stock
-        $loan->book->increment('stock');
+        // Restore book stock only if this loan wasn't already returned
+        if (!$loan->wasRecentlyCreated && in_array($loan->getOriginal('status'), [Loan::STATUS_PEMINJAMAN, Loan::STATUS_TERLAMBAT])) {
+            $loan->book->increment('stock');
+        }
 
         return redirect()->route('admin.loans.index')
             ->with('success', 'Buku berhasil dikembalikan');

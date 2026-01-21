@@ -152,6 +152,10 @@
                                                     <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs rounded-full font-medium">
                                                         <i class="fas fa-hourglass-half mr-1"></i>Peminjaman
                                                     </span>
+                                                @elseif($loan->status === 'dikembalikan' && $loan->return_date && $loan->return_date->isAfter($loan->due_date))
+                                                    <span class="px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
+                                                        <i class="fas fa-exclamation-circle mr-1"></i>Dikembalikan (Terlambat)
+                                                    </span>
                                                 @elseif($loan->getActualStatus() === 'dikembalikan')
                                                     <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
                                                         <i class="fas fa-check-circle mr-1"></i>Dikembalikan

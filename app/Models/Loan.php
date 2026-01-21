@@ -75,18 +75,14 @@ class Loan extends Model
      * This is the displayed status that considers if book was returned late
      * 
      * Logic:
-     * - return_date > due_date = Terlambat (mengembalikan setelah due date)
-     * - return_date ada & return_date <= due_date = Dikembalikan
-     * - return_date null & today > due_date = Terlambat (lewat dari due date)
+     * - return_date is set = Dikembalikan (book is returned, regardless of being late)
+     * - return_date null & today > due_date = Terlambat (lewat dari due date, belum dikembalikan)
      * - return_date null & today <= due_date = Peminjaman (belum jatuh tempo)
      */
     public function getActualStatus(): string
     {
-        // If return_date is set, compare with due_date
+        // If return_date is set, book is returned (regardless of being late or not)
         if ($this->return_date !== null) {
-            if ($this->return_date->isAfter($this->due_date)) {
-                return self::STATUS_TERLAMBAT;
-            }
             return self::STATUS_DIKEMBALIKAN;
         }
 
@@ -105,12 +101,9 @@ class Loan extends Model
      */
     public function getDaysLate(): int
     {
-        if ($this->return_date !== null) {
-            // If returned late
-            if ($this->return_date->isAfter($this->due_date)) {
-                return $this->return_date->diffInDays($this->due_date);
-            }
-            return 0;
+        // If returned late (return_date > due_date)
+        if ($this->return_date !== null && $this->return_date->isAfter($this->due_date)) {
+            return $this->return_date->diffInDays($this->due_date);
         }
 
         // If not returned and due date has passed (today > due_date)
