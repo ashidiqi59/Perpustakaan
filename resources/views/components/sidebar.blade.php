@@ -1,39 +1,44 @@
-            <!-- SIDEBAR -->
-            <aside class="w-64 bg-slate-900 text-white flex flex-col flex-shrink-0">
-                <div class="p-6 border-b border-slate-700">
-                    <h1 class="text-xl font-bold text-amber-400">
-                        <i class="fas fa-book-reader mr-2"></i>PERPUSTAKAAN
-                    </h1>
-                    <p class="text-xs text-slate-400 mt-1">Admin Panel</p>
-                </div>
+<aside id="sidebar" class="h-full bg-slate-900 text-white flex flex-col" style="width: 256px; flex-shrink: 0; transition: width 0.3s ease;">
+    <div class="p-4 border-b border-slate-700 relative shrink-0">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-book-reader text-amber-400 text-2xl"></i>
+            <div>
+                <h1 class="sidebar-text text-xl font-bold text-amber-400">PERPUSTAKAAN</h1>
+                <p class="sidebar-subtitle text-xs text-slate-400 mt-0.5">Admin Panel</p>
+            </div>
+        </div>
+        <button id="sidebar-toggle" onclick="toggleSidebar()" class="absolute -right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-slate-700 rounded-full flex items-center justify-center text-white hover:bg-slate-600 transition-colors shadow-lg z-10 border-2 border-slate-900">
+            <i class="fas fa-chevron-left text-sm"></i>
+        </button>
+    </div>
 
-                <nav class="flex-1 p-4 space-y-2">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
-                        <i class="fas fa-home w-5"></i>
-                        Dashboard
-                    </a>
-                    <a href="{{ route('admin.books.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.books.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
-                        <i class="fas fa-book w-5"></i>
-                        Kelola Buku
-                    </a>
-                    <a href="{{ route('admin.loans.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.loans.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
-                        <i class="fas fa-clipboard-list w-5"></i>
-                        Kelola Peminjaman
-                    </a>
-                    <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
-                        <i class="fas fa-users w-5"></i>
-                        Kelola Users
-                    </a>
-                </nav>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="{{ route('admin.dashboard') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
+            <i class="fas fa-home w-5 text-center"></i>
+            <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="{{ route('admin.books.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.books.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
+            <i class="fas fa-book w-5 text-center"></i>
+            <span class="nav-text">Kelola Buku</span>
+        </a>
+        <a href="{{ route('admin.loans.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.loans.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
+            <i class="fas fa-clipboard-list w-5 text-center"></i>
+            <span class="nav-text">Kelola Peminjaman</span>
+        </a>
+        <a href="{{ route('admin.users.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
+            <i class="fas fa-users w-5 text-center"></i>
+            <span class="nav-text">Kelola Users</span>
+        </a>
+    </nav>
 
-                <div class="p-4 border-t border-slate-700">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="flex items-center gap-3 w-full px-4 py-3 text-red-400 hover:bg-slate-800 rounded-lg transition-colors">
-                            <i class="fas fa-sign-out-alt w-5"></i>
-                            Logout
-                        </button>
-                    </form>
-                </div>
-            </aside>
+    <div class="p-4 border-t border-slate-700 shrink-0">
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="nav-item flex items-center gap-3 w-full px-4 py-3 text-red-400 hover:bg-slate-800 rounded-lg transition-colors">
+                <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                <span class="logout-text">Logout</span>
+            </button>
+        </form>
+    </div>
+</aside>
 

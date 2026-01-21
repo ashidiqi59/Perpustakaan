@@ -1,40 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="refresh" content="30">
-        <title>Perpustakaan | Admin Dashboard</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <script>
-            // Auto-refresh every 30 seconds untuk data terbaru
-            setTimeout(function() {
-                window.location.reload(true);
-            }, 30000);
-        </script>
-    </head>
-    <body class="min-h-screen bg-slate-100 text-slate-800 font-sans">
-        <div class="flex h-screen">
-            @include('components.sidebar')
+@extends('layouts.admin')
 
-            <!-- MAIN CONTENT -->
-            <main class="flex-1 flex flex-col overflow-hidden">
-                <!-- TOP BAR -->
-                <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-semibold text-slate-800">Dashboard</h2>
-                        <p class="text-sm text-slate-500">Selamat datang, {{ Auth::user()->name }}</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <span class="px-3 py-1 bg-amber-100 text-amber-700 text-sm rounded-full font-medium">
-                            <i class="fas fa-shield-alt mr-1"></i>Admin
-                        </span>
-                    </div>
-                </header>
+@section('title', 'Dashboard')
+@section('subtitle', 'Selamat datang, ' . Auth::user()->name)
 
-                <!-- CONTENT AREA -->
-                <div class="flex-1 overflow-y-auto p-6">
+@section('content')
                     <!-- STAT CARDS -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                         <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
@@ -276,9 +245,5 @@
                             @endif
                         </div>
                     </div>
-                </div>
-            </main>
-        </div>
-    </body>
-</html>
+@endsection
 

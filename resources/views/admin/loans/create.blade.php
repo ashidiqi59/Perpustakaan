@@ -1,28 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Perpustakaan | Tambah Peminjaman</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    </head>
-    <body class="min-h-screen bg-slate-100 text-slate-800 font-sans">
-        <div class="flex h-screen">
-            @include('components.sidebar')
+@extends('layouts.admin')
 
-            <!-- MAIN CONTENT -->
-            <main class="flex-1 flex flex-col overflow-hidden">
-                <!-- TOP BAR -->
-                <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-semibold text-slate-800">Tambah Peminjaman</h2>
-                        <p class="text-sm text-slate-500">Catat peminjaman buku baru</p>
-                    </div>
-                </header>
+@section('title', 'Tambah Peminjaman')
+@section('subtitle', 'Catat peminjaman buku baru')
 
-                <!-- CONTENT AREA -->
-                <div class="flex-1 overflow-y-auto p-6">
+@section('content')
                     <div class="max-w-2xl mx-auto">
                         <div class="bg-white rounded-xl shadow-sm p-6">
                             @if($errors->any())
@@ -117,8 +98,5 @@
                             </form>
                         </div>
                     </div>
-                </div>
-            </main>
-        </div>
-    </body>
-</html>
+@endsection
+

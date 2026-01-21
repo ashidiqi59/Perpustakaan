@@ -1,32 +1,16 @@
-<!DOCTYPE html>
-<html lang="id">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Perpustakaan | {{ $action == 'create' ? 'Tambah Buku' : 'Edit Buku' }}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    </head>
-    <body class="min-h-screen bg-slate-100 text-slate-800 font-sans">
-        <div class="flex h-screen">
-            @include('components.sidebar')
+@extends('layouts.admin')
 
-            <!-- MAIN CONTENT -->
-            <main class="flex-1 flex flex-col overflow-hidden">
-                <!-- TOP BAR -->
-                <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-semibold text-slate-800">{{ $action == 'create' ? 'Tambah Buku Baru' : 'Edit Buku' }}</h2>
-                        <p class="text-sm text-slate-500">{{ $action == 'create' ? 'Tambahkan buku baru ke koleksi' : 'Perbarui informasi buku' }}</p>
-                    </div>
-                    <a href="{{ route('admin.books.index') }}" class="px-4 py-2 bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition-colors flex items-center gap-2">
-                        <i class="fas fa-arrow-left"></i>
-                        Kembali
-                    </a>
-                </header>
+@section('title', $action == 'create' ? 'Tambah Buku Baru' : 'Edit Buku')
+@section('subtitle', $action == 'create' ? 'Tambahkan buku baru ke koleksi' : 'Perbarui informasi buku')
 
-                <!-- CONTENT AREA -->
-                <div class="flex-1 overflow-y-auto p-6">
+@section('header-actions')
+    <a href="{{ route('admin.books.index') }}" class="px-4 py-2 bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition-colors flex items-center gap-2">
+        <i class="fas fa-arrow-left"></i>
+        Kembali
+    </a>
+@endsection
+
+@section('content')
                     <!-- ALERT MESSAGES -->
                     @if($errors->any())
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -202,20 +186,16 @@
                             </button>
                         </div>
                     </form>
-                </div>
-            </main>
-        </div>
 
-        <script>
-            function previewImage(event) {
-                const reader = new FileReader();
-                reader.onload = function() {
-                    const output = document.getElementById('image-preview');
-                    output.src = reader.result;
-                };
-                reader.readAsDataURL(event.target.files[0]);
-            }
-        </script>
-    </body>
-</html>
+                    <script>
+                        function previewImage(event) {
+                            const reader = new FileReader();
+                            reader.onload = function() {
+                                const output = document.getElementById('image-preview');
+                                output.src = reader.result;
+                            };
+                            reader.readAsDataURL(event.target.files[0]);
+                        }
+                    </script>
+@endsection
 

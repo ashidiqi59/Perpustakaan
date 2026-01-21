@@ -21,9 +21,9 @@ class DashboardController extends Controller
         $activeLoans = Loan::where('status', Loan::STATUS_PEMINJAMAN)->count();
         $overdueLoans = Loan::where('status', Loan::STATUS_TERLAMBAT)->count();
 
-        // Get recent loans (latest 5)
+        // Get recent loans (latest 5) - diurutkan berdasarkan updated_at agar data terbaru muncul di atas
         $recentLoans = Loan::with(['user', 'book'])
-            ->orderBy('loan_date', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->take(5)
             ->get();
 
