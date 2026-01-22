@@ -477,6 +477,63 @@ button:focus {
   }
 }
 
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  body {
+    perspective: none; /* Remove perspective for mobile to avoid issues */
+  }
+
+  #container {
+    width: 100vh; /* Set width to viewport height for vertical layout */
+    height: 100vw; /* Set height to viewport width */
+    max-width: none; /* Remove max-width for full responsiveness */
+    transform: rotate(90deg); /* Rotate container 90 degrees for upright readability */
+    transform-origin: center; /* Ensure rotation is from center */
+  }
+
+  #container > div {
+    min-width: auto; /* Remove min-width for better mobile fit */
+  }
+
+  .content {
+    padding: 1em 2em; /* Reduce padding for mobile */
+    transform:rotate(-90deg); /* Rotate content back to normal orientation */
+  }
+
+  h1 {
+    font-size: 2.5em; /* Slightly smaller title for mobile */
+  }
+
+  form input {
+    font-size: 1.2em; /* Adjust input font size */
+    padding: 10px 12px; /* Adjust padding */
+  }
+
+  button {
+    font-size: 1em; /* Adjust button font size */
+    padding: 0.6em 1.5em; /* Adjust button padding */
+  }
+
+  .page .front .close .active svg {
+    width: 64px; /* Smaller icons for mobile */
+    height: 64px;
+    rotate:(0deg);
+  }
+
+  .popup-box {
+    width: 95%; /* Make popup wider on mobile */
+    padding: 2em; /* Adjust popup padding */
+  }
+
+  .active{
+    transform: rotate(0deg);
+  }
+
+  .close{
+    transform: rotate(0deg);
+  }
+}
+
     </style>
 
   <body>
