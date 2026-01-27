@@ -1,3 +1,29 @@
+<script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+        
+        menu.classList.toggle('hidden');
+        menuIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('mobile-menu');
+        const menuButton = event.target.closest('button[onclick="toggleMobileMenu()"]');
+        const menuContent = event.target.closest('#mobile-menu');
+        
+        // If menu is open and click is outside menu and menu button
+        if (!menu.classList.contains('hidden') && !menuButton && !menuContent) {
+            menu.classList.add('hidden');
+            document.getElementById('menu-icon').classList.remove('hidden');
+            document.getElementById('close-icon').classList.add('hidden');
+        }
+    });
+</script>
+
 <!-- Header / Navigation -->
     <header class="bg-white shadow-md sticky top-0 z-50">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -15,7 +41,7 @@
                     </div>
                 </div>
 
-                <!-- Navigation Links -->
+                <!-- Navigation Links (Desktop) -->
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">Beranda</a>
                     <a href="{{ route('books.collection') }}" class="{{ request()->routeIs('books.collection') || request()->routeIs('books.show') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">Koleksi</a>
@@ -30,9 +56,13 @@
 
                 <!-- Right Icons -->
                 <div class="flex items-center space-x-4">
-                    <button class="md:hidden text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 p-2">
+                        <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                     <div class="hidden md:flex items-center space-x-4">
@@ -61,5 +91,48 @@
                 </div>
             </div>
         </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white">
+            <div class="px-4 py-4 space-y-3">
+                <!-- Mobile Navigation Links -->
+                <a href="{{ route('home') }}" class="block py-2 px-3 rounded-lg {{ request()->routeIs('home') ? 'bg-library-light text-library-primary font-semibold' : 'text-gray-600 hover:bg-gray-50' }} transition-colors">Beranda</a>
+                <a href="{{ route('books.collection') }}" class="block py-2 px-3 rounded-lg {{ request()->routeIs('books.collection') || request()->routeIs('books.show') ? 'bg-library-light text-library-primary font-semibold' : 'text-gray-600 hover:bg-gray-50' }} transition-colors">Koleksi</a>
+                @auth
+                    <a href="{{ route('my-loans') }}" class="block py-2 px-3 rounded-lg {{ request()->routeIs('my-loans') ? 'bg-library-light text-library-primary font-semibold' : 'text-gray-600 hover:bg-gray-50' }} transition-colors">
+                        <i class="fas fa-history mr-1"></i>Peminjaman
+                    </a>
+                @endauth
+                <a href="#" class="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">Tentang</a>
+                <a href="#" class="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">Kontak</a>
+                
+                <hr class="border-gray-200 my-3">
+                
+                <!-- Mobile Auth Section -->
+                @auth
+                    <div class="pt-2">
+                        <div class="flex items-center space-x-3 py-2 px-3">
+                            <div class="w-10 h-10 bg-library-light rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-library-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-gray-500">{{ Auth::user()->npm }}</p>
+                            </div>
+                        </div>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full text-left py-2 px-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors">Keluar</button>
+                        </form>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="block w-full text-center bg-library-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        Masuk
+                    </a>
+                @endauth
+            </div>
+        </div>
     </header>
 
