@@ -1,5 +1,20 @@
-<aside id="sidebar" class="h-full bg-slate-900 text-white flex flex-col" style="width: 256px; flex-shrink: 0; transition: width 0.3s ease;">
-    <div class="p-4 border-b border-slate-700 relative shrink-0">
+<aside id="sidebar" class="h-full bg-slate-900 text-white flex flex-col">
+    <!-- Mobile Header with Close Button -->
+    <div class="p-4 border-b border-slate-700 relative shrink-0 flex items-center justify-between md:hidden">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-book-reader text-amber-400 text-2xl"></i>
+            <div>
+                <h1 class="sidebar-text text-xl font-bold text-amber-400">PERPUSTAKAAN</h1>
+                <p class="sidebar-subtitle text-xs text-slate-400 mt-0.5">Admin Panel</p>
+            </div>
+        </div>
+        <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center bg-slate-700 rounded-full text-slate-300 hover:bg-slate-600 transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Desktop Header -->
+    <div class="p-4 border-b border-slate-700 relative shrink-0 hidden md:block">
         <div class="flex items-center gap-3">
             <i class="fas fa-book-reader text-amber-400 text-2xl"></i>
             <div>
