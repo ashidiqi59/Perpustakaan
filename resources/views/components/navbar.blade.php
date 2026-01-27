@@ -50,8 +50,8 @@
                             <i class="fas fa-history mr-1"></i>Peminjaman
                         </a>
                     @endauth
-                    <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Tentang</a>
-                    <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Kontak</a>
+                    <!-- <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Tentang</a>
+                    <a href="#" class="text-gray-600 hover:text-library-primary transition-colors">Kontak</a> -->
                 </div>
 
                 <!-- Right Icons -->
@@ -103,8 +103,8 @@
                         <i class="fas fa-history mr-1"></i>Peminjaman
                     </a>
                 @endauth
-                <a href="#" class="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">Tentang</a>
-                <a href="#" class="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">Kontak</a>
+                <!-- <a href="#" class="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">Tentang</a>
+                <a href="#" class="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">Kontak</a> -->
                 
                 <hr class="border-gray-200 my-3">
                 
