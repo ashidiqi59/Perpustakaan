@@ -61,3 +61,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// API Routes for Registration Validation
+Route::post('/api/check-npm', [AuthController::class, 'checkNpm'])->name('api.check-npm');
+Route::post('/api/check-email', [AuthController::class, 'checkEmail'])->name('api.check-email');

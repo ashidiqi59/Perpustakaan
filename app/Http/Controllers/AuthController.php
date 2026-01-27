@@ -86,5 +86,51 @@ class AuthController extends Controller
         Auth::logout();
         return redirect('/')->with('success', 'Logout berhasil!');
     }
+
+    /**
+     * Check if NPM is available
+     */
+    public function checkNpm(Request $request)
+    {
+        $npm = $request->input('npm');
+        
+        if (!$npm) {
+            return response()->json(['available' => false, 'message' => 'NPM tidak boleh kosong']);
+        }
+
+        $exists = User::where('npm', $npm)->exists();
+        
+        if ($exists) {
+            return response()->json([
+                'available' => false,
+                'message' => 'NPM sudah terdaftar. Silakan gunakan NPM lain atau login dengan akun Anda.'
+            ]);
+        }
+
+        return response()->json(['available' => true]);
+    }
+
+    /**
+     * Check if Email is available
+     */
+    public function checkEmail(Request $request)
+    {
+        $email = $request->input('email');
+        
+        if (!$email) {
+            return response()->json(['available' => false, 'message' => 'Email tidak boleh kosong']);
+        }
+
+        $exists = User::where('email', $email)->exists();
+        
+        if ($exists) {
+            return response()->json([
+                'available' => false,
+                'message' => 'Email sudah terdaftar. Silakan gunakan email lain atau login dengan akun Anda.'
+            ]);
+        }
+
+        return response()->json(['available' => true]);
+    }
 }
 

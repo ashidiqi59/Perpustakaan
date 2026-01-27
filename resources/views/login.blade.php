@@ -985,6 +985,10 @@
     function showMobileRegister() {
       document.getElementById('mobile-login').style.display = 'none';
       document.getElementById('mobile-register').style.display = 'block';
+      setTimeout(() => {
+        attachNpmValidator();
+        attachEmailValidator();
+      }, 100);
     }
 
     function showMobileLogin() {
@@ -1013,8 +1017,15 @@
     });
 
     function validateLogin() {
-      const email = document.querySelector('input[name="email_or_npm"]').value;
-      const password = document.querySelector('input[name="password"]').value;
+      // Try desktop form first (within #container .login)
+      let email = document.querySelector('#container .login input[name="email_or_npm"]')?.value;
+      let password = document.querySelector('#container .login input[name="password"]')?.value;
+      
+      // If not found, try mobile form
+      if (!email || !password) {
+        email = document.querySelector('#mobile-login input[name="email_or_npm"]')?.value;
+        password = document.querySelector('#mobile-login input[name="password"]')?.value;
+      }
 
       if (!email || !password) {
         showPopup(
@@ -1027,12 +1038,23 @@
     }
 
     function validateRegister() {
-      const npm = document.querySelector('.register input[name="npm"]').value;
-      const name = document.querySelector('.register input[name="name"]').value;
-      const email = document.querySelector('.register input[name="email"]').value;
-      const password = document.querySelector('.register input[name="password"]').value;
-      const passwordConfirm = document.querySelector('.register input[name="password_confirmation"]').value;
-      const terms = document.querySelector('.register input[name="terms"]').checked;
+      // Try desktop form first (within #container .register)
+      let npm = document.querySelector('#container .register input[name="npm"]')?.value;
+      let name = document.querySelector('#container .register input[name="name"]')?.value;
+      let email = document.querySelector('#container .register input[name="email"]')?.value;
+      let password = document.querySelector('#container .register input[name="password"]')?.value;
+      let passwordConfirm = document.querySelector('#container .register input[name="password_confirmation"]')?.value;
+      let terms = document.querySelector('#container .register input[name="terms"]')?.checked;
+      
+      // If not found, try mobile form
+      if (!npm || !name || !email || !password || !passwordConfirm) {
+        npm = document.querySelector('#mobile-register input[name="npm"]')?.value;
+        name = document.querySelector('#mobile-register input[name="name"]')?.value;
+        email = document.querySelector('#mobile-register input[name="email"]')?.value;
+        password = document.querySelector('#mobile-register input[name="password"]')?.value;
+        passwordConfirm = document.querySelector('#mobile-register input[name="password_confirmation"]')?.value;
+        terms = document.querySelector('#mobile-register input[name="terms"]')?.checked;
+      }
 
       if (!npm || !name || !email || !password || !passwordConfirm) {
         showPopup(
@@ -1084,5 +1106,71 @@
         eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
       }
     }
+
+    // Real-time validation for NPM availability
+    function attachNpmValidator() {
+      const npmInputs = document.querySelectorAll('input[name="npm"]');
+      npmInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+          if (this.value.trim()) {
+            checkNpmAvailability(this.value);
+          }
+        });
+      });
+    }
+
+    function checkNpmAvailability(npm) {
+      fetch('{{ route("api.check-npm") }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ npm: npm })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.available) {
+          showPopup('NPM Sudah Terdaftar', data.message);
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    }
+
+    // Real-time validation for Email availability
+    function attachEmailValidator() {
+      const emailInputs = document.querySelectorAll('input[name="email"]');
+      emailInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+          if (this.value.trim()) {
+            checkEmailAvailability(this.value);
+          }
+        });
+      });
+    }
+
+    function checkEmailAvailability(email) {
+      fetch('{{ route("api.check-email") }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ email: email })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.available) {
+          showPopup('Email Sudah Terdaftar', data.message);
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    }
+
+    // Initialize validators on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      attachNpmValidator();
+      attachEmailValidator();
+    });
   </script>
 </html>
