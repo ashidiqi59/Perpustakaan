@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        @if(Route::is('admin.*'))
+        @if(Route::is('admin.dashboard'))
         <meta http-equiv="refresh" content="30">
         @endif
         <title>Perpustakaan | Admin Dashboard</title>
