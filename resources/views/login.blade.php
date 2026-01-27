@@ -63,6 +63,63 @@
       font-size: 1.4em;
     }
 
+    .password-wrapper {
+      position: relative;
+      margin: 8px 0;
+    }
+
+    .password-wrapper input {
+      padding-right: 50px;
+      margin: 0 !important;
+      width: 100%;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      background: none !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 1.2em;
+      width: auto !important;
+      height: auto !important;
+      z-index: 10;
+    }
+
+    .password-toggle:hover {
+      color: #333;
+    }
+
+    .password-toggle:active {
+      transform: translateY(-50%) scale(0.95) !important;
+    }
+
+    .password-toggle:focus {
+      outline: none;
+    }
+
+    @media (max-width: 768px) {
+      .password-toggle:hover {
+        transform: translateY(-50%) !important;
+      }
+    }
+
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+    }
+
     span {
       color: #333;
       font-size: 1.4em;
@@ -581,6 +638,43 @@
         box-shadow: 0 0 0 3px rgba(73, 136, 196, 0.2);
       }
 
+      .mobile-card .password-wrapper {
+        position: relative;
+        margin: 8px 0;
+      }
+
+      .mobile-card .password-wrapper input {
+        padding-right: 50px;
+        margin: 0 !important;
+      }
+
+      .mobile-card .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-size: 1.2em;
+        width: auto !important;
+        height: auto !important;
+        cursor: pointer;
+        z-index: 5;
+        box-shadow: none !important;
+      }
+
+      .mobile-card .password-toggle:hover {
+        color: #333;
+        transform: translateY(-50%) !important;
+        box-shadow: none !important;
+      }
+
       button {
         font-size: 1.2em;
         padding: 0.7em 2em;
@@ -656,6 +750,34 @@
       .mobile-container {
         display: none !important;
       }
+
+      .login .password-wrapper input {
+        width: 100%;
+        background: #eee;
+        border: none;
+        padding: 12px 15px;
+        padding-right: 50px;
+        font-size: 1.4em;
+        margin: 0 !important;
+      }
+
+      .login .password-toggle {
+        right: 15px;
+      }
+
+      .register .password-wrapper input {
+        width: 100%;
+        background: #eee;
+        border: none;
+        padding: 12px 15px;
+        padding-right: 50px;
+        font-size: 1.4em;
+        margin: 0 !important;
+      }
+
+      .register .password-toggle {
+        right: 15px;
+      }
     }
   </style>
 
@@ -675,7 +797,15 @@
             <form action="{{ route('auth.login') }}" method="POST">
               @csrf
               <input type="text" name="email_or_npm" placeholder="Email atau NPM" value="{{ old('email_or_npm') }}">
-              <input type="password" name="password" placeholder="Password">
+              <div class="password-wrapper">
+                <input type="password" name="password" placeholder="Password" style="width: 100%; padding-right: 50px;">
+                <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
 
               <label class="remember-container">
                 <input type="checkbox" name="remember" id="remember">
@@ -709,8 +839,24 @@
               <input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
               <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
               <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-              <input type="password" name="password" placeholder="Password" required>
-              <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+              <div class="password-wrapper">
+                <input type="password" name="password" placeholder="Password" style="width: 100%; padding-right: 50px;" required>
+                <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+              <div class="password-wrapper">
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" style="width: 100%; padding-right: 50px;" required>
+                <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
 
               <label class="remember-container">
                 <input type="checkbox" name="terms" id="terms" required>
@@ -737,7 +883,15 @@
           <form action="{{ route('auth.login') }}" method="POST">
             @csrf
             <input type="text" name="email_or_npm" placeholder="Email atau NPM" value="{{ old('email_or_npm') }}">
-            <input type="password" name="password" placeholder="Password">
+            <div class="password-wrapper">
+              <input type="password" name="password" placeholder="Password" style="width: 100%; padding-right: 50px;">
+              <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
 
             <label class="remember-container">
               <input type="checkbox" name="remember" id="remember">
@@ -776,8 +930,24 @@
             <input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
             <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
             <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+            <div class="password-wrapper">
+              <input type="password" name="password" placeholder="Password" style="width: 100%; padding-right: 50px;" required>
+              <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <div class="password-wrapper">
+              <input type="password" name="password_confirmation" placeholder="Confirm Password" style="width: 100%; padding-right: 50px;" required>
+              <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
 
             <label class="remember-container">
               <input type="checkbox" name="terms" id="terms" required>
@@ -897,6 +1067,22 @@
       }
 
       return true;
+    }
+
+    function togglePassword(button) {
+      const passwordWrapper = button.closest('.password-wrapper');
+      const passwordInput = passwordWrapper.querySelector('input[type="password"], input[type="text"]');
+      const eyeIcon = button.querySelector('.eye-icon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        // Change icon to eye-off
+        eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+      } else {
+        passwordInput.type = 'password';
+        // Change icon back to eye
+        eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+      }
     }
   </script>
 </html>
