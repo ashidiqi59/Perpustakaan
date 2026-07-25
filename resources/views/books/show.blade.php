@@ -83,22 +83,22 @@
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="grid grid-cols-1 md:grid-cols-3">
                     <!-- Book Cover -->
-                    <div class="bg-gray-100 p-8 flex items-center justify-center">
+                    <div class="bg-gray-100 p-4 sm:p-8 flex items-center justify-center">
                         <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}"
                             alt="{{ $book->title }}"
-                            class="w-64 h-96 object-cover rounded-lg shadow-lg">
+                            class="w-48 sm:w-64 h-72 sm:h-96 object-cover rounded-lg shadow-lg">
                     </div>
 
                     <!-- Book Info -->
-                    <div class="md:col-span-2 p-8">
+                    <div class="md:col-span-2 p-4 sm:p-8">
                         <!-- Title & Status -->
-                        <div class="flex items-start justify-between mb-6">
+                        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-6">
                             <div>
-                                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $book->title }}</h1>
-                                <p class="text-gray-500">ISBN: {{ $book->isbn }}</p>
+                                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{{ $book->title }}</h1>
+                                <p class="text-xs sm:text-sm text-gray-500">ISBN: {{ $book->isbn }}</p>
                             </div>
-                            <div class="flex gap-2">
-                                <span class="px-3 py-1 {{ $book->stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} rounded-full text-sm font-medium">
+                            <div class="flex gap-2 shrink-0">
+                                <span class="px-3 py-1 {{ $book->stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} rounded-full text-xs sm:text-sm font-medium">
                                     {{ $book->stock > 0 ? 'Tersedia' : 'Tidak Tersedia' }}
                                 </span>
                             </div>
@@ -195,35 +195,35 @@
 
                         <!-- Stock Info -->
                         <div class="bg-gray-50 rounded-lg p-4 mb-8">
-                            <div class="flex items-center justify-between">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 {{ $book->stock > 0 ? 'bg-green-100' : 'bg-red-100' }} rounded-full flex items-center justify-center">
+                                    <div class="w-12 h-12 {{ $book->stock > 0 ? 'bg-green-100' : 'bg-red-100' }} rounded-full flex items-center justify-center shrink-0">
                                         <i class="fas fa-book text-lg {{ $book->stock > 0 ? 'text-green-600' : 'text-red-600' }}"></i>
                                     </div>
                                     <div>
-                                        <p class="text-sm text-gray-500">Stok Tersedia</p>
-                                        <p class="text-2xl font-bold text-gray-800">{{ $book->stock }} Buku</p>
+                                        <p class="text-xs sm:text-sm text-gray-500">Stok Tersedia</p>
+                                        <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ $book->stock }} Buku</p>
                                     </div>
                                 </div>
                                 @auth
                                     @if($userHasActiveLoan)
-                                    <button disabled class="px-8 py-3 bg-yellow-500 text-white rounded-lg cursor-not-allowed flex items-center gap-2 font-semibold" title="Anda sudah meminjam buku ini">
+                                    <button disabled class="w-full sm:w-auto px-6 sm:px-8 py-3 bg-yellow-500 text-white rounded-lg cursor-not-allowed flex items-center justify-center gap-2 font-semibold text-sm sm:text-base" title="Anda sudah meminjam buku ini">
                                         <i class="fas fa-check-circle"></i>
                                         Sudah Dipinjam
                                     </button>
                                     @elseif($book->stock > 0)
-                                    <button onclick="showBorrowModal()" class="px-8 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-semibold">
+                                    <button onclick="showBorrowModal()" class="w-full sm:w-auto px-6 sm:px-8 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-semibold text-sm sm:text-base">
                                         <i class="fas fa-hand-holding"></i>
                                         Ajukan Peminjaman
                                     </button>
                                     @else
-                                    <button disabled class="px-8 py-3 bg-gray-400 text-white rounded-lg cursor-not-allowed flex items-center gap-2 font-semibold">
+                                    <button disabled class="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gray-400 text-white rounded-lg cursor-not-allowed flex items-center justify-center gap-2 font-semibold text-sm sm:text-base">
                                         <i class="fas fa-times-circle"></i>
                                         Stok Habis
                                     </button>
                                     @endif
                                 @else
-                                    <a href="{{ route('login') }}" class="px-8 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-semibold">
+                                    <a href="{{ route('login') }}" class="w-full sm:w-auto px-6 sm:px-8 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-semibold text-sm sm:text-base">
                                         <i class="fas fa-sign-in-alt"></i>
                                         Login untuk Meminjam
                                     </a>

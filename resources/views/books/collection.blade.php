@@ -99,37 +99,39 @@
 
     <!-- Search & Filter Section -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-        <div class="bg-white rounded-xl shadow-lg p-6 fade-in-up">
-            <form action="{{ route('books.collection') }}" method="GET" class="flex flex-wrap gap-4 items-end">
-                <div class="flex-1 min-w-64">
+        <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 fade-in-up">
+            <form action="{{ route('books.collection') }}" method="GET" class="flex flex-col md:flex-row flex-wrap gap-3 sm:gap-4 items-stretch md:items-end">
+                <div class="w-full md:flex-1 min-w-0 md:min-w-64">
                     <label class="block text-sm font-medium text-gray-600 mb-1">Cari Buku</label>
                     <div class="relative">
                         <input type="text" name="search" value="{{ $search }}" placeholder="Judul, penulis, ISBN..." 
-                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                         <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
                 </div>
-                <div>
+                <div class="w-full md:w-auto">
                     <label class="block text-sm font-medium text-gray-600 mb-1">Kategori</label>
-                    <select name="category" class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-48">
+                    <select name="category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-0 md:min-w-48 text-sm">
                         <option value="">Semua Kategori</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat }}" {{ $category == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="px-6 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-semibold">
-                    <i class="fas fa-search"></i>
-                    Cari
-                </button>
-                @if($search || $category)
-                    <a href="{{ route('books.collection') }}" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 font-semibold">
-                        <i class="fas fa-times"></i>
-                        Reset
-                    </a>
-                @endif
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button type="submit" class="flex-1 md:flex-initial px-6 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-semibold text-sm">
+                        <i class="fas fa-search"></i>
+                        Cari
+                    </button>
+                    @if($search || $category)
+                        <a href="{{ route('books.collection') }}" class="flex-1 md:flex-initial px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center gap-2 font-semibold text-sm">
+                            <i class="fas fa-times"></i>
+                            Reset
+                        </a>
+                    @endif
+                </div>
             </form>
         </div>
     </section>
@@ -138,18 +140,18 @@
     <section class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Results Info -->
-            <div class="flex items-center justify-between mb-8 fade-in-up">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 fade-in-up gap-2">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Semua Buku</h2>
-                    <p class="text-gray-600">Menampilkan {{ $books->count() }} dari {{ $books->total() }} buku</p>
+                    <p class="text-gray-600 text-sm">Menampilkan {{ $books->count() }} dari {{ $books->total() }} buku</p>
                 </div>
-                <div class="text-sm text-gray-500">
+                <div class="text-xs sm:text-sm text-gray-500">
                     Halaman {{ $books->currentPage() }} dari {{ $books->lastPage() }}
                 </div>
             </div>
             
             @if($books->count() > 0)
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
                     @foreach($books as $index => $book)
                     <a href="{{ route('books.show', $book->id) }}" class="fade-in-up delay-{{ ($index + 1) * 50 }} book-card block group">
                         <div class="bg-white rounded-lg overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">

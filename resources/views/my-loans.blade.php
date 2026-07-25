@@ -31,14 +31,14 @@
 <body>
     @include('components.navbar')
 
-    <div class="min-h-screen pt-24 pb-16">
-        <div class="max-w-6xl mx-auto px-4">
+    <div class="min-h-screen pt-20 sm:pt-24 pb-12 sm:pb-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <!-- Header -->
-            <div class="mb-8">
-                <h1 class="text-4xl font-bold text-gray-900 mb-2">
-                    <i class="fas fa-history library-primary mr-3"></i>Riwayat Peminjaman
+            <div class="mb-6 sm:mb-8">
+                <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 flex items-center">
+                    <i class="fas fa-history library-primary mr-3"></i><span>Riwayat Peminjaman</span>
                 </h1>
-                <p class="text-gray-600">Kelola peminjaman buku Anda</p>
+                <p class="text-xs sm:text-base text-gray-600">Kelola peminjaman buku Anda</p>
             </div>
 
             <!-- Alert Messages -->

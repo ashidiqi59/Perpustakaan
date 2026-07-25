@@ -138,15 +138,15 @@
                     </p>
 
                     <!-- Search Bar -->
-                    <form action="{{ route('home') }}#koleksi" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex gap-2 mb-6">
+                    <form action="{{ route('home') }}#koleksi" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex flex-col sm:flex-row gap-2 mb-6">
                         <input
                             type="text"
                             name="search"
                             value="{{ $search ?? '' }}"
                             placeholder="Cari judul buku, penulis, atau ISBN..."
-                            class="flex-1 px-4 py-3 border-0 focus:outline-none focus:ring-0 text-gray-700"
+                            class="w-full sm:flex-1 px-4 py-3 border-0 focus:outline-none focus:ring-0 text-gray-700 text-sm sm:text-base"
                         >
-                        <button type="submit" class="bg-library-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2">
+                        <button type="submit" class="bg-library-primary text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -155,25 +155,25 @@
                     </form>
 
                     <!-- Quick Stats -->
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="bg-white rounded-lg p-4 shadow-sm text-center">
-                            <div class="text-2xl font-bold text-library-primary">1,250+</div>
-                            <div class="text-xs text-gray-600 mt-1">Koleksi Buku</div>
+                    <div class="grid grid-cols-3 gap-2 sm:gap-4">
+                        <div class="bg-white rounded-lg p-2.5 sm:p-4 shadow-sm text-center">
+                            <div class="text-lg sm:text-2xl font-bold text-library-primary">1,250+</div>
+                            <div class="text-[11px] sm:text-xs text-gray-600 mt-1">Koleksi Buku</div>
                         </div>
-                        <div class="bg-white rounded-lg p-4 shadow-sm text-center">
-                            <div class="text-2xl font-bold text-library-primary">500+</div>
-                            <div class="text-xs text-gray-600 mt-1">Anggota Aktif</div>
+                        <div class="bg-white rounded-lg p-2.5 sm:p-4 shadow-sm text-center">
+                            <div class="text-lg sm:text-2xl font-bold text-library-primary">500+</div>
+                            <div class="text-[11px] sm:text-xs text-gray-600 mt-1">Anggota Aktif</div>
                         </div>
-                        <div class="bg-white rounded-lg p-4 shadow-sm text-center">
-                            <div class="text-2xl font-bold text-library-primary">24/7</div>
-                            <div class="text-xs text-gray-600 mt-1">Akses Online</div>
+                        <div class="bg-white rounded-lg p-2.5 sm:p-4 shadow-sm text-center">
+                            <div class="text-lg sm:text-2xl font-bold text-library-primary">24/7</div>
+                            <div class="text-[11px] sm:text-xs text-gray-600 mt-1">Akses Online</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right - Featured Books Stack -->
-                <div class="fade-in-up delay-200 flex justify-center">
-                    <div class="relative h-[500px] w-[300px]">
+                <div class="fade-in-up delay-200 flex justify-center max-w-full overflow-hidden sm:overflow-visible py-4">
+                    <div class="relative h-[420px] sm:h-[500px] w-[280px] sm:w-[300px]">
                         @forelse($featuredBooks as $index => $book)
                             @php
                                 $rotations = [-5, 2, -3];
@@ -254,33 +254,35 @@
                 </div>
 
                 <!-- Search & Filter -->
-                <form action="{{ route('home') }}#koleksi" method="GET" class="flex flex-wrap gap-2">
-                    <div class="relative">
+                <form action="{{ route('home') }}#koleksi" method="GET" class="flex flex-col sm:flex-row flex-wrap gap-2 w-full md:w-auto">
+                    <div class="relative w-full sm:w-64">
                         <input type="text" name="search" value="{{ $search }}" placeholder="Cari buku..."
-                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64">
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                         <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
-                    <select name="category" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select name="category" class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                         <option value="">Semua Kategori</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat }}" {{ $category == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                         @endforeach
                     </select>
-                    <button type="submit" class="px-4 py-2 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-search mr-1"></i> Cari
-                    </button>
-                    @if($search || $category)
-                        <a href="{{ route('home') }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                            <i class="fas fa-times mr-1"></i> Reset
-                        </a>
-                    @endif
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button type="submit" class="flex-1 sm:flex-initial px-4 py-2 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-sm">
+                            <i class="fas fa-search mr-1"></i> Cari
+                        </button>
+                        @if($search || $category)
+                            <a href="{{ route('home') }}" class="flex-1 sm:flex-initial px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center text-sm">
+                                <i class="fas fa-times mr-1"></i> Reset
+                            </a>
+                        @endif
+                    </div>
                 </form>
             </div>
 
             @if($books->count() > 0)
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
                     @foreach($books->take(5) as $index => $book)
                     <a href="{{ route('books.show', $book->id) }}" class="fade-in-up delay-{{ ($index + 1) * 100 }} book-card block group">
                         <div class="bg-white rounded-lg overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
