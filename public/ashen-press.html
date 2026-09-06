@@ -26,8 +26,9 @@
   canvas#gl.on{opacity:1}
 
   
-  /* Hide AshenPress top header & bottom catalogue rail as requested */
-  header, footer, .mbar, .menubtn, .menu { display: none !important; }
+  /* Hide top header, bottom rail, and loading UI */
+  header, footer, .mbar, .menubtn, .menu, .loader { display: none !important; }
+  canvas#gl { opacity: 1 !important; }
 
   /* ---------- header ---------- */
   header{
@@ -224,7 +225,7 @@ const K = {
   introStagger: 78, introWallFade: 1000, introFade: 460,
   fov: 20,
   boxX: 5.86, boxY: 3.36, boxCY: 0.06, offset: 1.25, maxWidthPx: 1550,
-  orbitAz: 0.085, orbitEl: 0.052,
+  orbitAz: 0.0, orbitEl: 0.0,
   activeX: 0.72, activeRot: [0.075, 0.285, 0.0],
   mTilt: -Math.PI/7, mFlat: -0.06,
   mStepZ: 0.15, mStepY: 0.17, mY: 0.30, mZ0: 0.75,
@@ -654,7 +655,7 @@ function wallTexture(px){
    ════════════════════════════════════════════════════════════════════════ */
 const canvas   = document.getElementById('gl');
 const renderer = new THREE.WebGLRenderer({canvas,antialias:false,alpha:false,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
 renderer.setClearColor(0xc6ae8e,1);
 renderer.toneMapping = THREE.NoToneMapping;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -1665,33 +1666,23 @@ function tick(now){
 }
 
 /* ---- boot ---- */
-const loader=document.getElementById('loader'), barfill=document.getElementById('barfill');
-const setProgress=p=>barfill.style.transform=`scaleX(${p})`;
-setProgress(0.06);
 const frame=()=>new Promise(r=>{let done=false;const go=()=>{if(!done){done=true;r();}};
   requestAnimationFrame(go);setTimeout(go,34);});
 
 (async function boot(){
-  try{ await Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,2200))]); }catch(e){}
-  setProgress(0.10);
+  try{ await Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,300))]); }catch(e){}
   await loadPlates();
-  setProgress(0.16);
   if(!document.hidden) await frame();
   for(let i=0;i<BOOKS.length;i++){
     books.push(buildBook(BOOKS[i],i));
-    setProgress(0.16+0.80*(i+1)/BOOKS.length);
     if(!document.hidden) await frame();
   }
   applyMode();
   resize(); washResize();
-  setProgress(1);
   requestAnimationFrame(tick);
   await frame(); await frame();
-  loader.classList.add('gone');
   canvas.classList.add('on');
   revealChrome();
-  const ft=document.querySelector('footer'); if(ft) ft.classList.add('on');
-  mbar.classList.add('on');
   startIntro();
 })();
 </script>
