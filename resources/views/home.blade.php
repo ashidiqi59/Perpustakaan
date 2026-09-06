@@ -138,7 +138,7 @@
                     </p>
 
                     <!-- Search Bar -->
-                    <form action="{{ route('home') }}#koleksi" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex flex-col sm:flex-row gap-2 mb-6">
+                    <form action="{{ route('books.collection') }}" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex flex-col sm:flex-row gap-2 mb-6">
                         <input
                             type="text"
                             name="search"
@@ -244,93 +244,48 @@
         </div>
     </section>
 
-    <!-- All Books Section -->
-    <section id="koleksi" class="bg-white py-16">
+    <!-- All Books / 3D Interactive Bookshelf Section -->
+    <section id="koleksi" class="bg-slate-50/70 py-16 lg:py-20 border-y border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 fade-in-up gap-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 fade-in-up gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Koleksi Buku</h2>
-                    <p class="text-gray-600">Jelajahi koleksi lengkap buku perpustakaan</p>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold mb-3">
+                        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                        Rak Buku Digital Interaktif 3D
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Koleksi Buku Perpustakaan</h2>
+                    <p class="text-gray-600 text-sm sm:text-base">Eksplorasi rak buku 3D interaktif. Klik buku untuk membaca detail, preview karya, atau buka lembaran di dalamnya.</p>
                 </div>
 
-                <!-- Search & Filter -->
-                <form action="{{ route('home') }}#koleksi" method="GET" class="flex flex-col sm:flex-row flex-wrap gap-2 w-full md:w-auto">
-                    <div class="relative w-full sm:w-64">
-                        <input type="text" name="search" value="{{ $search }}" placeholder="Cari buku..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                    <select name="category" class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                        <option value="">Semua Kategori</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat }}" {{ $category == $cat ? 'selected' : '' }}>{{ $cat }}</option>
-                        @endforeach
-                    </select>
-                    <div class="flex gap-2 w-full sm:w-auto">
-                        <button type="submit" class="flex-1 sm:flex-initial px-4 py-2 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-sm">
-                            <i class="fas fa-search mr-1"></i> Cari
-                        </button>
-                        @if($search || $category)
-                            <a href="{{ route('home') }}" class="flex-1 sm:flex-initial px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center text-sm">
-                                <i class="fas fa-times mr-1"></i> Reset
-                            </a>
-                        @endif
-                    </div>
-                </form>
-            </div>
-
-            @if($books->count() > 0)
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
-                    @foreach($books->take(5) as $index => $book)
-                    <a href="{{ route('books.show', $book->id) }}" class="fade-in-up delay-{{ ($index + 1) * 100 }} book-card block group">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
-                            <div class="relative">
-                                <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-64 object-cover">
-                                <div class="absolute top-2 right-2">
-                                    <span class="status-badge {{ $book->stock > 0 ? 'status-available' : 'status-borrowed' }}">{{ $book->stock > 0 ? 'Tersedia' : 'Dipinjam' }}</span>
-                                </div>
-                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
-                                    <div class="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                                        <span class="bg-white text-gray-800 px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                                            <i class="fas fa-eye mr-1"></i> Lihat Detail
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-900 mb-1 text-sm line-clamp-2 group-hover:text-library-primary transition-colors">{{ $book->title }}</h3>
-                                <p class="text-xs text-gray-500 mb-2">{{ $book->author ?: 'Penulis Tidak Diketahui' }}</p>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-xs text-gray-400">ISBN: {{ $book->isbn }}</span>
-                                    <span class="text-xs text-library-primary font-semibold">{{ $book->stock }} tersedia</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    @endforeach
-                </div>
-
-                <!-- View All Button -->
-                <div class="mt-8 flex justify-center">
-                    <a href="{{ route('books.collection') }}" class="px-8 py-3 bg-library-primary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-semibold">
-                        <i class="fas fa-book"></i>
-                        Lihat Selengkapnya
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('books.collection') }}" class="px-5 py-2.5 bg-library-primary text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+                        <i class="fas fa-th-large text-xs"></i>
+                        Lihat Katalog Lengkap
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </a>
                 </div>
-            @else
-                <div class="text-center py-12">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-book text-gray-400 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Tidak ada buku</h3>
-                    <p class="text-gray-500">Tidak ada buku yang sesuai dengan pencarian Anda.</p>
+            </div>
+
+            <!-- AshenPress 3D Art-Book Shelf Integration -->
+            <div class="fade-in-up delay-200 mb-8">
+                <x-ashen-press height="780px" class="shadow-2xl ring-1 ring-black/10" />
+            </div>
+
+            <!-- Bottom Action & Info -->
+            <div class="fade-in-up delay-300 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-white border border-gray-200 shadow-sm text-sm text-gray-600">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-info-circle text-library-primary"></i>
+                    <span><strong>Petunjuk:</strong> Klik & seret mouse untuk menggeser rak, klik volume buku untuk membuka detail & membalik halaman buku.</span>
                 </div>
-            @endif
+                <a href="{{ route('books.collection') }}" class="text-library-primary hover:text-blue-800 font-semibold flex items-center gap-1.5 whitespace-nowrap">
+                    Buka Katalog Seluruh Buku
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+            </div>
         </div>
     </section>
 
