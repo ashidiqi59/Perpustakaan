@@ -118,6 +118,30 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* ===== Koleksi Section ===== */
+
+        /* Subtle dot-grid background */
+        .koleksi-bg {
+            background-color: #F4EFEA;
+            background-image: radial-gradient(circle, rgba(160,135,100,0.14) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Shelf frame — thin, elegant border */
+        .shelf-frame {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(100,75,40,0.10), 0 0 0 1px rgba(200,175,140,0.35);
+        }
+
+        /* Bottom info bar */
+        .koleksi-info-bar {
+            background: rgba(255,255,255,0.80);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(210,190,160,0.35);
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body>
@@ -245,43 +269,51 @@
     </section>
 
     <!-- All Books / 3D Interactive Bookshelf Section -->
-    <section id="koleksi" class="relative overflow-hidden bg-[#F4EFEA] py-16 lg:py-24 border-y border-[#E6DFD5]">
+    <section id="koleksi" class="koleksi-bg py-16 lg:py-20 border-y border-[#E6DFD5]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 fade-in-up gap-4">
+
+            <!-- Section Header -->
+            <div class="fade-in-up flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
                 <div>
-                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Koleksi Buku Perpustakaan</h2>
-                    <p class="text-gray-600 text-sm sm:text-base">Eksplorasi rak buku 3D interaktif. Klik buku untuk membaca detail, preview karya, atau buka lembaran di dalamnya.</p>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
+                        Koleksi Buku Perpustakaan
+                    </h2>
+                    <p class="text-gray-500 text-sm sm:text-base mt-2.5 max-w-lg">
+                        Eksplorasi rak buku 3D interaktif. Klik buku untuk membaca detail, preview karya, atau buka lembaran di dalamnya.
+                    </p>
                 </div>
+                <a href="{{ route('books.collection') }}" class="shrink-0 px-5 py-2.5 bg-library-primary text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2 group">
+                    <i class="fas fa-th-large text-xs"></i>
+                    Lihat Katalog Lengkap
+                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
 
-                <div class="flex items-center gap-3">
-                    <a href="{{ route('books.collection') }}" class="px-5 py-2.5 bg-library-primary text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2">
-                        <i class="fas fa-th-large text-xs"></i>
-                        Lihat Katalog Lengkap
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </a>
+            <!-- 3D Bookshelf with clean frame -->
+            <div class="fade-in-up delay-200 mb-6">
+                <div class="shelf-frame">
+                    <x-ashen-press height="780px" class="" />
                 </div>
             </div>
 
-            <!-- AshenPress 3D Art-Book Shelf Integration -->
-            <div class="fade-in-up delay-200 mb-8">
-                <x-ashen-press height="780px" class="" />
-            </div>
-
-            <!-- Bottom Action & Info -->
-            <div class="fade-in-up delay-300 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-white/80 backdrop-blur-sm border border-[#DDD4C7] shadow-sm text-sm text-gray-600">
+            <!-- Bottom info bar -->
+            <div class="fade-in-up delay-300 koleksi-info-bar flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3 text-sm text-gray-500">
                 <div class="flex items-center gap-2">
-                    <i class="fas fa-info-circle text-library-primary"></i>
-                    <span><strong>Petunjuk:</strong> Klik & seret mouse untuk menggeser rak, klik volume buku untuk membuka detail & membalik halaman buku.</span>
+                    <svg class="w-4 h-4 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span><span class="font-medium text-gray-700">Petunjuk:</span> Klik &amp; seret untuk menggeser rak &mdash; klik buku untuk membuka detail &amp; membalik halaman.</span>
                 </div>
-                <a href="{{ route('books.collection') }}" class="text-library-primary hover:text-blue-800 font-semibold flex items-center gap-1.5 whitespace-nowrap">
-                    Buka Katalog Seluruh Buku
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ route('books.collection') }}" class="shrink-0 flex items-center gap-1.5 text-library-primary hover:text-blue-800 font-semibold transition-colors group">
+                    Lihat semua koleksi
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                     </svg>
                 </a>
             </div>
+
         </div>
     </section>
 
