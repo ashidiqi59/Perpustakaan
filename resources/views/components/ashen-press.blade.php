@@ -3,10 +3,10 @@
     'class' => ''
 ])
 
-<div class="ashen-press-container relative w-full overflow-hidden bg-[#F9FAFB] {{ $class }}"
+<div class="ashen-press-container relative w-full overflow-hidden bg-[#F4EFEA] {{ $class }}"
      style="min-height: 520px; height: {{ $height }};">
     <!-- Clean, elegant loading indicator -->
-    <div id="ashen-press-loader" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#F9FAFB] transition-opacity duration-500 pointer-events-none">
+    <div id="ashen-press-loader" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#F4EFEA] transition-opacity duration-500 pointer-events-none">
         <div class="relative flex items-center justify-center">
             <!-- Spinner Ring -->
             <div class="w-14 h-14 rounded-full border-2 border-blue-600/20 border-t-blue-600 animate-spin"></div>
@@ -17,7 +17,7 @@
                 </svg>
             </div>
         </div>
-        <p class="mt-4 text-xs tracking-wider uppercase font-semibold text-gray-500">Memuat Rak Buku 3D...</p>
+        <p class="mt-4 text-xs tracking-wider uppercase font-semibold text-stone-600">Memuat Rak Buku 3D...</p>
     </div>
 
     <!-- 3D Bookshelf Iframe -->
@@ -28,7 +28,7 @@
         sandbox="allow-scripts allow-same-origin"
         loading="eager"
         class="w-full h-full border-0 block relative z-0 opacity-100"
-        style="background: #F9FAFB;"
+        style="background: #F4EFEA;"
     ></iframe>
 </div>
 
@@ -47,21 +47,18 @@
             }, 500);
         }
 
-        // Listen for ready signal from 3D scene
         window.addEventListener('message', function(e) {
             if (e.data === 'ashen-ready') {
                 hideLoader();
             }
         });
 
-        // Fallback on iframe load
         if (iframe) {
             iframe.addEventListener('load', function() {
                 setTimeout(hideLoader, 600);
             });
         }
 
-        // Maximum fallback timeout so loader never gets stuck
         setTimeout(hideLoader, 2000);
     })();
 </script>

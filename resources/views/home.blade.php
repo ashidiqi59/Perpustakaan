@@ -245,14 +245,10 @@
     </section>
 
     <!-- All Books / 3D Interactive Bookshelf Section -->
-    <section id="koleksi" class="bg-[#F9FAFB] py-16 lg:py-20">
+    <section id="koleksi" class="relative overflow-hidden bg-[#F4EFEA] py-16 lg:py-24 border-y border-[#E6DFD5]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 fade-in-up gap-4">
                 <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold mb-3">
-                        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-                        Rak Buku Digital Interaktif 3D
-                    </div>
                     <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Koleksi Buku Perpustakaan</h2>
                     <p class="text-gray-600 text-sm sm:text-base">Eksplorasi rak buku 3D interaktif. Klik buku untuk membaca detail, preview karya, atau buka lembaran di dalamnya.</p>
                 </div>
@@ -274,7 +270,7 @@
             </div>
 
             <!-- Bottom Action & Info -->
-            <div class="fade-in-up delay-300 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-white border border-gray-200 shadow-sm text-sm text-gray-600">
+            <div class="fade-in-up delay-300 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-white/80 backdrop-blur-sm border border-[#DDD4C7] shadow-sm text-sm text-gray-600">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-info-circle text-library-primary"></i>
                     <span><strong>Petunjuk:</strong> Klik & seret mouse untuk menggeser rak, klik volume buku untuk membuka detail & membalik halaman buku.</span>

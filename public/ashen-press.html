@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F9FAFB;
+    --bg:#F4EFEA;
     --ink:#1F2937;
     --ink-soft:rgba(31,41,55,.6);
     --ease:cubic-bezier(.22,1,.36,1);
@@ -28,7 +28,7 @@
   
   /* Hide top header, bottom rail, and loading UI */
   header, footer, .mbar, .menubtn, .menu, .loader { display: none !important; }
-  canvas#gl { opacity: 1 !important; background: #F9FAFB !important; }
+  canvas#gl { opacity: 1 !important; background: #F4EFEA !important; }
 
   /* ---------- header ---------- */
   header{
@@ -605,14 +605,32 @@ function paperTexture(px){
 }
 function wallTexture(px){
   const c=C(px,px),g=c.getContext('2d');
+  const Ww=WALL.x1-WALL.x0, Hh=WALL.y1-WALL.y0;
   const img=g.createImageData(px,px), d=img.data;
+  const PB=[K.shelfTop[0]-K.plankThick, K.shelfTop[1]-K.plankThick];
+  const r=mulberry(7);
   for(let j=0;j<px;j++){
+    const y = WALL.y1 - (j+0.5)/px*Hh;
+    const edgeFade = Math.sin((j / px) * Math.PI);
     for(let i=0;i<px;i++){
+      const x = WALL.x0 + (i+0.5)/px*Ww;
+      const dist = Math.hypot(x*0.35, (y+0.25)*0.5);
+      let L = 244 - Math.min(8, dist * 3.0) * edgeFade;
+      
+      for(const pb of PB){
+        const dy = pb - y;
+        if(dy > 0 && dy < 0.70) {
+          L -= 5.0 * Math.pow(1.0 - dy/0.70, 1.8);
+        }
+      }
+      
       const o=(j*px+i)*4;
-      d[o]  = 249;
-      d[o+1]= 250;
-      d[o+2]= 251;
-      d[o+3]= 255;
+      const n=(r()-0.5)*2.0;
+      const val = clamp(L + n, 0, 255);
+      d[o]   = clamp(val * (244/244), 0, 255);
+      d[o+1] = clamp(val * (239/244), 0, 255);
+      d[o+2] = clamp(val * (234/244), 0, 255);
+      d[o+3] = 255;
     }
   }
   g.putImageData(img,0,0);
@@ -627,7 +645,7 @@ function wallTexture(px){
 const canvas   = document.getElementById('gl');
 const renderer = new THREE.WebGLRenderer({canvas,antialias:false,alpha:false,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
-renderer.setClearColor(0xF9FAFB,1);
+renderer.setClearColor(0xF4EFEA,1);
 renderer.toneMapping = THREE.NoToneMapping;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.autoClear = false;
@@ -647,7 +665,9 @@ const wallMat = new THREE.ShaderMaterial({
     uniform sampler2D uBake; uniform sampler2D uPaper; uniform float uOpacity;
     varying vec2 vUv;
     void main(){
-      vec3 col=texture2D(uBake,vUv).rgb;
+      vec3 bake=texture2D(uBake,vUv).rgb;
+      float fine=texture2D(uPaper,vUv*16.0).r;
+      vec3 col=bake*(0.98+0.04*fine);
       gl_FragColor=vec4(col,uOpacity);
       #include <colorspace_fragment>
     }`});
@@ -1602,8 +1622,8 @@ function tick(now){
       B.wallSh.scale.setScalar((1+away*0.13)*(B.tScale.v[0]||0.0001));
       const seat=B.tSeat.v[0];                                   // 1 on the shelf, 0 in the hand
       B.wallSh.material.opacity=0; B.wallSh.visible=false;
-      B.cs.material.opacity=(0.14*(1-away*0.55))*op*seat;
-      B.crease.material.opacity=(0.06*(1-away))*op*seat;
+      B.cs.material.opacity=(0.25*(1-away*0.55))*op*seat;
+      B.crease.material.opacity=(0.10*(1-away))*op*seat;
       B.reflMat.uniforms.uOpacity.value=B.tRefl.v[0]*op*seat;
       B.refl.position.z=K.bookZ+(SZH/2)*Math.sin(-B._lean)+0.24+B.tHover.v[2]*2;
     }
@@ -1651,6 +1671,7 @@ const frame=()=>new Promise(r=>{let done=false;const go=()=>{if(!done){done=true
   await frame(); await frame();
   canvas.classList.add('on');
   revealChrome();
-  startIntro(); try{ window.parent.postMessage('ashen-ready', '*'); }catch(e){}
+  startIntro();
+  try{ window.parent.postMessage('ashen-ready', '*'); }catch(e){}
 })();
 </script>
