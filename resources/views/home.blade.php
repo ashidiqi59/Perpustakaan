@@ -245,7 +245,7 @@
     </section>
 
     <!-- All Books / 3D Interactive Bookshelf Section -->
-    <section id="koleksi" class="bg-slate-50/70 py-16 lg:py-20 border-y border-slate-200">
+    <section id="koleksi" class="bg-[#F9FAFB] py-16 lg:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 fade-in-up gap-4">
                 <div>
@@ -270,7 +270,7 @@
 
             <!-- AshenPress 3D Art-Book Shelf Integration -->
             <div class="fade-in-up delay-200 mb-8">
-                <x-ashen-press height="780px" class="shadow-xl ring-1 ring-black/5" />
+                <x-ashen-press height="780px" class="" />
             </div>
 
             <!-- Bottom Action & Info -->
