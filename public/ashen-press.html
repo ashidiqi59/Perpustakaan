@@ -1651,6 +1651,6 @@ const frame=()=>new Promise(r=>{let done=false;const go=()=>{if(!done){done=true
   await frame(); await frame();
   canvas.classList.add('on');
   revealChrome();
-  startIntro();
+  startIntro(); try{ window.parent.postMessage('ashen-ready', '*'); }catch(e){}
 })();
 </script>
