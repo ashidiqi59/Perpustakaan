@@ -3,7 +3,7 @@
     'class' => ''
 ])
 
-<div class="shader-frame ashen-press-container relative w-full rounded-2xl overflow-hidden shadow-2xl border border-stone-800/20 bg-[#c6ae8e] {{ $class }}"
+<div class="shader-frame ashen-press-container relative w-full rounded-2xl overflow-hidden shadow-xl border border-stone-300/80 bg-[#c6ae8e] {{ $class }}"
      style="min-height: 520px; height: {{ $height }};">
     <iframe
         id="ashen-press-iframe"

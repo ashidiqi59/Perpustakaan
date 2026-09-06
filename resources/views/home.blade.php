@@ -270,7 +270,7 @@
 
             <!-- AshenPress 3D Art-Book Shelf Integration -->
             <div class="fade-in-up delay-200 mb-8">
-                <x-ashen-press height="780px" class="shadow-2xl ring-1 ring-black/10" />
+                <x-ashen-press height="780px" class="shadow-xl ring-1 ring-black/5" />
             </div>
 
             <!-- Bottom Action & Info -->

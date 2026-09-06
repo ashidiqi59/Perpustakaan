@@ -605,48 +605,22 @@ function paperTexture(px){
 }
 function wallTexture(px){
   const c=C(px,px),g=c.getContext('2d');
-  const Ww=WALL.x1-WALL.x0, Hh=WALL.y1-WALL.y0;
   const img=g.createImageData(px,px), d=img.data;
-  const PT=K.shelfTop, PB=[K.shelfTop[0]-K.plankThick, K.shelfTop[1]-K.plankThick];
-  const sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
   const r=mulberry(5);
   for(let j=0;j<px;j++){
-    const y = WALL.y1 - (j+0.5)/px*Hh;
     for(let i=0;i<px;i++){
-      const x = WALL.x0 + (i+0.5)/px*Ww;
-      const ax=Math.abs(x)/WT.bellR;
-      let L = WT.peak - WT.bell*ax*ax + WT.rightLift*clamp(x/4,0,1);
-      L -= WT.vFall*sm((WT.vStart-y)/WT.vRange)*sm((-x+2.8)/8.6);
-      const inPlank = 1-sm((Math.abs(x)-WT.plankHalf)/WT.plankFeather);
-      const inShadow = sm((x-WT.shLeft)/WT.shLeftFeather)*(1-sm((x-WT.shRight)/WT.shRightFeather));
-      for(const pt of PT){
-        const dy=y-pt; if(dy<0||dy>WT.bounceR) continue;
-        L += WT.bounce*Math.pow(1-dy/WT.bounceR,WT.bouncePow)*inPlank;
-      }
-      const rb=sm((x+4.8)/9.6);
-      let dy=PB[0]-y;
-      if(dy>0&&dy<WT.shTopR) L *= 1-WT.shTop*(1-(1-WT.shRightMul)*rb)*Math.pow(1-dy/WT.shTopR,WT.shPow)*inShadow;
-      dy=PB[1]-y;
-      if(dy>0&&dy<WT.shBotR) L *= 1-WT.shBot*(1-(1-WT.shBotRightMul)*rb)*Math.pow(1-dy/WT.shBotR,WT.shPow)*inShadow;
-      // the uprights sit proud of the wall and drop a soft edge shadow
-      for(const ux of [-3.40,3.40]){
-        const dx=x-ux;
-        const s=Math.exp(-Math.pow((dx+ (ux<0?0.30:-0.06))/0.40,2));
-        const band=sm((y+3.6)/1.6)*(1-sm((y-1.9)/1.7));   // no hard ends
-        L *= 1-0.30*s*band;
-      }
       const o=(j*px+i)*4;
-      const n=(r()-0.5)*5;            // limewash tooth
-      d[o]  =clamp((L+n)*WT.tint[0],0,255);
-      d[o+1]=clamp((L+n)*WT.tint[1],0,255);
-      d[o+2]=clamp((L+n)*WT.tint[2],0,255);
+      const n=(r()-0.5)*3;
+      const L=226 + n;
+      d[o]  =clamp(L*WT.tint[0],0,255);
+      d[o+1]=clamp(L*WT.tint[1],0,255);
+      d[o+2]=clamp(L*WT.tint[2],0,255);
       d[o+3]=255;
     }
   }
   g.putImageData(img,0,0);
   const t=new THREE.CanvasTexture(c);
-  t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;
-  t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;
+  t.colorSpace=THREE.SRGBColorSpace;
   return t;
 }
 
@@ -1633,9 +1607,9 @@ function tick(now){
       B.wallSh.position.y=B.basePos[1]+lift-0.04+away*0.02;
       B.wallSh.scale.setScalar((1+away*0.13)*(B.tScale.v[0]||0.0001));
       const seat=B.tSeat.v[0];                                   // 1 on the shelf, 0 in the hand
-      B.wallSh.material.opacity=(0.50-away*0.15)*op*seat;
-      B.cs.material.opacity=(0.92*(1-away*0.55))*op*seat;
-      B.crease.material.opacity=(0.55*(1-away))*op*seat;
+      B.wallSh.material.opacity=0; B.wallSh.visible=false;
+      B.cs.material.opacity=(0.20*(1-away*0.55))*op*seat;
+      B.crease.material.opacity=(0.10*(1-away))*op*seat;
       B.reflMat.uniforms.uOpacity.value=B.tRefl.v[0]*op*seat;
       B.refl.position.z=K.bookZ+(SZH/2)*Math.sin(-B._lean)+0.24+B.tHover.v[2]*2;
     }
