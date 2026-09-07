@@ -158,7 +158,7 @@
                             <div class="relative">
                                 <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-64 object-cover">
                                 <div class="absolute top-2 right-2">
-                                    <span class="status-badge {{ $book->stock > 0 ? 'status-available' : 'status-borrowed' }}">{{ $book->stock > 0 ? 'Tersedia' : 'Dipinjam' }}</span>
+                                    <span class="status-badge {{ $book->stock > 0 ? 'status-available' : 'status-borrowed' }}">{{ $book->stock > 0 ? 'Tersedia' : 'Stok Habis' }}</span>
                                 </div>
                                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
                                     <div class="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
@@ -173,7 +173,7 @@
                                 <p class="text-xs text-gray-500 mb-2">{{ $book->author ?: 'Penulis Tidak Diketahui' }}</p>
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs text-gray-400">ISBN: {{ $book->isbn }}</span>
-                                    <span class="text-xs text-library-primary font-semibold">{{ $book->stock }} tersedia</span>
+                                    <span class="text-xs font-semibold {{ $book->stock > 0 ? 'text-library-primary' : 'text-red-600' }}">{{ $book->stock > 0 ? $book->stock . ' tersedia' : 'Stok Habis' }}</span>
                                 </div>
                             </div>
                         </div>

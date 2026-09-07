@@ -99,7 +99,7 @@
                             </div>
                             <div class="flex gap-2 shrink-0">
                                 <span class="px-3 py-1 {{ $book->stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} rounded-full text-xs sm:text-sm font-medium">
-                                    {{ $book->stock > 0 ? 'Tersedia' : 'Tidak Tersedia' }}
+                                    {{ $book->stock > 0 ? 'Tersedia' : 'Stok Habis' }}
                                 </span>
                             </div>
                         </div>
@@ -201,8 +201,8 @@
                                         <i class="fas fa-book text-lg {{ $book->stock > 0 ? 'text-green-600' : 'text-red-600' }}"></i>
                                     </div>
                                     <div>
-                                        <p class="text-xs sm:text-sm text-gray-500">Stok Tersedia</p>
-                                        <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ $book->stock }} Buku</p>
+                                        <p class="text-xs sm:text-sm {{ $book->stock > 0 ? 'text-gray-500' : 'text-red-500 font-medium' }}">{{ $book->stock > 0 ? 'Stok Tersedia' : 'Status Buku' }}</p>
+                                        <p class="text-xl sm:text-2xl font-bold {{ $book->stock > 0 ? 'text-gray-800' : 'text-red-600' }}">{{ $book->stock > 0 ? $book->stock . ' Buku' : 'Stok Habis' }}</p>
                                     </div>
                                 </div>
                                 @auth
