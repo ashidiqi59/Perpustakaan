@@ -1546,7 +1546,7 @@ function buildBook(data,index){
     const t=new THREE.CanvasTexture(artBack(data,768,1152));
     t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;backMat.uniforms.uTex.value=t; };
 
-  const hit=new THREE.Mesh(hitGeo,new THREE.MeshBasicMaterial({visible:false}));
+  const hit=new THREE.Mesh(hitGeo,new THREE.MeshBasicMaterial({visible:false,side:THREE.DoubleSide}));
   hit.position.set(B.basePos[0],B.basePos[1],B.basePos[2]-0.04);
   hit.rotation.x=MOBILE?-0.06:B._lean;
   hit.rotation.y=MOBILE?0:B._yaw;
