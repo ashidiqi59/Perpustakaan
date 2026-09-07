@@ -36,7 +36,7 @@
     @include('components.navbar')
 
     <main class="flex-grow pt-20 sm:pt-24 pb-16">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
             <!-- Breadcrumb -->
             <nav class="flex mb-6 text-sm text-gray-500" aria-label="Breadcrumb">
@@ -112,17 +112,35 @@
 
             <!-- Profile Overview Header Card -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-                <div class="gradient-header h-28 sm:h-36 relative"></div>
-                <div class="px-6 pb-6 pt-0 relative">
-                    <div class="flex flex-col sm:flex-row sm:items-end justify-between -mt-14 sm:-mt-16 mb-4 gap-4">
-                        <div class="flex flex-col sm:flex-row items-center sm:items-end space-y-3 sm:space-y-0 sm:space-x-5 text-center sm:text-left">
-                            <div class="relative">
-                                <img src="{{ $user->getAvatarUrl() }}" 
+                <!-- Blue Header Banner (Proporsional seimbang 50/50 dengan area putih) -->
+                <div class="gradient-header h-20 sm:h-24 relative"></div>
+
+                <!-- White Area Card -->
+                <div class="px-6 sm:px-8 pb-6 pt-0 relative">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-4">
+                        <div class="flex flex-col sm:flex-row items-center sm:items-center space-y-3 sm:space-y-0 sm:space-x-5 text-center sm:text-left">
+                            
+                            <!-- Avatar Wrapper (Setengah Biru, Setengah Putih) -->
+                            <div class="-mt-12 sm:-mt-14 relative group cursor-pointer flex-shrink-0" onclick="document.getElementById('avatar-input').click()">
+                                <img id="avatar-preview" 
+                                     src="{{ $user->getAvatarUrl() }}" 
                                      alt="{{ $user->name }}" 
-                                     class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover ring-4 ring-white shadow-md bg-white">
+                                     class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover ring-4 ring-white shadow-xl bg-white transition-transform group-hover:scale-[1.02]">
+                                
+                                <!-- Hover camera overlay -->
+                                <div class="absolute inset-0 bg-black/40 rounded-2xl flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                    <i class="fas fa-camera text-lg mb-1"></i>
+                                    <span class="text-[9px] font-semibold tracking-wider uppercase">Ganti Foto</span>
+                                </div>
+
+                                <!-- Camera icon badge on bottom-right -->
+                                <div class="absolute -bottom-1 -right-1 bg-blue-600 group-hover:bg-blue-700 text-white w-7 h-7 rounded-xl shadow-md border-2 border-white flex items-center justify-center transition-colors">
+                                    <i class="fas fa-camera text-[10px]"></i>
+                                </div>
+
                                 @if($user->isGoogleUser())
-                                    <span class="absolute -bottom-1 -right-1 bg-white p-1 rounded-full shadow border border-gray-100" title="Akun Google">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                    <span class="absolute -top-1 -right-1 bg-white p-1 rounded-full shadow border border-gray-100" title="Akun Google">
+                                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                                             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
@@ -131,19 +149,34 @@
                                     </span>
                                 @endif
                             </div>
-                            <div class="pt-2">
-                                <div class="flex items-center justify-center sm:justify-start space-x-2">
-                                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900">{{ $user->name }}</h1>
-                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $user->isAdmin() ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+
+                            <!-- User Info (100% di area putih, jelas dan kontras tinggi) -->
+                            <div class="pt-4 sm:pt-5">
+                                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+                                    <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">{{ $user->name }}</h1>
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $user->isAdmin() ? 'bg-purple-100 text-purple-800' : 'bg-blue-50 text-blue-700 border border-blue-200' }}">
                                         {{ ucfirst($user->role) }}
                                     </span>
                                 </div>
-                                <p class="text-sm text-gray-500 mt-0.5">{{ $user->email }}</p>
+                                <p class="text-sm text-gray-500 mt-1 flex items-center justify-center sm:justify-start">
+                                    <i class="far fa-envelope mr-1.5 text-gray-400"></i>
+                                    {{ $user->email }}
+                                </p>
                             </div>
                         </div>
 
-                        <!-- Status Badges -->
-                        <div class="flex flex-wrap items-center justify-center sm:justify-end gap-2 pt-2 sm:pt-0">
+                        <!-- Status Badges & Delete Custom Avatar Option (di area putih) -->
+                        <div class="flex flex-wrap items-center justify-center sm:justify-end gap-2 pt-2 sm:pt-4">
+                            @if(!empty($user->avatar) && !str_starts_with($user->avatar, 'http'))
+                                <form action="{{ route('profile.avatar.remove') }}" method="POST" class="inline" onsubmit="return confirm('Hapus foto kustom dan kembali ke foto bawaan?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors border border-gray-200">
+                                        <i class="fas fa-trash-alt mr-1 text-[10px]"></i> Hapus Foto Kustom
+                                    </button>
+                                </form>
+                            @endif
+
                             @if($user->isProfileComplete())
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
                                     <i class="fas fa-check-circle mr-1.5"></i> Biodata Lengkap
@@ -180,9 +213,31 @@
                             </div>
                         </div>
 
-                        <form action="{{ route('profile.update') }}" method="POST" class="mt-6 space-y-5">
+                        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="mt-6 space-y-5">
                             @csrf
                             @method('PUT')
+
+                            <!-- Foto Profil Upload Section -->
+                            <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4">
+                                <label class="block text-sm font-semibold text-gray-800 mb-1">
+                                    Foto Profil
+                                </label>
+                                <p class="text-xs text-gray-500 mb-3">Pilih foto dari perangkat Anda untuk menggunakan foto profil sendiri.</p>
+                                <div class="flex flex-wrap items-center gap-3">
+                                    <input type="file" 
+                                           name="avatar" 
+                                           id="avatar-input" 
+                                           accept="image/jpeg,image/png,image/jpg,image/webp" 
+                                           class="hidden" 
+                                           onchange="previewAvatar(this)">
+                                    <label for="avatar-input" 
+                                           class="cursor-pointer px-4 py-2 bg-white hover:bg-blue-50 text-library-primary text-xs font-semibold rounded-xl border border-blue-300 shadow-sm transition-all flex items-center space-x-2">
+                                        <i class="fas fa-upload"></i>
+                                        <span>Pilih Foto Baru</span>
+                                    </label>
+                                    <span id="avatar-filename" class="text-xs text-gray-500 truncate max-w-xs">Format: JPG, PNG, atau WEBP (Maks. 3MB)</span>
+                                </div>
+                            </div>
 
                             <!-- NPM -->
                             <div>
@@ -418,9 +473,28 @@
         </div>
     </main>
 
-    <!-- Footer minimal -->
-    <footer class="bg-white border-t border-gray-100 py-6 text-center text-xs text-gray-400">
-        <p>&copy; {{ date('Y') }} Perpustakaan. Hak Cipta Dilindungi.</p>
-    </footer>
+    @include('components.footer')
+
+    <script>
+        function previewAvatar(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const filenameElem = document.getElementById('avatar-filename');
+                if (filenameElem) {
+                    filenameElem.innerText = file.name + ' (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB)';
+                    filenameElem.classList.add('text-blue-600', 'font-medium');
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewImg = document.getElementById('avatar-preview');
+                    if (previewImg) {
+                        previewImg.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </body>
 </html>

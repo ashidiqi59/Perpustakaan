@@ -76,10 +76,7 @@
                             <div class="flex items-center space-x-3">
                                 <a href="{{ route('profile') }}" class="flex items-center space-x-3 group hover:opacity-90 transition-opacity">
                                     <div class="text-right">
-                                        <p class="text-sm font-medium text-gray-900 group-hover:text-library-primary transition-colors">{{ Auth::user()->name }}</p>
-                                        <p class="text-xs {{ empty(Auth::user()->npm) ? 'text-amber-600 font-semibold' : 'text-gray-500' }}">
-                                            {{ Auth::user()->npm ?: 'Lengkapi Biodata' }}
-                                        </p>
+                                        <p class="text-sm font-semibold text-gray-800 group-hover:text-library-primary transition-colors">Hallo, {{ Auth::user()->name }}</p>
                                     </div>
                                     <div class="relative">
                                         <img src="{{ Auth::user()->getAvatarUrl() }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100" alt="{{ Auth::user()->name }}">
@@ -136,10 +133,7 @@
                                 @endif
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
-                                <p class="text-xs {{ empty(Auth::user()->npm) ? 'text-amber-600 font-semibold' : 'text-gray-500' }}">
-                                    {{ Auth::user()->npm ?: 'Lengkapi Biodata' }}
-                                </p>
+                                <p class="text-sm font-semibold text-gray-800">Hallo, {{ Auth::user()->name }}</p>
                             </div>
                         </a>
                         <form action="{{ route('logout') }}" method="POST">
