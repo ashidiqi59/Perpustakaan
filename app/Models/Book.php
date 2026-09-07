@@ -18,9 +18,14 @@ class Book extends Model
         'shelf_number',
         'category',
         'stock',
+        'is_featured',
         'description',
         'language',
         'published_date',
+    ];
+
+    protected $casts = [
+        'is_featured' => 'boolean',
     ];
 
     /**

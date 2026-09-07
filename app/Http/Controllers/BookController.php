@@ -44,16 +44,16 @@ class BookController extends Controller
      */
     public function publicIndex(Request $request)
     {
-        $search = $request->search ?? '';
+        $search   = $request->search   ?? '';
         $category = $request->category ?? '';
 
         $query = Book::query();
 
         if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('author', 'like', "%{$search}%")
-                  ->orWhere('isbn', 'like', "%{$search}%")
+            $query->where(function ($q) use ($search) {
+                $q->where('title',     'like', "%{$search}%")
+                  ->orWhere('author',    'like', "%{$search}%")
+                  ->orWhere('isbn',      'like', "%{$search}%")
                   ->orWhere('publisher', 'like', "%{$search}%");
             });
         }
@@ -62,18 +62,27 @@ class BookController extends Controller
             $query->where('category', $category);
         }
 
-        $books = $query->latest()->paginate(12);
+        $books      = $query->latest()->paginate(12);
         $categories = Book::select('category')->distinct()->pluck('category')->filter();
         $popularBooks = Book::orderBy('stock', 'desc')->take(5)->get();
 
-        // Get 3 random featured books with images for hero section
-        $featuredBooks = Book::whereNotNull('image')->inRandomOrder()->take(3)->get();
-        // If not enough books with images, fill with any books
-        if ($featuredBooks->count() < 3) {
-            $featuredBooks = Book::inRandomOrder()->take(3)->get();
+        // Buku hits Gen-Z untuk rak 3D interaktif di beranda
+        $shelfBooks = Book::where('is_featured', true)
+                          ->whereNotNull('image')
+                          ->get();
+
+        // Fallback: jika featured < 5, tambah dari semua buku
+        if ($shelfBooks->count() < 5) {
+            $shelfBooks = Book::whereNotNull('image')->get();
         }
 
-        return view('home', compact('books', 'categories', 'search', 'category', 'popularBooks', 'featuredBooks'));
+        // Hero section: 3 buku featured secara acak
+        $featuredBooks = $shelfBooks->random(min(3, $shelfBooks->count()));
+
+        return view('home', compact(
+            'books', 'categories', 'search', 'category',
+            'popularBooks', 'featuredBooks', 'shelfBooks'
+        ));
     }
 
     /**
