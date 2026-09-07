@@ -244,10 +244,6 @@
             
             <!-- Section Header -->
             <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-14 fade-in-up">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-library-primary border border-blue-100 shadow-2xs mb-3">
-                    <i class="fas fa-sparkles text-[11px] text-blue-600"></i>
-                    <span>Fitur & Layanan Utama</span>
-                </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Layanan Perpustakaan</h2>
                 <p class="text-gray-500 text-sm sm:text-base mt-2.5 leading-relaxed">
                     Kami menyediakan berbagai kemudahan akses referensi akademik, sirkulasi koleksi, dan asistensi belajar untuk mendukung riset Anda.
