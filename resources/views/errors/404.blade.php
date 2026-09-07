@@ -92,11 +92,6 @@
                         <i class="fas fa-book-open"></i>
                     </div>
                 </div>
-                <div class="hidden sm:block absolute -right-16 bottom-4 animate-float-reverse text-amber-500/80">
-                    <div class="w-11 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-l-md shadow-lg flex items-center justify-center text-white text-base">
-                        <i class="fas fa-bookmark"></i>
-                    </div>
-                </div>
 
                 <!-- Big 404 Digits -->
                 <div class="relative flex items-center justify-center">
@@ -115,7 +110,6 @@
 
             <!-- Status Pill Badge -->
             <div class="mb-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-semibold tracking-wide uppercase">
-                <span class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></span>
                 <span>Halaman Tidak Ditemukan</span>
             </div>
 
