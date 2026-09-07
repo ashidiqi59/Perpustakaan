@@ -3,9 +3,6 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        @if(Route::is('admin.dashboard'))
-        <meta http-equiv="refresh" content="30">
-        @endif
         <title>Perpustakaan | Admin Dashboard</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -128,13 +125,6 @@
             }
         </style>
         <script>
-            // Auto-refresh every 30 seconds untuk data terbaru (hanya di dashboard)
-            @if(Route::is('admin.dashboard'))
-            setTimeout(function() {
-                window.location.reload(true);
-            }, 30000);
-            @endif
-
             // Toggle Sidebar functionality
             function toggleSidebar() {
                 const sidebar = document.getElementById('sidebar');

@@ -106,7 +106,8 @@ class BookController extends Controller
             'title' => 'required|string|max:255',
             'author' => 'nullable|string|max:255',
             'publisher' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:3072',
+            'back_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:3072',
             'shelf_number' => 'nullable|string|max:50',
             'category' => 'nullable|string|max:100',
             'stock' => 'required|integer|min:0',
@@ -129,6 +130,14 @@ class BookController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('images/books'), $imageName);
             $data['image'] = 'images/books/' . $imageName;
+        }
+
+        // Handle back image upload
+        if ($request->hasFile('back_image')) {
+            $backImage = $request->file('back_image');
+            $backImageName = 'back_' . time() . '_' . $backImage->getClientOriginalName();
+            $backImage->move(public_path('images/books'), $backImageName);
+            $data['back_image'] = 'images/books/' . $backImageName;
         }
 
         Book::create($data);
@@ -212,7 +221,8 @@ class BookController extends Controller
             'title' => 'required|string|max:255',
             'author' => 'nullable|string|max:255',
             'publisher' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:3072',
+            'back_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:3072',
             'shelf_number' => 'nullable|string|max:50',
             'category' => 'nullable|string|max:100',
             'stock' => 'required|integer|min:0',
@@ -242,6 +252,18 @@ class BookController extends Controller
             $data['image'] = 'images/books/' . $imageName;
         }
 
+        // Handle back image upload
+        if ($request->hasFile('back_image')) {
+            if ($book->back_image && file_exists(public_path($book->back_image))) {
+                @unlink(public_path($book->back_image));
+            }
+
+            $backImage = $request->file('back_image');
+            $backImageName = 'back_' . time() . '_' . $backImage->getClientOriginalName();
+            $backImage->move(public_path('images/books'), $backImageName);
+            $data['back_image'] = 'images/books/' . $backImageName;
+        }
+
         $book->update($data);
 
         return redirect()->route('admin.books.index')
@@ -255,7 +277,11 @@ class BookController extends Controller
     {
         // Delete image if exists
         if ($book->image && file_exists(public_path($book->image))) {
-            unlink(public_path($book->image));
+            @unlink(public_path($book->image));
+        }
+
+        if ($book->back_image && file_exists(public_path($book->back_image))) {
+            @unlink(public_path($book->back_image));
         }
 
         $book->delete();

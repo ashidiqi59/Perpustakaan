@@ -15,6 +15,7 @@ class Book extends Model
         'author',
         'publisher',
         'image',
+        'back_image',
         'shelf_number',
         'category',
         'stock',

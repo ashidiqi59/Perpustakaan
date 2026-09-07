@@ -36,6 +36,10 @@
             <i class="fas fa-book w-5 text-center"></i>
             <span class="nav-text">Kelola Buku</span>
         </a>
+        <a href="{{ route('admin.featured-books.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.featured-books.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
+            <i class="fas fa-desktop w-5 text-center"></i>
+            <span class="nav-text">Buku Beranda</span>
+        </a>
         <a href="{{ route('admin.loans.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.loans.*') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
             <i class="fas fa-clipboard-list w-5 text-center"></i>
             <span class="nav-text">Kelola Peminjaman</span>

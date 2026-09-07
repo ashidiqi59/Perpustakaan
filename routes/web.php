@@ -6,6 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FeaturedBookController;
 
 Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 
@@ -42,6 +43,15 @@ Route::resource('/admin/books', BookController::class)->names([
     'update' => 'admin.books.update',
     'destroy' => 'admin.books.destroy',
 ])->middleware('auth');
+
+// Admin Featured Books (Buku Beranda) Routes
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/featured-books', [FeaturedBookController::class, 'index'])->name('featured-books.index');
+    Route::post('/featured-books/{book}', [FeaturedBookController::class, 'update'])->name('featured-books.update');
+});
+
+// Public API for featured books
+Route::get('/api/featured-books', [FeaturedBookController::class, 'apiFeatured'])->name('api.featured-books');
 
 // Admin Loans Routes (CRUD)
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

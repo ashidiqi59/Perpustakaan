@@ -136,24 +136,53 @@
 
                                 <!-- RIGHT COLUMN - IMAGE -->
                                 <div class="space-y-4">
-                                    <!-- Cover Image -->
-                                    <div>
-                                        <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Cover Buku</label>
-                                        <div class="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center hover:border-blue-500 transition-colors">
-                                            <input type="file" name="image" id="image" accept="image/*" class="hidden"
-                                                onchange="previewImage(event)">
-                                            <label for="image" class="cursor-pointer">
-                                                @if($book->image)
-                                                    <img id="image-preview" src="{{ asset($book->image) }}" alt="Preview" class="w-full h-36 sm:h-48 object-cover rounded-lg">
-                                                @else
-                                                    <img id="image-preview" src="{{ asset('images/books/spine&cover.jpg') }}" alt="Preview" class="w-full h-36 sm:h-48 object-cover rounded-lg">
-                                                @endif
-                                                <p class="mt-2 text-xs sm:text-sm text-slate-500">
-                                                    <i class="fas fa-cloud-upload-alt mr-1"></i>
-                                                    Klik untuk upload
-                                                </p>
-                                                <p class="text-xs text-slate-400">Format: JPEG, PNG, JPG (Max 2MB)</p>
-                                            </label>
+                                    <!-- Cover Image (Front & Back) -->
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Cover Depan Buku</label>
+                                            <div class="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center hover:border-blue-500 transition-colors">
+                                                <input type="file" name="image" id="image" accept="image/*" class="hidden"
+                                                    onchange="previewImage(event)">
+                                                <label for="image" class="cursor-pointer">
+                                                    @if($book->image)
+                                                        <img id="image-preview" src="{{ asset($book->image) }}" alt="Preview Depan" class="w-full h-36 sm:h-48 object-cover rounded-lg">
+                                                    @else
+                                                        <img id="image-preview" src="{{ asset('images/books/spine&cover.jpg') }}" alt="Preview Depan" class="w-full h-36 sm:h-48 object-cover rounded-lg">
+                                                    @endif
+                                                    <p class="mt-2 text-xs sm:text-sm text-slate-500">
+                                                        <i class="fas fa-cloud-upload-alt mr-1"></i>
+                                                        Klik untuk upload cover depan
+                                                    </p>
+                                                    <p class="text-xs text-slate-400">Format: JPEG, PNG, JPG, WEBP (Max 3MB)</p>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="flex items-center justify-between mb-1">
+                                                <label class="block text-xs sm:text-sm font-medium text-slate-600">Cover Belakang Buku</label>
+                                                <span class="text-[11px] text-amber-600 font-medium bg-amber-50 px-2 py-0.5 rounded">Wajib jika tampil di beranda</span>
+                                            </div>
+                                            <div class="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center hover:border-amber-500 transition-colors">
+                                                <input type="file" name="back_image" id="back_image" accept="image/*" class="hidden"
+                                                    onchange="previewBackImage(event)">
+                                                <label for="back_image" class="cursor-pointer">
+                                                    @if($book->back_image)
+                                                        <img id="back-image-preview" src="{{ asset($book->back_image) }}" alt="Preview Belakang" class="w-full h-36 sm:h-48 object-cover rounded-lg">
+                                                    @else
+                                                        <div id="back-image-placeholder" class="w-full h-36 sm:h-48 bg-slate-100 rounded-lg flex flex-col items-center justify-center text-slate-400">
+                                                            <i class="fas fa-images text-2xl mb-1"></i>
+                                                            <span class="text-xs font-medium">Belum ada cover belakang</span>
+                                                        </div>
+                                                        <img id="back-image-preview" src="" alt="Preview Belakang" class="w-full h-36 sm:h-48 object-cover rounded-lg hidden">
+                                                    @endif
+                                                    <p class="mt-2 text-xs sm:text-sm text-slate-500">
+                                                        <i class="fas fa-cloud-upload-alt mr-1"></i>
+                                                        Klik untuk upload cover belakang
+                                                    </p>
+                                                    <p class="text-xs text-slate-400">Format: JPEG, PNG, JPG, WEBP (Max 3MB)</p>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -194,6 +223,18 @@
                             reader.onload = function() {
                                 const output = document.getElementById('image-preview');
                                 output.src = reader.result;
+                            };
+                            reader.readAsDataURL(event.target.files[0]);
+                        }
+
+                        function previewBackImage(event) {
+                            const reader = new FileReader();
+                            reader.onload = function() {
+                                const output = document.getElementById('back-image-preview');
+                                const placeholder = document.getElementById('back-image-placeholder');
+                                output.src = reader.result;
+                                output.classList.remove('hidden');
+                                if (placeholder) placeholder.classList.add('hidden');
                             };
                             reader.readAsDataURL(event.target.files[0]);
                         }
