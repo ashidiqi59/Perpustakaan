@@ -25,7 +25,7 @@
         id="ashen-press-iframe"
         title="Rak Buku 3D Perpustakaan"
         src="{{ asset('ashen-press.html') }}"
-        sandbox="allow-scripts allow-same-origin"
+        sandbox="allow-scripts allow-same-origin allow-top-navigation allow-top-navigation-by-user-activation allow-forms"
         loading="eager"
         class="w-full h-full border-0 block relative z-0 opacity-100"
         style="background: #F4EFEA;"
@@ -50,6 +50,9 @@
         window.addEventListener('message', function(e) {
             if (e.data === 'ashen-ready') {
                 hideLoader();
+            }
+            if (e.data && e.data.type === 'navigate' && e.data.url) {
+                window.location.href = e.data.url;
             }
         });
 

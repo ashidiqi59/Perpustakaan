@@ -388,7 +388,7 @@
         <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
         <span id="mFlipText">Balik Sampul</span>
       </button>
-      <a href="#" target="_top" class="m-btn m-btn-detail" id="mBtnDetail">
+      <a href="javascript:void(0)" class="m-btn m-btn-detail" id="mBtnDetail">
         <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
         <span>Detail Buku</span>
       </a>
@@ -1483,8 +1483,12 @@ const bodyGeo=new THREE.BoxGeometry(SZW,SZH,SZD);
 const faceGeo=new THREE.PlaneGeometry(SZW,SZH,44,44);
 const hitGeo =new THREE.PlaneGeometry(SZW*1.06,SZH*0.98);
 const mPos=(i,scroll)=>{
-  const k=i-(scroll||0);
-  const absK=Math.abs(k);
+  const N = BOOKS.length || 10;
+  const s = (((scroll || 0) % N) + N) % N;
+  let k = i - s;
+  if (k > N / 2) k -= N;
+  if (k < -N / 2) k += N;
+  const absK = Math.abs(k);
   const x = k * 1.32;
   const y = 0.28;
   const z = 0.50 - Math.min(absK, 3.5) * 0.52;
@@ -1944,8 +1948,14 @@ function setLifted(B){
   S.lifted=B;
   if(B)hoverIn(B);
 }
+function getNormIndex(v) {
+  const N = BOOKS.length || 10;
+  return ((Math.round(v) % N) + N) % N;
+}
+
 function updateMobileUI() {
-  const i = clamp(Math.round(M.scroll), 0, BOOKS.length - 1);
+  const N = BOOKS.length || 10;
+  const i = getNormIndex(M.scroll);
   const d = BOOKS[i];
   if (!d) return;
 
@@ -1958,14 +1968,14 @@ function updateMobileUI() {
   const mPrevBtn = document.getElementById('mPrevBtn');
   const mNextBtn = document.getElementById('mNextBtn');
 
-  if (mCounter) mCounter.textContent = `${i + 1} / ${BOOKS.length}`;
+  if (mCounter) mCounter.textContent = `${i + 1} / ${N}`;
   if (mCategory) mCategory.textContent = d.category || 'Koleksi';
   if (mTitle) mTitle.textContent = d.title;
   if (mAuthor) mAuthor.textContent = `${d.author} · ${d.year || ''}`;
 
   if (mBtnDetail) {
     const bookId = d.laravelId || (i + 1);
-    mBtnDetail.href = `/books/${bookId}`;
+    mBtnDetail.dataset.bookId = bookId;
   }
 
   const B = books[i];
@@ -1981,12 +1991,12 @@ function updateMobileUI() {
     }
   }
 
-  if (mPrevBtn) mPrevBtn.style.opacity = (i === 0) ? '0.35' : '1';
-  if (mNextBtn) mNextBtn.style.opacity = (i === BOOKS.length - 1) ? '0.35' : '1';
+  if (mPrevBtn) mPrevBtn.style.opacity = '1';
+  if (mNextBtn) mNextBtn.style.opacity = '1';
 }
 
 function flipActiveMobile() {
-  const idx = clamp(Math.round(M.target), 0, BOOKS.length - 1);
+  const idx = getNormIndex(M.target);
   const B = books[idx];
   if (!B) return;
   B.flipped = !B.flipped;
@@ -2013,46 +2023,83 @@ function setupDots() {
   });
 }
 
-function goToIndex(idx) {
-  const cur = books[Math.round(M.target)];
+function goToIndex(nextIdx) {
+  const N = BOOKS.length || 10;
+  const curIdx = getNormIndex(M.target);
+  const cur = books[curIdx];
   if (cur && cur.flipped) {
     cur.flipped = false;
     if (cur.tFlip) cur.tFlip.start([0], 350, easeSettle);
   }
-  M.target = clamp(idx, 0, BOOKS.length - 1);
+  let diff = nextIdx - curIdx;
+  if (diff > N / 2) diff -= N;
+  if (diff < -N / 2) diff += N;
+  M.target += diff;
   updateMobileUI();
 }
 
 function goPrev() {
-  if (M.target > 0) {
-    goToIndex(Math.max(0, Math.round(M.target) - 1));
-  }
+  const N = BOOKS.length || 10;
+  const curIdx = getNormIndex(M.target);
+  goToIndex((curIdx - 1 + N) % N);
 }
 
 function goNext() {
-  if (M.target < BOOKS.length - 1) {
-    goToIndex(Math.min(BOOKS.length - 1, Math.round(M.target) + 1));
-  }
+  const N = BOOKS.length || 10;
+  const curIdx = getNormIndex(M.target);
+  goToIndex((curIdx + 1) % N);
 }
 
 // Bind mobile UI buttons
 const mPrevBtn = document.getElementById('mPrevBtn');
 const mNextBtn = document.getElementById('mNextBtn');
 const mBtnFlip = document.getElementById('mBtnFlip');
+const mBtnDetail = document.getElementById('mBtnDetail');
 if (mPrevBtn) mPrevBtn.addEventListener('click', e => { e.stopPropagation(); goPrev(); });
 if (mNextBtn) mNextBtn.addEventListener('click', e => { e.stopPropagation(); goNext(); });
 if (mBtnFlip) mBtnFlip.addEventListener('click', e => { e.stopPropagation(); flipActiveMobile(); });
+if (mBtnDetail) {
+  mBtnDetail.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const curIdx = getNormIndex(M.scroll);
+    const d = BOOKS[curIdx];
+    const bookId = (d && d.laravelId) ? d.laravelId : (mBtnDetail.dataset.bookId || (curIdx + 1));
+    const targetUrl = `/books/${bookId}`;
+
+    // 1. Send postMessage to parent window (reliable in any simulator or iframe embedding)
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'navigate', url: targetUrl }, '*');
+      }
+    } catch(err) {}
+
+    // 2. Direct same-origin parent navigation
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.location.href = targetUrl;
+        return;
+      }
+    } catch(err) {}
+
+    // 3. Fallback only if opened directly in tab (standalone)
+    if (window.parent === window) {
+      window.location.href = targetUrl;
+    }
+  });
+}
 
 function setMobileIndex(i,force){
-  i=clamp(i,0,BOOKS.length-1);
+  const N = BOOKS.length || 10;
+  i = ((i % N) + N) % N;
   if(!force&&i===M.index)return;
   M.index=i;
   updateMobileUI();
 }
 let snapTimer=null;
 function mobileSnap(delay){clearTimeout(snapTimer);
-  snapTimer=setTimeout(()=>{M.target=clamp(Math.round(M.target),0,BOOKS.length-1);updateMobileUI();},delay||40);}
-function mobileScrollBy(dv){M.target=clamp(M.target+dv,0,BOOKS.length-1);mobileSnap(80);}
+  snapTimer=setTimeout(()=>{M.target=Math.round(M.target);updateMobileUI();},delay||40);}
+function mobileScrollBy(dv){M.target+=dv;mobileSnap(80);}
 addEventListener('wheel',e=>{ if(!MOBILE||S.active)return; mobileScrollBy(e.deltaY/420); },{passive:true});
 
 // Horizontal swipe gesture for mobile collection (allows vertical scrolling to pass through to the page)
@@ -2090,7 +2137,7 @@ canvas.addEventListener('touchmove', e => {
 
   if(isHorizontalDrag) {
     const moveX = M.lastX - t.clientX;
-    M.target = clamp(M.target + moveX / (VW * 0.70), 0, BOOKS.length - 1);
+    M.target += moveX / (VW * 0.70);
     M.lastX = t.clientX;
   }
 }, {passive: true});
@@ -2162,7 +2209,7 @@ addEventListener('pointerdown',e=>{
     const hits=ray.intersectObjects(books.map(b=>b.hit),false);
     if(hits.length){
       const hitBook = hits[0].object.userData.book;
-      const currentIdx = Math.round(M.target);
+      const currentIdx = getNormIndex(M.target);
       if(hitBook.index === currentIdx){
         flipActiveMobile();
       } else {
@@ -2272,11 +2319,25 @@ function tick(now){
   wallMat.uniforms.uOpacity.value=wf; oakH.uniforms.uOpacity.value=wf; oakV.uniforms.uOpacity.value=wf;
 
   if(MOBILE){
+    const N = BOOKS.length || 10;
     if(!S.active) M.scroll+=(M.target-M.scroll)*Math.min(1,dt*9);
-    setMobileIndex(Math.round(M.scroll));
+
+    // Normalize scroll periodically when settled to prevent overflow
+    if (Math.abs(M.target - M.scroll) < 0.005) {
+      const norm = ((Math.round(M.target) % N) + N) % N;
+      M.target = norm;
+      M.scroll = norm;
+    }
+
+    const s = (((M.scroll % N) + N) % N);
+    setMobileIndex(Math.round(s));
+
     for(const B of books){
-      const k = B.index - M.scroll;
+      let k = B.index - s;
+      if (k > N / 2) k -= N;
+      if (k < -N / 2) k += N;
       const absK = Math.abs(k);
+
       B.basePos = mPos(B.index, M.scroll);
       if(B===S.active||S.anim==='animatingBackward')continue;
       B.tActiveP.v[0] = B.basePos[0];
