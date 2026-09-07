@@ -64,6 +64,7 @@
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
+    <x-page-loader />
     @include('components.navbar')
 
     <!-- Breadcrumb -->

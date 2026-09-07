@@ -145,6 +145,7 @@
     </style>
 </head>
 <body>
+    <x-page-loader />
     @include('components.navbar')
 
     <!-- Hero Section -->

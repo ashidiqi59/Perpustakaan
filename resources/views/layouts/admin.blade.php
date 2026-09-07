@@ -203,6 +203,7 @@
         @stack('styles')
     </head>
     <body class="h-screen bg-slate-100 text-slate-800 font-sans overflow-hidden">
+        <x-page-loader />
         <!-- Mobile Overlay -->
         <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 

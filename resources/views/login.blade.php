@@ -782,6 +782,7 @@
   </style>
 
   <body>
+    <x-page-loader />
 
     <!-- Mobile-only container -->
     <div class="mobile-container">

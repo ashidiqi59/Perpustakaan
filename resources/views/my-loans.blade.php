@@ -29,6 +29,7 @@
     </style>
 </head>
 <body>
+    <x-page-loader />
     @include('components.navbar')
 
     <div class="min-h-screen pt-20 sm:pt-24 pb-12 sm:pb-16">
