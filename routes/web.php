@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeaturedBookController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 
@@ -20,6 +21,11 @@ Route::get('/koleksi', [BookController::class, 'collection'])->name('books.colle
 Route::middleware('auth')->group(function () {
     Route::get('/my-loans', [LoanController::class, 'myLoans'])->name('my-loans');
     Route::post('/borrow', [LoanController::class, 'borrow'])->name('borrow');
+
+    // Profile & Biodata Routes
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
 Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
@@ -71,6 +77,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Google OAuth Routes
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 // API Routes for Registration Validation
 Route::post('/api/check-npm', [AuthController::class, 'checkNpm'])->name('api.check-npm');

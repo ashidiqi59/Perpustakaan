@@ -26,6 +26,11 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'google_id',
+        'avatar',
+        'phone',
+        'prodi',
+        'address',
         'remember_token',
     ];
 
@@ -43,6 +48,33 @@ class User extends Authenticatable
     public function isPengunjung(): bool
     {
         return $this->role === self::ROLE_PENGUNJUNG;
+    }
+
+    /**
+     * Check if user registered via Google
+     */
+    public function isGoogleUser(): bool
+    {
+        return !empty($this->google_id);
+    }
+
+    /**
+     * Check if user's profile is complete (e.g., NPM is filled)
+     */
+    public function isProfileComplete(): bool
+    {
+        return !empty($this->npm);
+    }
+
+    /**
+     * Get user avatar URL or fallback to initial avatar
+     */
+    public function getAvatarUrl(): string
+    {
+        if (!empty($this->avatar)) {
+            return $this->avatar;
+        }
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0F2854&color=ffffff&bold=true';
     }
 
     /**

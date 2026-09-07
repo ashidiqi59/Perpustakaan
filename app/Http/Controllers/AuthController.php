@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -52,7 +53,78 @@ class AuthController extends Controller
      */
     public function showRegister()
     {
-        return view('register');
+        return view('login', ['page' => 'register']);
+    }
+
+    /**
+     * Redirect ke halaman autentikasi Google
+     */
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Handle callback dari Google OAuth
+     */
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return redirect()->route('login')->with('error', 'Gagal masuk dengan Google: ' . $e->getMessage());
+        }
+
+        // Cari berdasarkan google_id terlebih dahulu
+        $user = User::where('google_id', $googleUser->getId())->first();
+
+        if ($user) {
+            // Update avatar jika ada perubahan
+            if ($googleUser->getAvatar() && $user->avatar !== $googleUser->getAvatar()) {
+                $user->update(['avatar' => $googleUser->getAvatar()]);
+            }
+            Auth::login($user, true);
+        } else {
+            // Cek apakah ada akun dengan email yang sama
+            $user = User::where('email', $googleUser->getEmail())->first();
+
+            if ($user) {
+                // Tautkan google_id ke akun yang sudah ada
+                $user->update([
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $user->avatar ?: $googleUser->getAvatar(),
+                    'email_verified_at' => $user->email_verified_at ?: now(),
+                ]);
+                Auth::login($user, true);
+            } else {
+                // Registrasi akun baru via Google
+                $user = User::create([
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
+                    'role' => User::ROLE_PENGUNJUNG,
+                    'npm' => null, // Wajib dilengkapi di profil
+                    'password' => null,
+                    'email_verified_at' => now(),
+                ]);
+                Auth::login($user, true);
+
+                return redirect()->route('profile')->with('info', 'Registrasi dengan Google berhasil! Silakan lengkapi biodata (termasuk NPM) Anda terlebih dahulu.');
+            }
+        }
+
+        // Jika user belum melengkapi profil/NPM, arahkan ke halaman profil
+        if (!$user->isProfileComplete()) {
+            return redirect()->route('profile')->with('info', 'Selamat datang! Silakan lengkapi biodata profil Anda terlebih dahulu.');
+        }
+
+        // Arahkan ke dashboard admin jika admin, atau ke home jika pengunjung biasa
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, Admin ' . $user->name . '!');
+        }
+
+        return redirect()->route('home')->with('success', 'Selamat datang kembali, ' . $user->name . '!');
     }
 
     /**

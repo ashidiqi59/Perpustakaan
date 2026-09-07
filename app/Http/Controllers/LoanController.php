@@ -118,6 +118,10 @@ class LoanController extends Controller
      */
     public function borrow(Request $request)
     {
+        if (!Auth::user()->isProfileComplete()) {
+            return redirect()->route('profile')->with('error', 'Mohon lengkapi biodata (termasuk NPM) Anda terlebih dahulu sebelum meminjam buku.');
+        }
+
         $validated = $request->validate([
             'book_id' => 'required|exists:books,id',
             'due_date' => 'required|date|after:today',
