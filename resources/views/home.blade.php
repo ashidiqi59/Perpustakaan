@@ -434,8 +434,8 @@
                     </div>
 
                     <div class="space-y-4">
-                        <!-- Stat 1: Total Koleksi -->
-                        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-200 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
+                        <!-- Stat 1: Total Koleksi (Dapat diklik menuju Koleksi Buku) -->
+                        <a href="{{ route('books.collection') }}" class="block bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-300 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden cursor-pointer">
                             <i class="fas fa-book-open absolute -right-3 -bottom-3 text-7xl text-blue-50/70 group-hover:text-blue-100/80 transition-colors pointer-events-none"></i>
                             <div class="flex items-center justify-between relative">
                                 <div class="flex items-center space-x-4">
@@ -456,12 +456,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="hidden sm:flex items-center text-blue-500 font-semibold text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="hidden sm:flex items-center text-blue-600 font-semibold text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
                                     <span>Lihat Semua</span>
                                     <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
                                 </div>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- Stat 2: Anggota Aktif -->
                         <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
@@ -492,8 +492,8 @@
                             </div>
                         </div>
 
-                        <!-- Stat 3: Buku Dipinjam -->
-                        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-amber-200 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
+                        <!-- Stat 3: Buku Dipinjam (Dapat diklik menuju Peminjaman) -->
+                        <a href="{{ Auth::check() ? route('my-loans') : route('login') }}" class="block bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-amber-300 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden cursor-pointer">
                             <i class="fas fa-receipt absolute -right-3 -bottom-3 text-7xl text-amber-50/70 group-hover:text-amber-100/80 transition-colors pointer-events-none"></i>
                             <div class="flex items-center justify-between relative">
                                 <div class="flex items-center space-x-4">
@@ -514,12 +514,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="hidden sm:flex items-center text-amber-600 font-semibold text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="hidden sm:flex items-center text-amber-600 font-semibold text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
                                     <span>Peminjaman Aktif</span>
                                     <i class="fas fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
                                 </div>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- Google Maps Lokasi ULBI -->
                         <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
