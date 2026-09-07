@@ -452,7 +452,7 @@
                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100">
                                                 <i class="fas fa-check-circle mr-1 text-[9px]"></i> Terkatalog
                                             </span>
-                                            <span class="text-xs text-gray-400">Buku fisik & e-book</span>
+                                            <span class="text-xs text-gray-400">Buku fisik</span>
                                         </div>
                                     </div>
                                 </div>
