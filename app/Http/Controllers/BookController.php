@@ -62,7 +62,7 @@ class BookController extends Controller
             $query->where('category', $category);
         }
 
-        $books      = $query->latest()->paginate(12);
+        $books      = $query->latest()->paginate(15);
         $categories = Book::select('category')->distinct()->pluck('category')->filter();
         $popularBooks = Book::orderBy('stock', 'desc')->take(5)->get();
 
@@ -185,7 +185,7 @@ class BookController extends Controller
             $query->where('category', $category);
         }
 
-        $books = $query->latest()->paginate(12);
+        $books = $query->latest()->paginate(15);
         $categories = Book::select('category')->distinct()->pluck('category')->filter();
 
         return view('books.collection', compact('books', 'categories', 'search', 'category'));
