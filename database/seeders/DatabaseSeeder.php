@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'npm' => '12345678',
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
-            'password' => 'Admin12',
+            'password' => 'Admin123',
             'role' => User::ROLE_ADMIN,
         ]);
 
