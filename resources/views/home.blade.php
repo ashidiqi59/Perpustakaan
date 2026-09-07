@@ -239,33 +239,148 @@
     </section>
 
     <!-- Services Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="text-center mb-12 fade-in-up">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Layanan Perpustakaan</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Kami menyediakan berbagai layanan untuk mendukung kebutuhan informasi dan pembelajaran Anda</p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @php
-                $services = [
-                    ['icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', 'title' => 'Peminjaman Buku', 'desc' => 'Pinjam buku fisik dan digital dengan mudah'],
-                    ['icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 'title' => 'Reservasi Buku', 'desc' => 'Reservasi buku yang sedang dipinjam'],
-                    ['icon' => 'M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 'title' => 'Pengembalian', 'desc' => 'Kembalikan buku dengan cepat dan mudah'],
-                    ['icon' => 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', 'title' => 'Pencarian Katalog', 'desc' => 'Cari buku dari koleksi perpustakaan']
-                ];
-            @endphp
-
-            @foreach($services as $index => $service)
-            <div class="fade-in-up delay-{{ ($index + 1) * 100 }} service-card bg-white rounded-xl p-6 shadow-md hover:shadow-lg">
-                <div class="icon-bg bg-library-light mb-4">
-                    <svg class="w-8 h-8 text-library-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $service['icon'] }}"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $service['title'] }}</h3>
-                <p class="text-sm text-gray-600">{{ $service['desc'] }}</p>
+    <section class="py-16 sm:py-20 relative overflow-hidden bg-gradient-to-b from-white via-slate-50/40 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-14 fade-in-up">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-library-primary border border-blue-100 shadow-2xs mb-3">
+                    <i class="fas fa-sparkles text-[11px] text-blue-600"></i>
+                    <span>Fitur & Layanan Utama</span>
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Layanan Perpustakaan</h2>
+                <p class="text-gray-500 text-sm sm:text-base mt-2.5 leading-relaxed">
+                    Kami menyediakan berbagai kemudahan akses referensi akademik, sirkulasi koleksi, dan asistensi belajar untuk mendukung riset Anda.
+                </p>
             </div>
-            @endforeach
+
+            <!-- Services Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Service 1: Peminjaman Buku -->
+                <div class="fade-in-up delay-100 group relative bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-200 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <i class="fas fa-book-open-reader absolute -right-3 -bottom-3 text-7xl text-blue-50/60 group-hover:text-blue-100/70 group-hover:scale-110 transition-all pointer-events-none"></i>
+                    
+                    <div class="relative">
+                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-xl shadow-lg shadow-blue-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
+                            <i class="fas fa-book-open-reader"></i>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100 mb-2.5">
+                            Fisik & Digital
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Peminjaman Buku</h3>
+                        <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                            Pinjam koleksi buku fisik di konter atau baca ribuan e-book akademik langsung dari perangkat Anda.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 mt-5 relative flex items-center justify-between">
+                        <a href="{{ route('books.collection') }}" class="text-xs font-semibold text-blue-600 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <span>Mulai Pinjam</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                        <span class="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Service 2: Reservasi Buku -->
+                <div class="fade-in-up delay-200 group relative bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-purple-200 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <i class="fas fa-bookmark absolute -right-3 -bottom-3 text-7xl text-purple-50/60 group-hover:text-purple-100/70 group-hover:scale-110 transition-all pointer-events-none"></i>
+                    
+                    <div class="relative">
+                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white flex items-center justify-center text-xl shadow-lg shadow-purple-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-100 mb-2.5">
+                            Antrean Cerdas
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">Reservasi Buku</h3>
+                        <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                            Buku favorit sedang dipinjam? Kunci antrean Anda dan dapatkan notifikasi begitu buku siap diambil.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 mt-5 relative flex items-center justify-between">
+                        <a href="{{ route('books.collection') }}" class="text-xs font-semibold text-purple-600 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <span>Reservasi Sekarang</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                        <span class="w-6 h-6 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Service 3: Pengembalian Mandiri -->
+                <div class="fade-in-up delay-300 group relative bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-emerald-200 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <i class="fas fa-rotate-left absolute -right-3 -bottom-3 text-7xl text-emerald-50/60 group-hover:text-emerald-100/70 group-hover:scale-110 transition-all pointer-events-none"></i>
+                    
+                    <div class="relative">
+                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center text-xl shadow-lg shadow-emerald-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
+                            <i class="fas fa-rotate-left"></i>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 mb-2.5">
+                            Drop-Box & Loket
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">Pengembalian</h3>
+                        <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                            Proses pengembalian tanpa antre lama dengan pemindaian barcode otomatis di konter sirkulasi.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 mt-5 relative flex items-center justify-between">
+                        @auth
+                            <a href="{{ route('my-loans') }}" class="text-xs font-semibold text-emerald-600 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                                <span>Cek Pinjaman</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="text-xs font-semibold text-emerald-600 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                                <span>Masuk Akun</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </a>
+                        @endauth
+                        <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Service 4: Pencarian Katalog -->
+                <div class="fade-in-up delay-400 group relative bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-amber-200 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <i class="fas fa-magnifying-glass absolute -right-3 -bottom-3 text-7xl text-amber-50/60 group-hover:text-amber-100/70 group-hover:scale-110 transition-all pointer-events-none"></i>
+                    
+                    <div class="relative">
+                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white flex items-center justify-center text-xl shadow-lg shadow-amber-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
+                            <i class="fas fa-magnifying-glass"></i>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-100 mb-2.5">
+                            Katalog Cerdas
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">Pencarian Katalog</h3>
+                        <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                            Eksplorasi ribuan judul buku, skripsi, dan jurnal ilmiah dengan filter kategori dan kata kunci akurat.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 mt-5 relative flex items-center justify-between">
+                        <a href="{{ route('books.collection') }}" class="text-xs font-semibold text-amber-600 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <span>Jelajahi Koleksi</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                        <span class="w-6 h-6 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </section>
 
