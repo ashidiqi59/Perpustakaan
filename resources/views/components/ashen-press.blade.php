@@ -1,10 +1,10 @@
 @props([
-    'height' => '780px',
+    'height' => null,
     'class' => ''
 ])
 
-<div class="ashen-press-container relative w-full overflow-hidden bg-[#F4EFEA] {{ $class }}"
-     style="min-height: 520px; height: {{ $height }};">
+<div class="ashen-press-container relative w-full overflow-hidden bg-[#F4EFEA] h-[540px] sm:h-[640px] lg:h-[780px] {{ $class }}"
+     style="min-height: 520px; @if($height) height: {{ $height }}; @endif">
     <!-- Clean, elegant loading indicator -->
     <div id="ashen-press-loader" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#F4EFEA] transition-opacity duration-500 pointer-events-none">
         <div class="relative flex items-center justify-center">
