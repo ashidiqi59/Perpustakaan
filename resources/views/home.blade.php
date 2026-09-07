@@ -276,15 +276,15 @@
             <div class="fade-in-up flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
                 <div>
                     <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
-                        Koleksi Buku Perpustakaan
+                        Top Buku Perpustakaan
                     </h2>
                     <p class="text-gray-500 text-sm sm:text-base mt-2.5 max-w-lg">
-                        Eksplorasi rak buku 3D interaktif. Klik buku untuk membaca detail, preview karya, atau buka lembaran di dalamnya.
+                        Jelajahi koleksi secara interaktif. Klik sampul mana pun untuk membaca ringkasan karya dan preview isi.
                     </p>
                 </div>
-                <a href="{{ route('books.collection') }}" class="shrink-0 px-5 py-2.5 bg-library-primary text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2 group">
-                    <i class="fas fa-th-large text-xs"></i>
-                    Lihat Katalog Lengkap
+                <a href="{{ route('books.collection') }}" class="shrink-0 px-5 py-2.5 bg-library-primary text-white text-xs sm:text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2 group">
+                    <i class="fas fa-book text-xs"></i>
+                Selengkapnya
                     <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
