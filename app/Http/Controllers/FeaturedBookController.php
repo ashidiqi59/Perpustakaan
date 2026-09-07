@@ -73,6 +73,16 @@ class FeaturedBookController extends Controller
         $hasUploadedBackImage = $request->hasFile('back_image');
         $hasExistingBackImage = !empty($book->back_image) && file_exists(public_path($book->back_image));
 
+        // Maksimal hanya 10 buku di halaman beranda
+        if ($willBeFeatured && !$book->is_featured) {
+            $currentFeaturedCount = Book::where('is_featured', true)->count();
+            if ($currentFeaturedCount >= 10) {
+                return redirect()->back()
+                    ->with('error', "Maksimal hanya 10 buku yang dapat ditampilkan di halaman beranda! Nonaktifkan buku lain terlebih dahulu jika ingin menambahkan buku ini.")
+                    ->with('open_modal_book_id', $book->id);
+            }
+        }
+
         // Syarat wajib: Jika ingin menampilkan di beranda, harus ada cover belakang
         if ($willBeFeatured && !$hasUploadedBackImage && !$hasExistingBackImage) {
             return redirect()->back()

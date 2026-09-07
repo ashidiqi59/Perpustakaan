@@ -50,7 +50,7 @@
         <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tampil di Beranda</p>
-                <h3 class="text-2xl font-bold text-amber-500 mt-1">{{ $featuredCount }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+                <h3 class="text-2xl font-bold text-amber-500 mt-1">{{ $featuredCount }} <span class="text-sm font-normal text-slate-400">/ 10 Buku</span></h3>
             </div>
             <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600">
                 <i class="fas fa-desktop text-xl"></i>
@@ -96,8 +96,8 @@
         <div class="text-sm text-slate-700">
             <h4 class="font-semibold text-slate-900 mb-1">Ketentuan Buku Tampil di Beranda:</h4>
             <p class="leading-relaxed">
-                Setiap buku yang diaktifkan sebagai <strong>Tampil di Beranda</strong> akan muncul di rak buku 3D interaktif dan sorotan beranda. 
-                <span class="text-amber-900 font-semibold bg-amber-100/80 px-1.5 py-0.5 rounded">Syarat Wajib:</span> Buku <strong>harus memiliki foto cover belakang</strong> agar pengunjung perpustakaan dapat membalik buku dan melihat tampilan depan & belakang yang otentik.
+                Kapasitas rak buku 3D beranda adalah <strong>maksimal 10 buku pilihan</strong> (Buku 1 sampai 10).
+                <span class="text-amber-900 font-semibold bg-amber-100/80 px-1.5 py-0.5 rounded">Syarat Wajib:</span> Setiap buku yang ditampilkan di beranda <strong>wajib memiliki foto cover belakang</strong> agar pengunjung dapat membalik buku dan melihat cover depan serta belakang secara otentik.
             </p>
         </div>
     </div>
