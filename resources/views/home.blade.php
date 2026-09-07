@@ -574,6 +574,43 @@
                         <p class="text-sm text-gray-500 mt-1">Jadwal kunjungan tatap muka serta layanan bantuan perpustakaan.</p>
                     </div>
 
+                    @php
+                        $nowWib = \Carbon\Carbon::now('Asia/Jakarta');
+                        $dayOfWeek = $nowWib->dayOfWeek; // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+                        $currentHourMin = (int)$nowWib->format('Hi'); // format JamMenit misal 0028
+
+                        $isOpen = false;
+                        $statusText = 'Sedang Tutup';
+                        $statusDesc = '';
+
+                        if ($dayOfWeek >= 1 && $dayOfWeek <= 5) {
+                            // Senin - Jumat: 08:00 - 17:00 WIB
+                            if ($currentHourMin >= 800 && $currentHourMin < 1700) {
+                                $isOpen = true;
+                                $statusText = 'Buka Sekarang';
+                                $statusDesc = 'Buka s/d 17:00 WIB';
+                            } elseif ($currentHourMin < 800) {
+                                $statusDesc = 'Buka hari ini pukul 08:00 WIB';
+                            } else {
+                                $statusDesc = ($dayOfWeek == 5) ? 'Buka besok (Sabtu) pukul 08:00 WIB' : 'Buka besok pukul 08:00 WIB';
+                            }
+                        } elseif ($dayOfWeek == 6) {
+                            // Sabtu: 08:00 - 14:00 WIB
+                            if ($currentHourMin >= 800 && $currentHourMin < 1400) {
+                                $isOpen = true;
+                                $statusText = 'Buka Sekarang';
+                                $statusDesc = 'Buka s/d 14:00 WIB';
+                            } elseif ($currentHourMin < 800) {
+                                $statusDesc = 'Buka hari ini pukul 08:00 WIB';
+                            } else {
+                                $statusDesc = 'Buka Senin pukul 08:00 WIB';
+                            }
+                        } else {
+                            // Minggu: Tutup
+                            $statusDesc = 'Buka Senin pukul 08:00 WIB';
+                        }
+                    @endphp
+
                     <!-- Jam Operasional Card -->
                     <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
                         <div class="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
@@ -583,50 +620,75 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-gray-900 text-sm sm:text-base">Jam Operasional</h3>
-                                    <p class="text-xs text-gray-400">Waktu pelayanan gedung utama</p>
+                                    <p class="text-xs text-gray-500 font-medium">{{ $statusDesc }}</p>
                                 </div>
                             </div>
-                            <!-- Live Status Indicator -->
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
-                                <span class="relative flex h-2 w-2">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            <!-- Live Status Indicator Dinamis (WIB) -->
+                            @if($isOpen)
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                                    <span class="relative flex h-2 w-2">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                    </span>
+                                    <span>Buka Sekarang</span>
                                 </span>
-                                <span>Buka Sekarang</span>
-                            </span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 shadow-2xs">
+                                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                    <span>Sedang Tutup</span>
+                                </span>
+                            @endif
                         </div>
 
                         <div class="space-y-2.5 text-sm">
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50/70 hover:bg-gray-50 transition-colors">
+                            <!-- Senin - Jumat -->
+                            <div class="flex items-center justify-between p-2.5 rounded-xl transition-colors {{ ($dayOfWeek >= 1 && $dayOfWeek <= 5) ? 'bg-blue-50/70 border border-blue-200/80 ring-1 ring-blue-200/50' : 'bg-gray-50/70 hover:bg-gray-50' }}">
                                 <div class="flex items-center gap-2.5">
-                                    <div class="w-7 h-7 rounded-lg bg-blue-100/60 text-blue-600 flex items-center justify-center text-xs">
+                                    <div class="w-7 h-7 rounded-lg {{ ($dayOfWeek >= 1 && $dayOfWeek <= 5) ? 'bg-blue-600 text-white' : 'bg-blue-100/60 text-blue-600' }} flex items-center justify-center text-xs">
                                         <i class="fas fa-calendar-week"></i>
                                     </div>
-                                    <span class="font-medium text-gray-700">Senin – Jumat</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-semibold text-gray-800">Senin – Jumat</span>
+                                        @if($dayOfWeek >= 1 && $dayOfWeek <= 5)
+                                            <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded-md">Hari Ini</span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <span class="font-bold text-xs sm:text-sm text-gray-900 bg-white px-3 py-1 rounded-lg border border-gray-200/80 shadow-2xs">
                                     08:00 – 17:00 WIB
                                 </span>
                             </div>
 
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50/70 hover:bg-gray-50 transition-colors">
+                            <!-- Sabtu -->
+                            <div class="flex items-center justify-between p-2.5 rounded-xl transition-colors {{ ($dayOfWeek == 6) ? 'bg-amber-50/70 border border-amber-200/80 ring-1 ring-amber-200/50' : 'bg-gray-50/70 hover:bg-gray-50' }}">
                                 <div class="flex items-center gap-2.5">
-                                    <div class="w-7 h-7 rounded-lg bg-amber-100/60 text-amber-600 flex items-center justify-center text-xs">
+                                    <div class="w-7 h-7 rounded-lg {{ ($dayOfWeek == 6) ? 'bg-amber-500 text-white' : 'bg-amber-100/60 text-amber-600' }} flex items-center justify-center text-xs">
                                         <i class="fas fa-calendar-day"></i>
                                     </div>
-                                    <span class="font-medium text-gray-700">Sabtu</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-semibold text-gray-800">Sabtu</span>
+                                        @if($dayOfWeek == 6)
+                                            <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded-md">Hari Ini</span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <span class="font-bold text-xs sm:text-sm text-gray-900 bg-white px-3 py-1 rounded-lg border border-gray-200/80 shadow-2xs">
                                     08:00 – 14:00 WIB
                                 </span>
                             </div>
 
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-50/40 border border-rose-100/60">
+                            <!-- Minggu & Libur Nasional -->
+                            <div class="flex items-center justify-between p-2.5 rounded-xl transition-colors {{ ($dayOfWeek == 0) ? 'bg-rose-50 border border-rose-200 ring-1 ring-rose-200/50' : 'bg-rose-50/40 border border-rose-100/60' }}">
                                 <div class="flex items-center gap-2.5">
-                                    <div class="w-7 h-7 rounded-lg bg-rose-100/80 text-rose-500 flex items-center justify-center text-xs">
+                                    <div class="w-7 h-7 rounded-lg {{ ($dayOfWeek == 0) ? 'bg-rose-500 text-white' : 'bg-rose-100/80 text-rose-500' }} flex items-center justify-center text-xs">
                                         <i class="fas fa-calendar-xmark"></i>
                                     </div>
-                                    <span class="font-medium text-gray-600">Minggu & Libur Nasional</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-semibold text-gray-700">Minggu & Libur Nasional</span>
+                                        @if($dayOfWeek == 0)
+                                            <span class="text-[10px] font-bold text-rose-700 bg-rose-100 px-1.5 py-0.5 rounded-md">Hari Ini</span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <span class="font-bold text-xs text-rose-600 bg-rose-100/80 px-3 py-1 rounded-lg">
                                     Tutup
