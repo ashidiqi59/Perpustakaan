@@ -303,111 +303,299 @@
     </section>
 
     <!-- Statistics & Info Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="grid lg:grid-cols-2 gap-12">
-            <!-- Statistics -->
-            <div class="fade-in-up">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6">Statistik Perpustakaan</h2>
-                <div class="space-y-4">
-                    <div class="bg-white rounded-lg p-6 shadow-md flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="icon-bg bg-library-light">
-                                <svg class="w-6 h-6 text-library-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Total Koleksi</p>
-                                <p class="text-2xl font-bold text-gray-900">1,250 Buku</p>
-                            </div>
-                        </div>
+    <section class="py-16 sm:py-20 bg-gradient-to-b from-gray-50/50 via-white to-gray-50/60 border-t border-gray-100 relative overflow-hidden">
+        <!-- Subtle background glow decoration -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-100/30 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+                
+                <!-- Left Column: Statistics -->
+                <div class="fade-in-up">
+                    <div class="mb-6">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-library-primary border border-blue-100 shadow-xs mb-2">
+                            <i class="fas fa-chart-pie text-[11px]"></i>
+                            <span>Data & Aktivitas Terkini</span>
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">Statistik Perpustakaan</h2>
+                        <p class="text-sm text-gray-500 mt-1">Perkembangan inventaris koleksi dan aktivitas literasi civitas akademika.</p>
                     </div>
 
-                    <div class="bg-white rounded-lg p-6 shadow-md flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="icon-bg bg-library-light">
-                                <svg class="w-6 h-6 text-library-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Anggota Aktif</p>
-                                <p class="text-2xl font-bold text-gray-900">520 Mahasiswa</p>
+                    <div class="space-y-4">
+                        <!-- Stat 1: Total Koleksi -->
+                        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-200 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
+                            <i class="fas fa-book-open absolute -right-3 -bottom-3 text-7xl text-blue-50/70 group-hover:text-blue-100/80 transition-colors pointer-events-none"></i>
+                            <div class="flex items-center justify-between relative">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-book-bookmark text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Koleksi</p>
+                                        <div class="flex items-baseline gap-2 mt-0.5">
+                                            <p class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">1,250</p>
+                                            <span class="text-sm font-bold text-blue-600">Buku</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-1.5">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100">
+                                                <i class="fas fa-check-circle mr-1 text-[9px]"></i> Terkatalog
+                                            </span>
+                                            <span class="text-xs text-gray-400">Buku fisik & e-book</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden sm:flex items-center text-blue-500 font-semibold text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span>Lihat Semua</span>
+                                    <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="bg-white rounded-lg p-6 shadow-md flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="icon-bg bg-library-light">
-                                <svg class="w-6 h-6 text-library-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
+                        <!-- Stat 2: Anggota Aktif -->
+                        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
+                            <i class="fas fa-users absolute -right-3 -bottom-3 text-7xl text-emerald-50/70 group-hover:text-emerald-100/80 transition-colors pointer-events-none"></i>
+                            <div class="flex items-center justify-between relative">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-user-graduate text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Anggota Terdaftar</p>
+                                        <div class="flex items-baseline gap-2 mt-0.5">
+                                            <p class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">520</p>
+                                            <span class="text-sm font-bold text-emerald-600">Mahasiswa</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-1.5">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                                <i class="fas fa-id-badge mr-1 text-[9px]"></i> Aktif Semester Ini
+                                            </span>
+                                            <span class="text-xs text-gray-400">Civitas akademika</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden sm:flex items-center text-emerald-600 font-semibold text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span>Tervalidasi</span>
+                                    <i class="fas fa-check ml-1 text-[10px]"></i>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Buku Dipinjam</p>
-                                <p class="text-2xl font-bold text-gray-900">342 Buku</p>
+                        </div>
+
+                        <!-- Stat 3: Buku Dipinjam -->
+                        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-amber-200 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
+                            <i class="fas fa-receipt absolute -right-3 -bottom-3 text-7xl text-amber-50/70 group-hover:text-amber-100/80 transition-colors pointer-events-none"></i>
+                            <div class="flex items-center justify-between relative">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white shadow-lg shadow-amber-500/25 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-clock-rotate-left text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Buku Sedang Dipinjam</p>
+                                        <div class="flex items-baseline gap-2 mt-0.5">
+                                            <p class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">342</p>
+                                            <span class="text-sm font-bold text-amber-600">Buku</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-1.5">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-100">
+                                                <i class="fas fa-arrows-rotate mr-1 text-[9px]"></i> Sirkulasi Lancar
+                                            </span>
+                                            <span class="text-xs text-gray-400">98% pengembalian tepat</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden sm:flex items-center text-amber-600 font-semibold text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span>Peminjaman Aktif</span>
+                                    <i class="fas fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Google Maps Lokasi ULBI -->
+                        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                            <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base">
+                                        <i class="fas fa-map-location-dot"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 text-sm sm:text-base">Lokasi Perpustakaan</h3>
+                                        <p class="text-xs text-gray-400">Universitas Logistik dan Bisnis Internasional (ULBI)</p>
+                                    </div>
+                                </div>
+                                <a href="https://maps.google.com/?q=Universitas+Logistik+dan+Bisnis+Internasional+(ULBI)+Bandung" 
+                                   target="_blank" 
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors shadow-2xs">
+                                    <i class="fas fa-directions text-[11px]"></i>
+                                    <span>Petunjuk Arah</span>
+                                </a>
+                            </div>
+
+                            <!-- Map Iframe with Rounded Corners & Subtle Border -->
+                            <div class="w-full h-56 sm:h-64 rounded-xl overflow-hidden border border-gray-200/80 shadow-inner relative">
+                                <iframe 
+                                    src="https://maps.google.com/maps?q=Universitas+Logistik+dan+Bisnis+Internasional+(ULBI)+Bandung&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                                    width="100%" 
+                                    height="100%" 
+                                    style="border:0;" 
+                                    allowfullscreen="" 
+                                    loading="lazy" 
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    class="w-full h-full">
+                                </iframe>
+                            </div>
+
+                            <div class="mt-3.5 pt-3 border-t border-gray-100 flex items-start gap-2 text-xs text-gray-500">
+                                <i class="fas fa-location-dot text-rose-500 mt-0.5 shrink-0"></i>
+                                <span>Jl. Sariasih No. 54, Sarijadi, Kec. Sukasari, Kota Bandung, Jawa Barat 40151</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Operating Hours & Contact -->
-            <div class="fade-in-up delay-200">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6">Informasi Perpustakaan</h2>
-                <div class="bg-white rounded-lg p-6 shadow-md mb-6">
-                    <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-library-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Jam Operasional
-                    </h3>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Senin - Jumat</span>
-                            <span class="font-medium text-gray-900">08:00 - 17:00 WIB</span>
+                <!-- Right Column: Operating Hours & Contact -->
+                <div class="fade-in-up delay-200 space-y-6">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-xs mb-2">
+                            <i class="fas fa-info-circle text-[11px]"></i>
+                            <span>Layanan & Informasi</span>
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">Informasi Perpustakaan</h2>
+                        <p class="text-sm text-gray-500 mt-1">Jadwal kunjungan tatap muka serta layanan bantuan perpustakaan.</p>
+                    </div>
+
+                    <!-- Jam Operasional Card -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-library-primary flex items-center justify-center text-base">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-900 text-sm sm:text-base">Jam Operasional</h3>
+                                    <p class="text-xs text-gray-400">Waktu pelayanan gedung utama</p>
+                                </div>
+                            </div>
+                            <!-- Live Status Indicator -->
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                                <span>Buka Sekarang</span>
+                            </span>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Sabtu</span>
-                            <span class="font-medium text-gray-900">08:00 - 14:00 WIB</span>
+
+                        <div class="space-y-2.5 text-sm">
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50/70 hover:bg-gray-50 transition-colors">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-blue-100/60 text-blue-600 flex items-center justify-center text-xs">
+                                        <i class="fas fa-calendar-week"></i>
+                                    </div>
+                                    <span class="font-medium text-gray-700">Senin – Jumat</span>
+                                </div>
+                                <span class="font-bold text-xs sm:text-sm text-gray-900 bg-white px-3 py-1 rounded-lg border border-gray-200/80 shadow-2xs">
+                                    08:00 – 17:00 WIB
+                                </span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50/70 hover:bg-gray-50 transition-colors">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-amber-100/60 text-amber-600 flex items-center justify-center text-xs">
+                                        <i class="fas fa-calendar-day"></i>
+                                    </div>
+                                    <span class="font-medium text-gray-700">Sabtu</span>
+                                </div>
+                                <span class="font-bold text-xs sm:text-sm text-gray-900 bg-white px-3 py-1 rounded-lg border border-gray-200/80 shadow-2xs">
+                                    08:00 – 14:00 WIB
+                                </span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-50/40 border border-rose-100/60">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-rose-100/80 text-rose-500 flex items-center justify-center text-xs">
+                                        <i class="fas fa-calendar-xmark"></i>
+                                    </div>
+                                    <span class="font-medium text-gray-600">Minggu & Libur Nasional</span>
+                                </div>
+                                <span class="font-bold text-xs text-rose-600 bg-rose-100/80 px-3 py-1 rounded-lg">
+                                    Tutup
+                                </span>
+                            </div>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Minggu</span>
-                            <span class="font-medium text-red-600">Tutup</span>
+
+                        <div class="mt-4 pt-3.5 border-t border-gray-100 flex items-center gap-2 text-xs text-gray-500">
+                            <i class="fas fa-circle-info text-blue-500"></i>
+                            <span>Akses katalog buku online & peminjaman digital tetap aktif <strong>24/7</strong>.</span>
+                        </div>
+                    </div>
+
+                    <!-- Kontak Card Interaktif -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center space-x-3 pb-4 mb-4 border-b border-gray-100">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-900 text-sm sm:text-base">Kontak & Pusat Bantuan</h3>
+                                <p class="text-xs text-gray-400">Hubungi petugas kami untuk bantuan literasi</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5">
+                            <!-- Telepon -->
+                            <a href="tel:02112345678" class="group flex items-center justify-between p-3 rounded-xl bg-gray-50/70 hover:bg-blue-50/70 border border-transparent hover:border-blue-200 transition-all duration-200">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-blue-100/80 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-phone-alt text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Telepon Layanan</p>
+                                        <p class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors">(021) 1234-5678</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-blue-600 flex items-center gap-1 opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
+                                    <span>Panggil</span>
+                                    <i class="fas fa-chevron-right text-[10px]"></i>
+                                </span>
+                            </a>
+
+                            <!-- Email -->
+                            <a href="mailto:info@perpustakaan.ac.id" class="group flex items-center justify-between p-3 rounded-xl bg-gray-50/70 hover:bg-indigo-50/70 border border-transparent hover:border-indigo-200 transition-all duration-200">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-indigo-100/80 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-envelope text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Surel Resmi</p>
+                                        <p class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">info@perpustakaan.ac.id</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-indigo-600 flex items-center gap-1 opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
+                                    <span>Kirim Surel</span>
+                                    <i class="fas fa-chevron-right text-[10px]"></i>
+                                </span>
+                            </a>
+
+                            <!-- Lokasi -->
+                            <a href="https://maps.google.com/?q=Universitas+Logistik+dan+Bisnis+Internasional+(ULBI)+Bandung" target="_blank" class="group flex items-center justify-between p-3 rounded-xl bg-gray-50/70 hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200 transition-all duration-200">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-emerald-100/80 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-location-dot text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Lokasi Gedung</p>
+                                        <p class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-emerald-600 transition-colors">ULBI Bandung, Jl. Sariasih No. 54</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-emerald-600 flex items-center gap-1 opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
+                                    <span>Peta</span>
+                                    <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg p-6 shadow-md">
-                    <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-library-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                        Kontak
-                    </h3>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex items-center gap-3">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                            <span class="text-gray-600">(021) 1234-5678</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                            <span class="text-gray-600">info@perpustakaan.ac.id</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <span class="text-gray-600">Jl. Kampus No. 123, Jakarta</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
