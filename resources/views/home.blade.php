@@ -292,19 +292,19 @@
             </div>
 
             <!-- 3D Bookshelf with clean frame -->
-            <div class="fade-in-up delay-200 mb-6">
+            <div class="fade-in-up delay-200 mb-2 sm:mb-6">
                 <div class="shelf-frame">
                     <x-ashen-press class="" />
                 </div>
             </div>
 
-            <!-- Bottom info bar -->
-            <div class="fade-in-up delay-300 koleksi-info-bar flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3 text-sm text-gray-500">
+            <!-- Bottom info bar (Desktop only) -->
+            <div class="fade-in-up delay-300 koleksi-info-bar hidden sm:flex sm:flex-row items-center justify-between gap-3 px-5 py-3 text-sm text-gray-500">
                 <div class="flex items-center gap-2">
                     <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span><span class="font-medium text-gray-700">Petunjuk:</span> <span class="hidden sm:inline">Klik &amp; seret untuk menggeser rak &mdash; klik buku untuk membuka detail &amp; membalik halaman.</span><span class="sm:hidden">Geser ke samping untuk berganti buku &mdash; ketuk buku / tombol untuk membalik sampul.</span></span>
+                    <span><span class="font-medium text-gray-700">Petunjuk:</span> Klik &amp; seret untuk menggeser rak &mdash; klik buku untuk membuka detail &amp; membalik halaman.</span>
                 </div>
                 <a href="{{ route('books.collection') }}" class="shrink-0 flex items-center gap-1.5 text-library-primary hover:text-blue-800 font-semibold transition-colors group">
                     Lihat semua koleksi

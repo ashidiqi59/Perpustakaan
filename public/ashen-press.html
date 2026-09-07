@@ -1538,9 +1538,12 @@ function buildBook(data,index){
   const coverMat=mk(coverTex,1.0,index*7.3);
   const cover=new THREE.Mesh(faceGeo,coverMat);
   cover.position.z=SZD/2+K.chamf+0.0008; gScl.add(cover);
+  cover.userData.book = B;
   const backMat=mk(coverTex,0.55,index*3.1+11);
   const back=new THREE.Mesh(faceGeo,backMat);
   back.position.z=-SZD/2-K.chamf-0.0008; back.rotation.y=Math.PI; gScl.add(back);
+  back.userData.book = B;
+  body.userData.book = B;
   B.backLoaded=false;
   B.loadBack=()=>{ if(B.backLoaded)return; B.backLoaded=true;
     const t=new THREE.CanvasTexture(artBack(data,768,1152));
@@ -2206,14 +2209,23 @@ addEventListener('pointerdown',e=>{
   ptr.x=(e.clientX/VW)*2-1; ptr.y=-(e.clientY/VH)*2+1;
   ray.setFromCamera(ptr,camera);
   if(MOBILE){
-    const hits=ray.intersectObjects(books.map(b=>b.hit),false);
+    const targets = [];
+    for(const b of books){
+      if(b.hit) targets.push(b.hit);
+      if(b.cover) targets.push(b.cover);
+      if(b.back) targets.push(b.back);
+      if(b.body) targets.push(b.body);
+    }
+    const hits=ray.intersectObjects(targets,false);
     if(hits.length){
       const hitBook = hits[0].object.userData.book;
-      const currentIdx = getNormIndex(M.target);
-      if(hitBook.index === currentIdx){
-        flipActiveMobile();
-      } else {
-        goToIndex(hitBook.index);
+      if(hitBook){
+        const currentIdx = getNormIndex(M.target);
+        if(hitBook.index === currentIdx){
+          flipActiveMobile();
+        } else {
+          goToIndex(hitBook.index);
+        }
       }
     }
     return;
