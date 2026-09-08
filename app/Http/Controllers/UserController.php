@@ -92,6 +92,25 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified user details.
+     */
+    public function show(User $user)
+    {
+        $user->load(['loans' => function($q) {
+            $q->with('book')->latest();
+        }]);
+
+        $loanStats = [
+            'total'    => $user->loans->count(),
+            'active'   => $user->loans->filter(fn($l) => $l->getActualStatus() === 'peminjaman')->count(),
+            'returned' => $user->loans->filter(fn($l) => $l->getActualStatus() === 'dikembalikan')->count(),
+            'overdue'  => $user->loans->filter(fn($l) => $l->getActualStatus() === 'terlambat')->count(),
+        ];
+
+        return view('admin.users.show', compact('user', 'loanStats'));
+    }
+
+    /**
      * Show the form for editing the specified user.
      */
     public function edit(User $user)

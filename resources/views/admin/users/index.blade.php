@@ -265,6 +265,12 @@
                                 <!-- AKSI -->
                                 <td class="px-4 py-3.5">
                                     <div class="flex items-center justify-center gap-1.5">
+                                        <a href="{{ route('admin.users.show', $user->id) }}" 
+                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition-all"
+                                            title="Detail User">
+                                            <i class="fas fa-eye text-xs"></i>
+                                        </a>
+
                                         <a href="{{ route('admin.users.edit', $user->id) }}" 
                                             class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-amber-600 hover:bg-amber-50 border border-transparent hover:border-amber-200 transition-all"
                                             title="Edit User">
