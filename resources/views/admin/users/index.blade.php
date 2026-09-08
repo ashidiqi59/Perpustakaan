@@ -130,13 +130,13 @@
                 </div>
 
                 <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                    <button type="submit" class="flex-1 sm:flex-none px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm">
                         <i class="fas fa-search text-xs"></i>
                         <span>Cari</span>
                     </button>
 
                     @if($search || $role !== 'all')
-                        <a href="{{ route('admin.users.index') }}" class="w-full sm:w-auto px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5" title="Reset filter">
+                        <a href="{{ route('admin.users.index') }}" class="flex-1 sm:flex-none px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5" title="Reset filter">
                             <i class="fas fa-undo text-xs"></i>
                             <span>Reset</span>
                         </a>

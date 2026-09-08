@@ -104,32 +104,40 @@
 
     <!-- FILTER & SEARCH -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4">
-        <form action="{{ route('admin.featured-books.index') }}" method="GET" class="flex flex-col sm:flex-row gap-3 items-center justify-between">
-            <div class="relative w-full sm:w-80">
-                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input type="text" name="search" value="{{ $search }}" placeholder="Cari judul, penulis, ISBN..." 
-                       class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+        <form action="{{ route('admin.featured-books.index') }}" method="GET" class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+            <input type="hidden" name="status" value="{{ $status }}">
+
+            <div class="flex items-center gap-2 flex-1 max-w-full md:max-w-md">
+                <div class="relative flex-1">
+                    <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" name="search" value="{{ $search }}" placeholder="Cari judul, penulis, ISBN..." 
+                           class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-slate-50/30">
+                </div>
+                <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 shrink-0 shadow-sm">
+                    <i class="fas fa-search text-xs"></i>
+                    <span>Cari</span>
+                </button>
             </div>
 
-            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <div class="flex bg-slate-100 p-1 rounded-lg text-xs font-medium">
+            <div class="flex items-center gap-2 justify-between sm:justify-end overflow-x-auto pb-1 sm:pb-0">
+                <div class="flex bg-slate-100 p-1 rounded-lg text-xs font-medium shrink-0">
                     <a href="{{ route('admin.featured-books.index', ['status' => 'all', 'search' => $search]) }}"
-                       class="px-3 py-1.5 rounded-md transition-colors {{ $status === 'all' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800' }}">
+                       class="px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'all' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}">
                         Semua ({{ $totalBooks }})
                     </a>
                     <a href="{{ route('admin.featured-books.index', ['status' => 'featured', 'search' => $search]) }}"
-                       class="px-3 py-1.5 rounded-md transition-colors {{ $status === 'featured' ? 'bg-amber-500 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800' }}">
+                       class="px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'featured' ? 'bg-amber-500 text-white shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}">
                         Beranda ({{ $featuredCount }})
                     </a>
                     <a href="{{ route('admin.featured-books.index', ['status' => 'not_featured', 'search' => $search]) }}"
-                       class="px-3 py-1.5 rounded-md transition-colors {{ $status === 'not_featured' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800' }}">
+                       class="px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'not_featured' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}">
                         Bukan Beranda ({{ $totalBooks - $featuredCount }})
                     </a>
                 </div>
 
                 @if($search || $status !== 'all')
-                    <a href="{{ route('admin.featured-books.index') }}" class="px-3 py-2 text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors" title="Reset filter">
-                        <i class="fas fa-redo-alt mr-1"></i>Reset
+                    <a href="{{ route('admin.featured-books.index') }}" class="px-3 py-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 rounded-lg transition-colors flex items-center shrink-0" title="Reset filter">
+                        <i class="fas fa-undo text-xs mr-1"></i>Reset
                     </a>
                 @endif
             </div>

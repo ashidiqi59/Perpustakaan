@@ -20,31 +20,41 @@
                     @endif
 
                     <!-- SEARCH & FILTER -->
-                    <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4 sm:p-5 mb-6">
                         <form action="{{ route('admin.books.index') }}" method="GET" id="searchForm" class="space-y-3">
-                            <div class="flex flex-col sm:flex-row gap-3">
-                                <div class="flex-1">
+                            <div class="flex flex-col sm:flex-row gap-3 items-end">
+                                <div class="flex-1 w-full">
                                     <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Cari Buku</label>
-                                    <input type="text" name="search" value="{{ $search }}" placeholder="Judul, penulis, atau ISBN..." 
-                                        class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                            <i class="fas fa-search text-sm"></i>
+                                        </div>
+                                        <input type="text" name="search" value="{{ $search }}" placeholder="Judul, penulis, atau ISBN..." 
+                                            class="w-full pl-9 pr-4 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/30">
+                                    </div>
                                 </div>
-                                <div class="w-full sm:w-40">
+                                <div class="w-full sm:w-48">
                                     <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Kategori</label>
-                                    <select name="category" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="">Semua</option>
+                                    <select name="category" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                        <option value="">Semua Kategori</option>
                                         @foreach($categories as $cat)
                                             <option value="{{ $cat }}" {{ $category == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            @if($search || $category)
-                                <div class="flex justify-end">
-                                    <a href="{{ route('admin.books.index') }}" class="px-3 py-1.5 bg-slate-500 text-white text-xs rounded-lg hover:bg-slate-600 transition-colors flex items-center">
-                                        <i class="fas fa-times mr-1"></i> Reset
-                                    </a>
+                                <div class="flex items-center gap-2 w-full sm:w-auto">
+                                    <button type="submit" class="flex-1 sm:flex-none px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                                        <i class="fas fa-search text-xs"></i>
+                                        <span>Cari</span>
+                                    </button>
+                                    @if($search || $category)
+                                        <a href="{{ route('admin.books.index') }}" class="flex-1 sm:flex-none px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5" title="Reset filter">
+                                            <i class="fas fa-undo text-xs"></i>
+                                            <span>Reset</span>
+                                        </a>
+                                    @endif
                                 </div>
-                            @endif
+                            </div>
                         </form>
                     </div>
 
