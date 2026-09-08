@@ -259,11 +259,11 @@
                     <i class="fas fa-book-open-reader absolute -right-3 -bottom-3 text-7xl text-blue-50/60 group-hover:text-blue-100/70 group-hover:scale-110 transition-all pointer-events-none"></i>
                     
                     <div class="relative">
-                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-xl shadow-lg shadow-blue-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
+                        <div class="hidden sm:flex sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white items-center justify-center text-xl shadow-lg shadow-blue-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
                             <i class="fas fa-book-open-reader"></i>
                         </div>
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100 mb-2.5">
-                            Fisik & Digital
+                            Fisik
                         </span>
                         <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Peminjaman Buku</h3>
                         <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
@@ -288,7 +288,7 @@
                     <i class="fas fa-bookmark absolute -right-3 -bottom-3 text-7xl text-purple-50/60 group-hover:text-purple-100/70 group-hover:scale-110 transition-all pointer-events-none"></i>
                     
                     <div class="relative">
-                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white flex items-center justify-center text-xl shadow-lg shadow-purple-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
+                        <div class="hidden sm:flex sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white items-center justify-center text-xl shadow-lg shadow-purple-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
                             <i class="fas fa-calendar-check"></i>
                         </div>
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-100 mb-2.5">
@@ -317,7 +317,7 @@
                     <i class="fas fa-rotate-left absolute -right-3 -bottom-3 text-7xl text-emerald-50/60 group-hover:text-emerald-100/70 group-hover:scale-110 transition-all pointer-events-none"></i>
                     
                     <div class="relative">
-                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center text-xl shadow-lg shadow-emerald-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
+                        <div class="hidden sm:flex sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white items-center justify-center text-xl shadow-lg shadow-emerald-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
                             <i class="fas fa-rotate-left"></i>
                         </div>
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 mb-2.5">
@@ -353,7 +353,7 @@
                     <i class="fas fa-magnifying-glass absolute -right-3 -bottom-3 text-7xl text-amber-50/60 group-hover:text-amber-100/70 group-hover:scale-110 transition-all pointer-events-none"></i>
                     
                     <div class="relative">
-                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white flex items-center justify-center text-xl shadow-lg shadow-amber-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
+                        <div class="hidden sm:flex sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white items-center justify-center text-xl shadow-lg shadow-amber-500/25 group-hover:scale-110 transition-transform duration-300 mb-5">
                             <i class="fas fa-magnifying-glass"></i>
                         </div>
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-100 mb-2.5">
@@ -521,8 +521,8 @@
                             </div>
                         </a>
 
-                        <!-- Google Maps Lokasi ULBI -->
-                        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <!-- Google Maps Lokasi ULBI (Desktop: Ditampilkan di kolom kiri) -->
+                        <div class="hidden lg:block bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
                             <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base">
@@ -765,6 +765,46 @@
                                     <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
                                 </span>
                             </a>
+                        </div>
+                    </div>
+
+                    <!-- Google Maps Lokasi ULBI (Mobile: Ditampilkan paling bawah setelah Kontak & Pusat Bantuan) -->
+                    <div class="block lg:hidden bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base">
+                                    <i class="fas fa-map-location-dot"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-900 text-sm sm:text-base">Lokasi Perpustakaan</h3>
+                                    <p class="text-xs text-gray-400">Universitas Logistik dan Bisnis Internasional (ULBI)</p>
+                                </div>
+                            </div>
+                            <a href="https://maps.google.com/?q=Universitas+Logistik+dan+Bisnis+Internasional+(ULBI)+Bandung" 
+                               target="_blank" 
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors shadow-2xs">
+                                <i class="fas fa-directions text-[11px]"></i>
+                                <span>Petunjuk Arah</span>
+                            </a>
+                        </div>
+
+                        <!-- Map Iframe with Rounded Corners & Subtle Border -->
+                        <div class="w-full h-56 sm:h-64 rounded-xl overflow-hidden border border-gray-200/80 shadow-inner relative">
+                            <iframe 
+                                src="https://maps.google.com/maps?q=Universitas+Logistik+dan+Bisnis+Internasional+(ULBI)+Bandung&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                class="w-full h-full">
+                            </iframe>
+                        </div>
+
+                        <div class="mt-3.5 pt-3 border-t border-gray-100 flex items-start gap-2 text-xs text-gray-500">
+                            <i class="fas fa-location-dot text-rose-500 mt-0.5 shrink-0"></i>
+                            <span>Jl. Sariasih No. 54, Sarijadi, Kec. Sukasari, Kota Bandung, Jawa Barat 40151</span>
                         </div>
                     </div>
                 </div>
