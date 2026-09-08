@@ -86,20 +86,12 @@
             </div>
             <div class="p-4 sm:p-6">
 
-                {{-- Mode Tabs --}}
-                <div class="flex gap-2 mb-4">
-                    <button onclick="setMode('auto')" id="tab-auto"
-                        class="scan-tab flex-1 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-300 bg-indigo-500 text-white transition-all">
-                        <i class="fas fa-magic mr-1"></i> Auto Detect
-                    </button>
-                    <button onclick="setMode('loan')" id="tab-loan"
-                        class="scan-tab flex-1 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 transition-all">
-                        <i class="fas fa-book mr-1"></i> Pinjam
-                    </button>
-                    <button onclick="setMode('return')" id="tab-return"
-                        class="scan-tab flex-1 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 transition-all">
-                        <i class="fas fa-undo mr-1"></i> Kembali
-                    </button>
+                {{-- Auto Detect Badge --}}
+                <div class="mb-4">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 border border-indigo-200 text-indigo-600 text-xs font-semibold rounded-full">
+                        <i class="fas fa-magic text-xs"></i> Auto Detect
+                    </span>
+                    <span class="text-xs text-slate-400 ml-2">Token terdeteksi otomatis</span>
                 </div>
 
                 {{-- Toggle Kamera --}}
@@ -222,37 +214,14 @@
 @endsection
 
 @push('styles')
-<style>
-    .scan-tab.active-tab {
-        background-color: #6366f1;
-        color: white;
-        border-color: #6366f1;
-    }
-</style>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 @endpush
 
 @push('scripts')
 <script>
 // ── STATE ──
-let currentMode = 'auto';
 let cameraActive = false;
 let html5QrCode = null;
-
-// ── TABS ──
-function setMode(mode) {
-    currentMode = mode;
-    ['auto', 'loan', 'return'].forEach(m => {
-        const tab = document.getElementById('tab-' + m);
-        if (m === mode) {
-            tab.classList.add('bg-indigo-500', 'text-white', 'border-indigo-500');
-            tab.classList.remove('text-slate-600', 'bg-white', 'hover:bg-slate-50');
-        } else {
-            tab.classList.remove('bg-indigo-500', 'text-white', 'border-indigo-500');
-            tab.classList.add('text-slate-600', 'hover:bg-slate-50');
-        }
-    });
-}
 
 // ── CAMERA ──
 function toggleCamera() {
@@ -307,15 +276,13 @@ async function processToken(token) {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
     btn.disabled = true;
 
-    let type = currentMode;
-    if (type === 'auto') {
-        if (token.startsWith('PINJAM-'))        type = 'loan';
-        else if (token.startsWith('KEMBALI-'))  type = 'return';
-        else {
-            showResult(false, '❌ Format token tidak dikenali. Pastikan dimulai dengan PINJAM- atau KEMBALI-');
-            btn.innerHTML = '<i class="fas fa-search"></i> Scan'; btn.disabled = false;
-            return;
-        }
+    let type;
+    if (token.startsWith('PINJAM-'))        type = 'loan';
+    else if (token.startsWith('KEMBALI-'))  type = 'return';
+    else {
+        showResult(false, '❌ Format token tidak dikenali. Pastikan dimulai dengan PINJAM- atau KEMBALI-');
+        btn.innerHTML = '<i class="fas fa-search"></i> Scan'; btn.disabled = false;
+        return;
     }
 
     try {
