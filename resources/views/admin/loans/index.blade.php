@@ -20,7 +20,19 @@
                     @endif
 
                     <!-- STATS CARDS -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-yellow-500">
+                            <div class="flex justify-between items-center">
+                                <div class="min-w-0">
+                                    <p class="text-xs sm:text-sm text-slate-500">Menunggu Konfirmasi</p>
+                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $stats['menunggu'] }}</p>
+                                </div>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 rounded-full flex items-center justify-center shrink-0">
+                                    <i class="fas fa-clock text-yellow-500 text-lg sm:text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-amber-500">
                             <div class="flex justify-between items-center">
                                 <div class="min-w-0">
@@ -62,18 +74,21 @@
                     <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6">
                         <form action="{{ route('admin.loans.index') }}" method="GET" id="searchForm" class="space-y-3">
                             <div class="flex flex-col sm:flex-row gap-3">
-                                <div class="flex-1">
+                                        <div class="flex-1">
                                     <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Cari Peminjam</label>
                                     <input type="text" name="search" placeholder="Nama atau NPM..." value="{{ request('search', '') }}"
                                         class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
-                                <div class="w-full sm:w-40">
+                                <div class="w-full sm:w-48">
                                     <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Status</label>
                                     <select name="status" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                         <option value="">Semua</option>
-                                        <option value="peminjaman" {{ request('status') === 'peminjaman' ? 'selected' : '' }}>Peminjaman</option>
+                                        <option value="menunggu_konfirmasi" {{ request('status') === 'menunggu_konfirmasi' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
+                                        <option value="peminjaman" {{ request('status') === 'peminjaman' ? 'selected' : '' }}>Peminjaman Aktif</option>
+                                        <option value="menunggu_pengembalian" {{ request('status') === 'menunggu_pengembalian' ? 'selected' : '' }}>Menunggu Pengembalian</option>
                                         <option value="dikembalikan" {{ request('status') === 'dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
                                         <option value="terlambat" {{ request('status') === 'terlambat' ? 'selected' : '' }}>Terlambat</option>
+                                        <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>Hangus/Expired</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,21 +137,30 @@
                                                     </div>
                                                 </td>
                                                 <td class="px-3 py-3">
-                                                    @if($loan->getActualStatus() === 'peminjaman')
+                                                    @php $actualStatus = $loan->getActualStatus(); @endphp
+                                                    @if($actualStatus === 'menunggu_konfirmasi')
+                                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full font-medium whitespace-nowrap">
+                                                            <i class="fas fa-clock"></i> Menunggu
+                                                        </span>
+                                                    @elseif($actualStatus === 'peminjaman')
                                                         <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded-full font-medium">
                                                             Dipinjam
                                                         </span>
-                                                    @elseif($loan->status === 'dikembalikan' && $loan->return_date && $loan->return_date->isAfter($loan->due_date))
-                                                        <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
-                                                            Terlambat
+                                                    @elseif($actualStatus === 'menunggu_pengembalian')
+                                                        <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full font-medium whitespace-nowrap">
+                                                            <i class="fas fa-undo"></i> Mau Kembali
                                                         </span>
-                                                    @elseif($loan->getActualStatus() === 'dikembalikan')
+                                                    @elseif($actualStatus === 'dikembalikan')
                                                         <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
                                                             Kembali
                                                         </span>
-                                                    @else
+                                                    @elseif($actualStatus === 'terlambat')
                                                         <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
                                                             Terlambat
+                                                        </span>
+                                                    @else
+                                                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full font-medium">
+                                                            Hangus
                                                         </span>
                                                     @endif
                                                 </td>
@@ -152,18 +176,6 @@
                                                             title="Edit">
                                                             <i class="fas fa-edit text-xs"></i>
                                                         </a>
-                                                        @if($loan->getActualStatus() !== 'dikembalikan')
-                                                            <form action="{{ route('admin.loans.return', $loan->id) }}" method="POST" class="inline">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <button type="submit"
-                                                                    class="p-1.5 text-slate-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
-                                                                    title="Kembalikan"
-                                                                    onclick="return confirm('Kembalikan buku ini?')">
-                                                                    <i class="fas fa-undo text-xs"></i>
-                                                                </button>
-                                                            </form>
-                                                        @endif
                                                         <form action="{{ route('admin.loans.destroy', $loan->id) }}" method="POST" class="inline">
                                                             @csrf
                                                             @method('DELETE')

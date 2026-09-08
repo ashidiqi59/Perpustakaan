@@ -31,13 +31,52 @@ class UserController extends Controller
     }
 
     /**
+     * Show the form for creating a new user (petugas only).
+     */
+    public function create()
+    {
+        return view('admin.users.form', [
+            'user'   => null,
+            'action' => 'create',
+        ]);
+    }
+
+    /**
+     * Store a newly created user (petugas) in storage.
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'npm'      => 'nullable|string|max:20|unique:users,npm',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'role'     => 'required|in:admin,petugas,pengunjung',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $data = $validator->validated();
+        $data['password'] = Hash::make($data['password']);
+
+        User::create($data);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'Akun berhasil dibuat!');
+    }
+
+    /**
      * Show the form for editing the specified user.
      */
     public function edit(User $user)
     {
         return view('admin.users.form', [
-            'user' => $user,
-            'action' => 'edit'
+            'user'   => $user,
+            'action' => 'edit',
         ]);
     }
 
@@ -50,7 +89,7 @@ class UserController extends Controller
             'npm' => 'required|string|max:20|unique:users,npm,' . $user->id,
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,pengunjung',
+            'role'     => 'required|in:admin,petugas,pengunjung',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 

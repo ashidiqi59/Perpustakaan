@@ -3,6 +3,14 @@
 @section('title', 'Kelola Users')
 @section('subtitle', 'Kelola data user perpustakaan')
 
+@section('header-actions')
+    <a href="{{ route('admin.users.create') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-500 text-white text-xs sm:text-sm rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1 sm:gap-2">
+        <i class="fas fa-plus"></i>
+        <span class="hidden sm:inline">Tambah Akun</span>
+        <span class="sm:hidden">Tambah</span>
+    </a>
+@endsection
+
 @section('content')
                     <!-- ALERT MESSAGES -->
                     @if(session('success'))

@@ -48,6 +48,14 @@
             <i class="fas fa-users w-5 text-center"></i>
             <span class="nav-text">Kelola Users</span>
         </a>
+
+        <!-- Divider -->
+        <div class="border-t border-slate-700 my-2"></div>
+
+        <a href="{{ route('petugas.dashboard') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('petugas.*') ? 'bg-indigo-500 text-white' : 'text-indigo-300 hover:bg-slate-800' }}">
+            <i class="fas fa-qrcode w-5 text-center"></i>
+            <span class="nav-text">Scanner Barcode</span>
+        </a>
     </nav>
 
     <div class="p-4 border-t border-slate-700 shrink-0">

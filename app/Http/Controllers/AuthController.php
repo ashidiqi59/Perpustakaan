@@ -42,6 +42,10 @@ class AuthController extends Controller
                 return redirect()->route('admin.dashboard')->with('success', 'Login berhasil! Selamat datang, Admin.');
             }
 
+            if ($user->isPetugas()) {
+                return redirect()->route('petugas.dashboard')->with('success', 'Login berhasil! Selamat datang, Petugas.');
+            }
+
             return redirect()->route('home')->with('success', 'Login berhasil!');
         }
 
@@ -124,6 +128,10 @@ class AuthController extends Controller
         // Arahkan ke dashboard admin jika admin, atau ke home jika pengunjung biasa
         if ($user->isAdmin()) {
             return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, Admin ' . $user->name . '!');
+        }
+
+        if ($user->isPetugas()) {
+            return redirect()->route('petugas.dashboard')->with('success', 'Selamat datang kembali, Petugas ' . $user->name . '!');
         }
 
         return redirect()->route('home')->with('success', 'Selamat datang kembali, ' . $user->name . '!');

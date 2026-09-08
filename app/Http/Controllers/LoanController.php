@@ -16,23 +16,26 @@ class LoanController extends Controller
      */
     public function adminIndex(Request $request)
     {
-        // Update status for overdue loans FIRST before getting any counts
-        // Only update loans that have NOT been returned yet (return_date is null)
-        Loan::where('status', Loan::STATUS_PEMINJAMAN)
+        // Auto-expire barcodes that have passed their expiry time
+        $this->autoExpireBarcodes();
+
+        // Update status for overdue loans (only active loans)
+        Loan::whereIn('status', [Loan::STATUS_PEMINJAMAN])
             ->whereNull('return_date')
             ->where('due_date', '<', now()->toDateString())
             ->update(['status' => Loan::STATUS_TERLAMBAT]);
 
-        // Get UNFILTERED counts for stats cards (always show all data)
+        // Get UNFILTERED counts for stats cards
         $allLoans = Loan::all();
         $stats = [
-            'active' => $allLoans->filter(fn($l) => $l->getActualStatus() === 'peminjaman')->count(),
-            'overdue' => $allLoans->filter(fn($l) => $l->getActualStatus() === 'terlambat')->count(),
-            'returned' => $allLoans->filter(fn($l) => $l->getActualStatus() === 'dikembalikan')->count(),
+            'menunggu'   => $allLoans->filter(fn($l) => $l->getActualStatus() === 'menunggu_konfirmasi')->count(),
+            'active'     => $allLoans->filter(fn($l) => $l->getActualStatus() === 'peminjaman')->count(),
+            'overdue'    => $allLoans->filter(fn($l) => $l->getActualStatus() === 'terlambat')->count(),
+            'returned'   => $allLoans->filter(fn($l) => $l->getActualStatus() === 'dikembalikan')->count(),
         ];
 
         // Build filtered query for the table
-        $query = Loan::with('user', 'book')->orderBy('loan_date', 'desc');
+        $query = Loan::with('user', 'book')->orderBy('created_at', 'desc');
 
         // Filter by search (nama atau NPM user)
         if ($request->has('search') && $request->search) {
@@ -57,7 +60,10 @@ class LoanController extends Controller
      */
     public function myLoans()
     {
-        // Update status for overdue loans - menggunakan UPDATE query langsung agar lebih efisien
+        // Auto-expire barcodes
+        $this->autoExpireBarcodes();
+
+        // Update status for overdue loans
         Loan::where('user_id', Auth::id())
             ->where('status', Loan::STATUS_PEMINJAMAN)
             ->where('due_date', '<', now()->toDateString())
@@ -67,14 +73,14 @@ class LoanController extends Controller
         $user = Auth::user();
         $loans = Loan::where('user_id', $user->id)
             ->with('book')
-            ->orderBy('loan_date', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('my-loans', compact('loans'));
     }
 
     /**
-     * Show the form for creating a new loan.
+     * Show the form for creating a new loan (admin).
      */
     public function adminCreate()
     {
@@ -85,16 +91,16 @@ class LoanController extends Controller
     }
 
     /**
-     * Store a newly created loan in database.
+     * Store a newly created loan in database (admin).
      */
     public function adminStore(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'book_id' => 'required|exists:books,id',
+            'user_id'  => 'required|exists:users,id',
+            'book_id'  => 'required|exists:books,id',
             'loan_date' => 'required|date',
-            'due_date' => 'required|date|after_or_equal:loan_date',
-            'notes' => 'nullable|string',
+            'due_date'  => 'required|date|after_or_equal:loan_date',
+            'notes'    => 'nullable|string',
         ]);
 
         // Check if book stock is available
@@ -103,10 +109,12 @@ class LoanController extends Controller
             return back()->withErrors(['book_id' => 'Stok buku tidak tersedia']);
         }
 
-        // Create the loan
-        Loan::create($validated);
+        // Admin creates loan directly as active (bypass barcode flow)
+        $loan = Loan::create(array_merge($validated, [
+            'status' => Loan::STATUS_PEMINJAMAN,
+        ]));
 
-        // Reduce book stock
+        // Reduce book stock immediately
         $book->decrement('stock');
 
         return redirect()->route('admin.loans.index')
@@ -114,7 +122,7 @@ class LoanController extends Controller
     }
 
     /**
-     * User borrow a book
+     * User borrow a book — generates barcode, reduces stock immediately.
      */
     public function borrow(Request $request)
     {
@@ -123,7 +131,7 @@ class LoanController extends Controller
         }
 
         $validated = $request->validate([
-            'book_id' => 'required|exists:books,id',
+            'book_id'  => 'required|exists:books,id',
             'due_date' => 'required|date|after:today',
         ]);
 
@@ -133,34 +141,118 @@ class LoanController extends Controller
             return back()->withErrors(['book_id' => 'Maaf, stok buku tidak tersedia']);
         }
 
-        // Check if user already has this book borrowed
+        // Check if user already has this book borrowed/pending
         $existingLoan = Loan::where('user_id', Auth::id())
             ->where('book_id', $validated['book_id'])
-            ->whereIn('status', ['peminjaman', 'terlambat'])
+            ->whereIn('status', [
+                Loan::STATUS_MENUNGGU_KONFIRMASI,
+                Loan::STATUS_PEMINJAMAN,
+                Loan::STATUS_TERLAMBAT,
+                Loan::STATUS_MENUNGGU_PENGEMBALIAN,
+            ])
             ->first();
 
         if ($existingLoan) {
-            return back()->withErrors(['book_id' => 'Anda sudah meminjam buku ini']);
+            return back()->withErrors(['book_id' => 'Anda sudah meminjam atau mengajukan pinjam buku ini']);
         }
 
-        // Create the loan
-        Loan::create([
-            'user_id' => Auth::id(),
-            'book_id' => $validated['book_id'],
+        // Create the loan with status "menunggu_konfirmasi"
+        $loan = Loan::create([
+            'user_id'  => Auth::id(),
+            'book_id'  => $validated['book_id'],
             'loan_date' => now()->toDateString(),
-            'due_date' => $validated['due_date'],
-            'status' => Loan::STATUS_PEMINJAMAN,
+            'due_date'  => $validated['due_date'],
+            'status'   => Loan::STATUS_MENUNGGU_KONFIRMASI,
         ]);
 
-        // Reduce book stock
+        // Reduce book stock immediately upon request
         $book->decrement('stock');
 
+        // Generate loan barcode
+        $loan->generateLoanBarcode();
+
         return redirect()->route('my-loans')
-            ->with('success', 'Peminjaman berhasil! Silakan ambil buku di perpustakaan.');
+            ->with('success', 'Pengajuan berhasil! Tunjukkan barcode kepada petugas untuk mengambil buku.');
     }
 
     /**
-     * Display the specified loan.
+     * User requests book return — generates return barcode.
+     */
+    public function requestReturn(Loan $loan)
+    {
+        // Ensure this loan belongs to the authenticated user
+        if ($loan->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Only allow return request for active loans
+        $allowedStatuses = [Loan::STATUS_PEMINJAMAN, Loan::STATUS_TERLAMBAT];
+        if (!in_array($loan->status, $allowedStatuses)) {
+            return redirect()->route('my-loans')->with('error', 'Peminjaman ini tidak dapat dikembalikan saat ini.');
+        }
+
+        // Generate return barcode
+        $loan->generateReturnBarcode();
+
+        // Update status to waiting for return confirmation
+        $loan->update(['status' => Loan::STATUS_MENUNGGU_PENGEMBALIAN]);
+
+        return redirect()->route('my-loans')
+            ->with('success', 'Barcode pengembalian dibuat! Tunjukkan kepada petugas untuk mengembalikan buku.');
+    }
+
+    /**
+     * Cancel a pending loan (status menunggu_konfirmasi only).
+     * Restores book stock.
+     */
+    public function cancelLoan(Loan $loan)
+    {
+        if ($loan->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($loan->status !== Loan::STATUS_MENUNGGU_KONFIRMASI) {
+            return redirect()->route('my-loans')->with('error', 'Pengajuan ini tidak dapat dibatalkan.');
+        }
+
+        // Restore stock
+        $loan->book->increment('stock');
+
+        $loan->update(['status' => Loan::STATUS_EXPIRED]);
+
+        return redirect()->route('my-loans')->with('success', 'Pengajuan peminjaman berhasil dibatalkan.');
+    }
+
+    /**
+     * Cancel a pending return request (status menunggu_pengembalian).
+     * Returns loan back to peminjaman/terlambat status.
+     */
+    public function cancelReturn(Loan $loan)
+    {
+        if ($loan->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($loan->status !== Loan::STATUS_MENUNGGU_PENGEMBALIAN) {
+            return redirect()->route('my-loans')->with('error', 'Tidak ada permintaan pengembalian yang aktif.');
+        }
+
+        // Determine correct status (peminjaman or terlambat)
+        $newStatus = $loan->due_date->isBefore(today())
+            ? Loan::STATUS_TERLAMBAT
+            : Loan::STATUS_PEMINJAMAN;
+
+        $loan->update([
+            'status'                   => $newStatus,
+            'return_barcode'           => null,
+            'return_barcode_expires_at' => null,
+        ]);
+
+        return redirect()->route('my-loans')->with('success', 'Permintaan pengembalian dibatalkan.');
+    }
+
+    /**
+     * Display the specified loan (admin).
      */
     public function adminShow(Loan $loan)
     {
@@ -169,7 +261,7 @@ class LoanController extends Controller
     }
 
     /**
-     * Show the form for editing the specified loan.
+     * Show the form for editing the specified loan (admin).
      */
     public function adminEdit(Loan $loan)
     {
@@ -181,30 +273,28 @@ class LoanController extends Controller
     }
 
     /**
-     * Update the specified loan in database.
+     * Update the specified loan in database (admin).
      */
     public function adminUpdate(Request $request, Loan $loan)
     {
         $validated = $request->validate([
-            'loan_date' => 'required|date',
-            'due_date' => 'required|date|after_or_equal:loan_date',
+            'loan_date'   => 'required|date',
+            'due_date'    => 'required|date|after_or_equal:loan_date',
             'return_date' => 'nullable|date|after_or_equal:loan_date',
-            'notes' => 'nullable|string',
+            'notes'       => 'nullable|string',
         ]);
 
-        $oldBook = $loan->book_id;
+        $oldBook   = $loan->book_id;
         $oldStatus = $loan->status;
 
-        // Determine status based on return_date and due_date
-        $status = $loan->status; // keep existing status by default
+        // Determine status
+        $status = $loan->status;
         if ($validated['return_date']) {
-            // If return_date is set, compare with due_date
-            $returnDate = \Carbon\Carbon::parse($validated['return_date']);
-            $dueDate = \Carbon\Carbon::parse($validated['due_date']);
-            $status = $returnDate->isAfter($dueDate) ? Loan::STATUS_TERLAMBAT : Loan::STATUS_DIKEMBALIKAN;
+            $returnDate = Carbon::parse($validated['return_date']);
+            $dueDate    = Carbon::parse($validated['due_date']);
+            $status     = $returnDate->isAfter($dueDate) ? Loan::STATUS_TERLAMBAT : Loan::STATUS_DIKEMBALIKAN;
         } else {
-            // If return_date is null, check if overdue
-            $dueDate = \Carbon\Carbon::parse($validated['due_date']);
+            $dueDate = Carbon::parse($validated['due_date']);
             if ($dueDate->isBefore(now())) {
                 $status = Loan::STATUS_TERLAMBAT;
             } else {
@@ -219,14 +309,14 @@ class LoanController extends Controller
         if ($loan->book_id !== $oldBook) {
             $oldBookObj = Book::find($oldBook);
             $newBookObj = $loan->book;
-
             $oldBookObj->increment('stock');
             $newBookObj->decrement('stock');
         }
 
         // Increment stock if returned (was not returned before)
-        if (in_array($oldStatus, [Loan::STATUS_PEMINJAMAN, Loan::STATUS_TERLAMBAT]) && 
-            in_array($status, [Loan::STATUS_DIKEMBALIKAN, Loan::STATUS_TERLAMBAT])) {
+        $wasActive   = in_array($oldStatus, [Loan::STATUS_PEMINJAMAN, Loan::STATUS_TERLAMBAT, Loan::STATUS_MENUNGGU_PENGEMBALIAN]);
+        $nowReturned = $status === Loan::STATUS_DIKEMBALIKAN;
+        if ($wasActive && $nowReturned) {
             $loan->book->increment('stock');
         }
 
@@ -235,12 +325,19 @@ class LoanController extends Controller
     }
 
     /**
-     * Remove the specified loan from database.
+     * Remove the specified loan from database (admin).
      */
     public function adminDestroy(Loan $loan)
     {
-        // Restore stock if loan was not returned
-        if ($loan->status !== Loan::STATUS_DIKEMBALIKAN) {
+        // Restore stock if loan was still active (not returned, not expired)
+        $activeStatuses = [
+            Loan::STATUS_MENUNGGU_KONFIRMASI,
+            Loan::STATUS_PEMINJAMAN,
+            Loan::STATUS_TERLAMBAT,
+            Loan::STATUS_MENUNGGU_PENGEMBALIAN,
+        ];
+
+        if (in_array($loan->status, $activeStatuses)) {
             $loan->book->increment('stock');
         }
 
@@ -251,26 +348,41 @@ class LoanController extends Controller
     }
 
     /**
-     * Mark a loan as returned
+     * Auto-expire barcodes that have passed their expiry time.
+     * - Loan barcodes: restore stock, set status to expired
+     * - Return barcodes: revert status to peminjaman/terlambat
      */
-    public function return(Loan $loan)
+    private function autoExpireBarcodes(): void
     {
-        $returnDate = now()->toDateString();
-        $dueDate = \Carbon\Carbon::parse($loan->due_date)->toDateString();
-        
-        // Set status to 'dikembalikan' when book is returned
-        // The actual display status (late or not) is determined by getActualStatus() method
-        $loan->update([
-            'return_date' => $returnDate,
-            'status' => Loan::STATUS_DIKEMBALIKAN,
-        ]);
+        // Expire loan barcodes (menunggu_konfirmasi that timed out)
+        $expiredLoans = Loan::where('status', Loan::STATUS_MENUNGGU_KONFIRMASI)
+            ->whereNotNull('loan_barcode_expires_at')
+            ->where('loan_barcode_expires_at', '<', now())
+            ->get();
 
-        // Restore book stock only if this loan wasn't already returned
-        if (!$loan->wasRecentlyCreated && in_array($loan->getOriginal('status'), [Loan::STATUS_PEMINJAMAN, Loan::STATUS_TERLAMBAT])) {
+        foreach ($expiredLoans as $loan) {
+            // Restore stock since the borrow never happened
             $loan->book->increment('stock');
+            $loan->update(['status' => Loan::STATUS_EXPIRED]);
         }
 
-        return redirect()->route('admin.loans.index')
-            ->with('success', 'Buku berhasil dikembalikan');
+        // Expire return barcodes (menunggu_pengembalian that timed out)
+        $expiredReturns = Loan::where('status', Loan::STATUS_MENUNGGU_PENGEMBALIAN)
+            ->whereNotNull('return_barcode_expires_at')
+            ->where('return_barcode_expires_at', '<', now())
+            ->get();
+
+        foreach ($expiredReturns as $loan) {
+            // Revert to active status
+            $newStatus = $loan->due_date->isBefore(today())
+                ? Loan::STATUS_TERLAMBAT
+                : Loan::STATUS_PEMINJAMAN;
+
+            $loan->update([
+                'status'                    => $newStatus,
+                'return_barcode'            => null,
+                'return_barcode_expires_at' => null,
+            ]);
+        }
     }
 }

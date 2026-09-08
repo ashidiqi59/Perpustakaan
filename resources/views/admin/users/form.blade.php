@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit User')
-@section('subtitle', 'Perbarui informasi user')
+@section('title', $action === 'create' ? 'Tambah Akun' : 'Edit User')
+@section('subtitle', $action === 'create' ? 'Buat akun petugas atau pengguna baru' : 'Perbarui informasi user')
 
 @section('header-actions')
     <a href="{{ route('admin.users.index') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-slate-500 text-white text-xs sm:text-sm rounded-lg hover:bg-slate-600 transition-colors flex items-center gap-1 sm:gap-2">
@@ -22,28 +22,39 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('admin.users.update', $user->id) }}" 
-                          method="POST" 
+                    <form action="{{ $action === 'create' ? route('admin.users.store') : route('admin.users.update', $user->id) }}"
+                          method="POST"
                           class="bg-white rounded-xl shadow-sm overflow-hidden max-w-2xl">
                         @csrf
-                        @method('PUT')
+                        @if($action !== 'create')
+                            @method('PUT')
+                        @endif
 
                         <div class="p-4 sm:p-6 space-y-4">
-                            <!-- User Avatar -->
+                            <!-- User Avatar / Header -->
                             <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                                 <div class="w-14 h-14 sm:w-20 sm:h-20 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
                                     <i class="fas fa-user text-blue-500 text-xl sm:text-3xl"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base sm:text-lg font-semibold text-slate-800">{{ $user->name }}</h3>
-                                    <p class="text-xs sm:text-sm text-slate-500">{{ $user->npm }}</p>
+                                    @if($action === 'create')
+                                        <h3 class="text-base sm:text-lg font-semibold text-slate-800">Akun Baru</h3>
+                                        <p class="text-xs sm:text-sm text-slate-500">Isi data untuk membuat akun petugas atau pengguna baru</p>
+                                    @else
+                                        <h3 class="text-base sm:text-lg font-semibold text-slate-800">{{ $user->name }}</h3>
+                                        <p class="text-xs sm:text-sm text-slate-500">{{ $user->npm }}</p>
+                                    @endif
                                 </div>
                             </div>
 
                             <!-- NPM -->
                             <div>
-                                <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">NPM *</label>
-                                <input type="text" name="npm" value="{{ old('npm', $user->npm) }}" required
+                                <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">
+                                    NPM {{ $action === 'create' ? '(Opsional untuk petugas)' : '*' }}
+                                </label>
+                                <input type="text" name="npm"
+                                    value="{{ old('npm', $user?->npm) }}"
+                                    {{ $action !== 'create' ? 'required' : '' }}
                                     class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Masukkan NPM">
                             </div>
@@ -51,7 +62,8 @@
                             <!-- Name -->
                             <div>
                                 <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Nama Lengkap *</label>
-                                <input type="text" name="name" value="{{ old('name', $user->name) }}" required
+                                <input type="text" name="name"
+                                    value="{{ old('name', $user?->name) }}" required
                                     class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Masukkan nama lengkap">
                             </div>
@@ -59,7 +71,8 @@
                             <!-- Email -->
                             <div>
                                 <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Email *</label>
-                                <input type="email" name="email" value="{{ old('email', $user->email) }}" required
+                                <input type="email" name="email"
+                                    value="{{ old('email', $user?->email) }}" required
                                     class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Masukkan email">
                             </div>
@@ -70,28 +83,42 @@
                                 <select name="role" required
                                     class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option value="">Pilih Role</option>
-                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="pengunjung" {{ old('role', $user->role) == 'pengunjung' ? 'selected' : '' }}>Pengunjung</option>
+                                    <option value="admin" {{ old('role', $user?->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="petugas" {{ old('role', $user?->role) == 'petugas' ? 'selected' : '' }}>
+                                        Petugas (Scanner Barcode)
+                                    </option>
+                                    <option value="pengunjung" {{ old('role', $user?->role) == 'pengunjung' ? 'selected' : '' }}>Pengunjung</option>
                                 </select>
+                                @if($action === 'create')
+                                    <p class="text-xs text-slate-500 mt-1">
+                                        <i class="fas fa-info-circle text-blue-400"></i>
+                                        Pilih <strong>Petugas</strong> untuk membuat akun yang bisa scan barcode peminjaman & pengembalian.
+                                    </p>
+                                @endif
                             </div>
 
-                            <!-- Password (Optional) -->
+                            <!-- Password -->
                             <div class="border-t border-slate-200 pt-4 mt-4">
                                 <h4 class="font-medium text-slate-800 mb-3 sm:mb-4 text-sm">
-                                    <i class="fas fa-key mr-2"></i>Ubah Password (Opsional)
+                                    <i class="fas fa-key mr-2"></i>
+                                    {{ $action === 'create' ? 'Password' : 'Ubah Password (Opsional)' }}
                                 </h4>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Password Baru</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">
+                                            {{ $action === 'create' ? 'Password *' : 'Password Baru' }}
+                                        </label>
                                         <input type="password" name="password"
                                             class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder="Kosongkan jika tidak diubah">
+                                            placeholder="{{ $action === 'create' ? 'Masukkan password' : 'Kosongkan jika tidak diubah' }}"
+                                            {{ $action === 'create' ? 'required' : '' }}>
                                     </div>
                                     <div>
                                         <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Konfirmasi Password</label>
                                         <input type="password" name="password_confirmation"
                                             class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder="Konfirmasi password baru">
+                                            placeholder="Konfirmasi password"
+                                            {{ $action === 'create' ? 'required' : '' }}>
                                     </div>
                                 </div>
                             </div>
@@ -103,10 +130,9 @@
                                 Batal
                             </a>
                             <button type="submit" class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2">
-                                <i class="fas fa-save"></i>
-                                Perbarui User
+                                <i class="fas fa-{{ $action === 'create' ? 'plus' : 'save' }}"></i>
+                                {{ $action === 'create' ? 'Buat Akun' : 'Perbarui User' }}
                             </button>
                         </div>
                     </form>
 @endsection
-

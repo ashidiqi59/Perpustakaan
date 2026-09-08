@@ -12,7 +12,8 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    const ROLE_ADMIN = 'admin';
+    const ROLE_ADMIN     = 'admin';
+    const ROLE_PETUGAS   = 'petugas';
     const ROLE_PENGUNJUNG = 'pengunjung';
 
     /**
@@ -43,11 +44,27 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is petugas (staff/operator)
+     */
+    public function isPetugas(): bool
+    {
+        return $this->role === self::ROLE_PETUGAS;
+    }
+
+    /**
      * Check if user is pengunjung
      */
     public function isPengunjung(): bool
     {
         return $this->role === self::ROLE_PENGUNJUNG;
+    }
+
+    /**
+     * Check if user can access petugas scanner (admin or petugas)
+     */
+    public function canScan(): bool
+    {
+        return $this->isPetugas() || $this->isAdmin();
     }
 
     /**

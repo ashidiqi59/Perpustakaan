@@ -12,7 +12,7 @@ class BooksSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('books')->insert([
+        DB::table('books')->insertOrIgnore([
 
             // ─── BUKU HITS POPULER (tampil di rak 3D beranda) ───
 
