@@ -130,9 +130,9 @@
                 </div>
 
                 <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
-                        <i class="fas fa-filter text-xs"></i>
-                        <span>Filter</span>
+                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                        <i class="fas fa-search text-xs"></i>
+                        <span>Cari</span>
                     </button>
 
                     @if($search || $role !== 'all')
