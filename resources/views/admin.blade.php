@@ -47,22 +47,6 @@
                         </div>
                     </div>
 
-                    <!-- QUICK ACTIONS -->
-                    <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6">
-                        <h3 class="text-base sm:text-lg font-semibold text-slate-800 mb-4">Aksi Cepat</h3>
-                        <div class="flex flex-wrap gap-2 sm:gap-3">
-                            <a href="{{ route('admin.books.create') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-500 text-white text-xs sm:text-sm rounded-lg hover:bg-blue-600 transition-colors">
-                                <i class="fas fa-plus mr-1 sm:mr-2"></i>Tambah Buku
-                            </a>
-                            <a href="{{ route('admin.users.index') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-green-500 text-white text-xs sm:text-sm rounded-lg hover:bg-green-600 transition-colors">
-                                <i class="fas fa-user-plus mr-1 sm:mr-2"></i>Kelola User
-                            </a>
-                            <a href="{{ route('admin.loans.index') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-purple-500 text-white text-xs sm:text-sm rounded-lg hover:bg-purple-600 transition-colors">
-                                <i class="fas fa-list mr-1 sm:mr-2"></i>Kelola Peminjaman
-                            </a>
-                        </div>
-                    </div>
-
                     <!-- RECENT ACTIVITY -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                         <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
