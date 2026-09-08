@@ -72,8 +72,52 @@
                 display: block;
             }
 
-            /* Mobile Styles */
+            /* Desktop Layout */
+            @media (min-width: 769px) {
+                html, body {
+                    height: 100%;
+                    overflow: hidden;
+                }
+                .app-wrapper {
+                    height: 100vh;
+                }
+                #sidebar {
+                    height: 100%;
+                }
+                #main-content {
+                    height: 100%;
+                    overflow: hidden;
+                }
+                #content-scroll-area {
+                    flex: 1 1 0%;
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .mobile-menu-btn {
+                    display: none !important;
+                }
+            }
+
+            /* Mobile Layout (Phone & Tablet) */
             @media (max-width: 768px) {
+                html, body {
+                    height: auto !important;
+                    min-height: 100% !important;
+                    overflow-x: hidden !important;
+                    overflow-y: auto !important;
+                    -webkit-overflow-scrolling: touch !important;
+                    overscroll-behavior-y: auto !important;
+                }
+
+                body.sidebar-open {
+                    overflow: hidden !important;
+                }
+
+                .app-wrapper {
+                    height: auto !important;
+                    min-height: 100vh !important;
+                }
+
                 #sidebar {
                     position: fixed;
                     left: -256px;
@@ -81,6 +125,7 @@
                     height: 100vh;
                     transform: translateX(0);
                     transition: left 0.3s ease;
+                    z-index: 50;
                 }
 
                 #sidebar.active {
@@ -109,21 +154,27 @@
 
                 #main-content {
                     width: 100%;
-                    padding-left: 0;
+                    height: auto !important;
+                    min-height: 100vh !important;
+                    overflow: visible !important;
+                }
+
+                #top-header {
+                    position: sticky;
+                    top: 0;
+                    z-index: 30;
+                }
+
+                #content-scroll-area {
+                    height: auto !important;
+                    overflow: visible !important;
+                    flex: none !important;
+                    padding: 1rem;
+                    -webkit-overflow-scrolling: touch !important;
                 }
 
                 .mobile-menu-btn {
                     display: flex !important;
-                }
-
-                .mobile-content {
-                    padding: 1rem;
-                }
-            }
-
-            @media (min-width: 769px) {
-                .mobile-menu-btn {
-                    display: none !important;
                 }
             }
         </style>
@@ -136,6 +187,7 @@
                 if (isMobile) {
                     sidebar.classList.toggle('active');
                     if (overlay) overlay.classList.toggle('active');
+                    document.body.classList.toggle('sidebar-open', sidebar.classList.contains('active'));
                 } else {
                     sidebar.classList.toggle('collapsed');
                     document.getElementById('sidebar-toggle').classList.toggle('collapsed');
@@ -150,6 +202,7 @@
                 if (window.innerWidth <= 768) {
                     sidebar.classList.remove('active');
                     if (overlay) overlay.classList.remove('active');
+                    document.body.classList.remove('sidebar-open');
                 }
             }
 
@@ -160,6 +213,7 @@
 
                 if (isMobile) {
                     sidebar.classList.remove('active');
+                    document.body.classList.remove('sidebar-open');
                 } else {
                     const isCollapsed = localStorage.getItem('petugasSidebarCollapsed') === 'true';
                     if (isCollapsed) {
@@ -175,20 +229,21 @@
                 if (window.innerWidth > 768) {
                     sidebar.classList.remove('active');
                     if (overlay) overlay.classList.remove('active');
+                    document.body.classList.remove('sidebar-open');
                 }
             });
         </script>
         @stack('styles')
     </head>
-    <body class="h-screen bg-slate-100 text-slate-800 font-sans overflow-hidden">
+    <body class="bg-slate-100 text-slate-800 font-sans">
         <x-page-loader />
 
         <!-- Mobile Overlay -->
         <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-        <div class="flex h-full">
+        <div class="app-wrapper flex">
             <!-- SIDEBAR -->
-            <aside id="sidebar" class="h-full bg-slate-900 text-white flex flex-col">
+            <aside id="sidebar" class="bg-slate-900 text-white flex flex-col">
                 <!-- Mobile Header -->
                 <div class="p-4 border-b border-slate-700 relative shrink-0 flex items-center justify-between md:hidden">
                     <div class="flex items-center gap-3">
@@ -251,9 +306,9 @@
             </aside>
 
             <!-- MAIN CONTENT -->
-            <main id="main-content" class="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
+            <main id="main-content" class="flex-1 flex flex-col min-w-0">
                 <!-- TOP BAR -->
-                <header class="bg-white shadow-sm px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shrink-0">
+                <header id="top-header" class="bg-white shadow-sm px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shrink-0">
                     <div class="flex items-center gap-3">
                         <!-- Mobile Menu Button -->
                         <button onclick="toggleSidebar()" class="mobile-menu-btn w-10 h-10 items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
@@ -274,7 +329,7 @@
                 </header>
 
                 <!-- CONTENT AREA -->
-                <div class="flex-1 overflow-y-auto p-4 sm:p-6">
+                <div id="content-scroll-area" class="flex-1 p-4 sm:p-6">
                     @yield('content')
                 </div>
             </main>
