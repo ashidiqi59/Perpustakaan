@@ -151,17 +151,50 @@
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-blue-50 via-white to-blue-50 py-16 lg:py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Left Content -->
-                <div class="fade-in-up">
+            <div class="grid lg:grid-cols-2 lg:gap-x-12 gap-y-8 lg:gap-y-0 items-center">
+                <!-- Hero Text: Heading & Description -->
+                <div class="fade-in-up order-1 lg:col-start-1 lg:row-start-1">
                     <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                         Selamat Datang di<br>
                         <span class="text-library-primary">Perpustakaan Digital</span>
                     </h1>
-                    <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+                    <p class="text-gray-600 text-lg mb-0 lg:mb-8 leading-relaxed">
                         Akses ribuan koleksi buku digital, jurnal, dan referensi akademik. Temukan pengetahuan yang Anda butuhkan untuk mendukung pembelajaran dan penelitian.
                     </p>
+                </div>
 
+                <!-- Right - Featured Books Stack (Placed above search on mobile) -->
+                <div class="fade-in-up delay-200 order-2 lg:order-none lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center flex justify-center max-w-full overflow-hidden sm:overflow-visible py-4">
+                    <div class="relative h-[360px] sm:h-[440px] lg:h-[500px] w-[280px] sm:w-[300px]">
+                        @forelse($featuredBooks as $index => $book)
+                            @php
+                                $rotations = [-5, 2, -3];
+                                $zIndexes = [30, 20, 10];
+                                $topPositions = [0, 6, 12];
+                                $leftPositions = [0, 12, 24];
+                            @endphp
+                            <div class="absolute w-64 h-80 rounded-lg shadow-2xl transform hover:rotate-0 transition-transform duration-300 group cursor-pointer"
+                                style="top: {{ $topPositions[$index] }}px; left: {{ $leftPositions[$index] }}px; transform: rotate({{ $rotations[$index] }}deg); z-index: {{ $zIndexes[$index] }};">
+                                <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-full object-cover rounded-lg shadow-2xl">
+                                <a href="{{ route('books.show', $book->id) }}" class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center">
+                                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span class="bg-white text-gray-800 px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                                            Lihat Detail
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
+                        @empty
+                            <!-- Fallback if no books available -->
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 1" class="absolute top-0 left-0 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[-5deg] z-30 hover:rotate-0 transition-transform duration-300">
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 2" class="absolute top-6 left-12 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[2deg] z-20 hover:rotate-0 transition-transform duration-300">
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 3" class="absolute top-12 left-24 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[-3deg] z-10 hover:rotate-0 transition-transform duration-300">
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Search Bar & Stats (Placed below books on mobile) -->
+                <div class="fade-in-up order-3 lg:order-none lg:col-start-1 lg:row-start-2">
                     <!-- Search Bar -->
                     <form action="{{ route('books.collection') }}" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex flex-col sm:flex-row gap-2 mb-6">
                         <input
@@ -193,36 +226,6 @@
                             <div class="text-lg sm:text-2xl font-bold text-library-primary">24/7</div>
                             <div class="text-[11px] sm:text-xs text-gray-600 mt-1">Akses Online</div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Right - Featured Books Stack -->
-                <div class="fade-in-up delay-200 flex justify-center max-w-full overflow-hidden sm:overflow-visible py-4">
-                    <div class="relative h-[420px] sm:h-[500px] w-[280px] sm:w-[300px]">
-                        @forelse($featuredBooks as $index => $book)
-                            @php
-                                $rotations = [-5, 2, -3];
-                                $zIndexes = [30, 20, 10];
-                                $topPositions = [0, 6, 12];
-                                $leftPositions = [0, 12, 24];
-                            @endphp
-                            <div class="absolute w-64 h-80 rounded-lg shadow-2xl transform hover:rotate-0 transition-transform duration-300 group cursor-pointer"
-                                style="top: {{ $topPositions[$index] }}px; left: {{ $leftPositions[$index] }}px; transform: rotate({{ $rotations[$index] }}deg); z-index: {{ $zIndexes[$index] }};">
-                                <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-full object-cover rounded-lg shadow-2xl">
-                                <a href="{{ route('books.show', $book->id) }}" class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center">
-                                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <span class="bg-white text-gray-800 px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                                            Lihat Detail
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-                        @empty
-                            <!-- Fallback if no books available -->
-                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 1" class="absolute top-0 left-0 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[-5deg] z-30 hover:rotate-0 transition-transform duration-300">
-                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 2" class="absolute top-6 left-12 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[2deg] z-20 hover:rotate-0 transition-transform duration-300">
-                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 3" class="absolute top-12 left-24 w-64 h-80 object-cover rounded-lg shadow-2xl transform rotate-[-3deg] z-10 hover:rotate-0 transition-transform duration-300">
-                        @endforelse
                     </div>
                 </div>
             </div>
