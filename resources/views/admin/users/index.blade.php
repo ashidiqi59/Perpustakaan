@@ -300,9 +300,11 @@
                 <div class="text-xs text-slate-500">
                     Menampilkan <strong>{{ $users->firstItem() }}</strong> - <strong>{{ $users->lastItem() }}</strong> dari <strong>{{ $users->total() }}</strong> pengguna
                 </div>
-                <div>
-                    {{ $users->links() }}
-                </div>
+                @if($users->hasPages())
+                    <div class="overflow-x-auto">
+                        {{ $users->links() }}
+                    </div>
+                @endif
             </div>
         @else
             <!-- EMPTY STATE -->

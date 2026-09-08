@@ -50,7 +50,7 @@ class LoanController extends Controller
             $query->where('status', $request->status);
         }
 
-        $loans = $query->paginate(10);
+        $loans = $query->paginate(10)->withQueryString();
 
         return view('admin.loans.index', compact('loans', 'stats'));
     }

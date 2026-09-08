@@ -133,8 +133,15 @@
                             </div>
                             
                             <!-- PAGINATION -->
-                            <div class="px-3 py-4 border-t border-slate-200 overflow-x-auto">
-                                {{ $books->appends(['search' => $search, 'category' => $category])->links() }}
+                            <div class="px-4 py-3.5 border-t border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <div class="text-xs text-slate-500">
+                                    Menampilkan <strong>{{ $books->firstItem() }}</strong> - <strong>{{ $books->lastItem() }}</strong> dari <strong>{{ $books->total() }}</strong> buku
+                                </div>
+                                @if($books->hasPages())
+                                    <div class="overflow-x-auto">
+                                        {{ $books->appends(['search' => $search, 'category' => $category])->links() }}
+                                    </div>
+                                @endif
                             </div>
                         @else
                             <div class="p-6 sm:p-8 text-center">
