@@ -1296,6 +1296,27 @@
     document.addEventListener('DOMContentLoaded', function() {
       attachNpmValidator();
       attachEmailValidator();
+
+      // Cegah double submission akibat double-tap pada layar sentuh HP
+      document.querySelectorAll('form').forEach(function(form) {
+        form.addEventListener('submit', function() {
+          const btn = form.querySelector('button[type="submit"]');
+          if (btn) {
+            setTimeout(function() {
+              btn.disabled = true;
+              btn.style.opacity = '0.7';
+            }, 50);
+          }
+        });
+      });
+    });
+
+    // Otomatis refresh jika halaman dibuka kembali dari background/cache HP (BFCache)
+    // Hal ini memastikan CSRF Token selalu baru dan tidak memicu 419 Page Expired
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
     });
   </script>
 </html>
