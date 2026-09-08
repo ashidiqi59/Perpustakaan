@@ -60,7 +60,7 @@
         <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Lengkap Cover Belakang</p>
-                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ $books->where('is_featured', true)->whereNotNull('back_image')->count() }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ $completeBackCoverCount }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
             </div>
             <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600">
                 <i class="fas fa-check-double text-xl"></i>
@@ -163,7 +163,7 @@
                     <tr class="hover:bg-slate-50/60 transition-colors {{ $book->is_featured ? 'bg-amber-50/20' : '' }}">
                         <!-- Index -->
                         <td class="py-4 px-4 text-center text-xs font-semibold text-slate-400">
-                            {{ $index + 1 }}
+                            {{ $books->firstItem() + $index }}
                         </td>
 
                         <!-- Book Info -->
@@ -242,6 +242,13 @@
                 </tbody>
             </table>
         </div>
+        
+        <!-- PAGINATION -->
+        @if($books->hasPages())
+            <div class="px-4 py-4 border-t border-slate-200 overflow-x-auto">
+                {{ $books->appends(['search' => $search, 'status' => $status])->links() }}
+            </div>
+        @endif
     </div>
 </div>
 

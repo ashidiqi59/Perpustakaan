@@ -34,14 +34,15 @@ class FeaturedBookController extends Controller
             $query->where('is_featured', false);
         }
 
-        // Urutkan buku featured terlebih dahulu, lalu id
+        // Urutkan buku featured terlebih dahulu, lalu id, batasi 10 buku per halaman
         $books = $query->orderByDesc('is_featured')
                        ->orderBy('id', 'asc')
-                       ->get();
+                       ->paginate(10);
 
         $totalBooks = Book::count();
         $featuredCount = Book::where('is_featured', true)->count();
         $missingBackCoverCount = Book::where('is_featured', true)->whereNull('back_image')->count();
+        $completeBackCoverCount = Book::where('is_featured', true)->whereNotNull('back_image')->count();
 
         return view('admin.featured-books.index', compact(
             'books',
@@ -49,7 +50,8 @@ class FeaturedBookController extends Controller
             'status',
             'totalBooks',
             'featuredCount',
-            'missingBackCoverCount'
+            'missingBackCoverCount',
+            'completeBackCoverCount'
         ));
     }
 
