@@ -20,52 +20,44 @@
                     @endif
 
                     <!-- STATS CARDS -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-yellow-500">
-                            <div class="flex justify-between items-center">
-                                <div class="min-w-0">
-                                    <p class="text-xs sm:text-sm text-slate-500">Menunggu Konfirmasi</p>
-                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $stats['menunggu'] }}</p>
-                                </div>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fas fa-clock text-yellow-500 text-lg sm:text-xl"></i>
-                                </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Menunggu Konfirmasi</p>
+                                <h3 class="text-2xl font-bold text-amber-500 mt-1">{{ $stats['menunggu'] }} <span class="text-sm font-normal text-slate-400">Transaksi</span></h3>
+                            </div>
+                            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 shrink-0">
+                                <i class="fas fa-clock text-xl"></i>
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-amber-500">
-                            <div class="flex justify-between items-center">
-                                <div class="min-w-0">
-                                    <p class="text-xs sm:text-sm text-slate-500">Peminjaman Aktif</p>
-                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $stats['active'] }}</p>
-                                </div>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fas fa-hourglass-half text-amber-500 text-lg sm:text-xl"></i>
-                                </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Peminjaman Aktif</p>
+                                <h3 class="text-2xl font-bold text-blue-600 mt-1">{{ $stats['active'] }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shrink-0">
+                                <i class="fas fa-hourglass-half text-xl"></i>
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-red-500">
-                            <div class="flex justify-between items-center">
-                                <div class="min-w-0">
-                                    <p class="text-xs sm:text-sm text-slate-500">Terlambat</p>
-                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $stats['overdue'] }}</p>
-                                </div>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fas fa-exclamation-circle text-red-500 text-lg sm:text-xl"></i>
-                                </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Terlambat</p>
+                                <h3 class="text-2xl font-bold text-rose-600 mt-1">{{ $stats['overdue'] }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+                            </div>
+                            <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center text-rose-600 shrink-0">
+                                <i class="fas fa-exclamation-circle text-xl"></i>
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-green-500">
-                            <div class="flex justify-between items-center">
-                                <div class="min-w-0">
-                                    <p class="text-xs sm:text-sm text-slate-500">Dikembalikan</p>
-                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $stats['returned'] }}</p>
-                                </div>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fas fa-check-circle text-green-500 text-lg sm:text-xl"></i>
-                                </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Dikembalikan</p>
+                                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ $stats['returned'] }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+                            </div>
+                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shrink-0">
+                                <i class="fas fa-check-circle text-xl"></i>
                             </div>
                         </div>
                     </div>

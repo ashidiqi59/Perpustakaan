@@ -4,53 +4,45 @@
 @section('subtitle', 'Selamat datang, ' . Auth::user()->name)
 
 @section('content')
-                    <!-- STAT CARDS -->
+                    <!-- STAT CARDS (STYLE PERSIS BUKU BERANDA) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-blue-500">
-                            <div class="flex justify-between items-center">
-                                <div class="min-w-0">
-                                    <p class="text-xs sm:text-sm text-slate-500">Total Buku</p>
-                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ number_format($totalBooks) }}</p>
-                                </div>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fas fa-book text-blue-500 text-lg sm:text-xl"></i>
-                                </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Peminjaman Aktif</p>
+                                <h3 class="text-2xl font-bold text-amber-500 mt-1">{{ number_format($activeLoans) }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+                            </div>
+                            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600">
+                                <i class="fas fa-clock text-xl"></i>
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-green-500">
-                            <div class="flex justify-between items-center">
-                                <div class="min-w-0">
-                                    <p class="text-xs sm:text-sm text-slate-500">Total Users</p>
-                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ number_format($totalUsers) }}</p>
-                                </div>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fas fa-users text-green-500 text-lg sm:text-xl"></i>
-                                </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Users</p>
+                                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ number_format($totalUsers) }} <span class="text-sm font-normal text-slate-400">User</span></h3>
+                            </div>
+                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600">
+                                <i class="fas fa-users text-xl"></i>
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-amber-500">
-                            <div class="flex justify-between items-center">
-                                <div class="min-w-0">
-                                    <p class="text-xs sm:text-sm text-slate-500">Peminjaman Aktif</p>
-                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ number_format($activeLoans) }}</p>
-                                </div>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fas fa-hand-holding text-amber-500 text-lg sm:text-xl"></i>
-                                </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Terlambat</p>
+                                <h3 class="text-2xl font-bold text-rose-600 mt-1">{{ number_format($overdueLoans) }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+                            </div>
+                            <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center text-rose-600">
+                                <i class="fas fa-exclamation-triangle text-xl"></i>
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-red-500">
-                            <div class="flex justify-between items-center">
-                                <div class="min-w-0">
-                                    <p class="text-xs sm:text-sm text-slate-500">Terlambat</p>
-                                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ number_format($overdueLoans) }}</p>
-                                </div>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fas fa-exclamation-triangle text-red-500 text-lg sm:text-xl"></i>
-                                </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Koleksi Buku</p>
+                                <h3 class="text-2xl font-bold text-slate-800 mt-1">{{ number_format($totalBooks) }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+                            </div>
+                            <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
+                                <i class="fas fa-book text-xl"></i>
                             </div>
                         </div>
                     </div>

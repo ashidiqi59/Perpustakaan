@@ -20,52 +20,44 @@
     @endif
 
     {{-- STATS CARDS --}}
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-yellow-400">
-            <div class="flex justify-between items-center">
-                <div class="min-w-0">
-                    <p class="text-xs sm:text-sm text-slate-500">Menunggu Konfirmasi Pinjam</p>
-                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $pendingLoans }}</p>
-                </div>
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 rounded-full flex items-center justify-center shrink-0">
-                    <i class="fas fa-clock text-yellow-500 text-lg sm:text-xl"></i>
-                </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">
+            <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Menunggu Pinjam</p>
+                <h3 class="text-2xl font-bold text-amber-500 mt-1">{{ $pendingLoans }} <span class="text-sm font-normal text-slate-400">Transaksi</span></h3>
+            </div>
+            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 shrink-0">
+                <i class="fas fa-clock text-xl"></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-indigo-500">
-            <div class="flex justify-between items-center">
-                <div class="min-w-0">
-                    <p class="text-xs sm:text-sm text-slate-500">Menunggu Konfirmasi Kembali</p>
-                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $pendingReturns }}</p>
-                </div>
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-100 rounded-full flex items-center justify-center shrink-0">
-                    <i class="fas fa-undo-alt text-indigo-500 text-lg sm:text-xl"></i>
-                </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">
+            <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Menunggu Kembali</p>
+                <h3 class="text-2xl font-bold text-indigo-600 mt-1">{{ $pendingReturns }} <span class="text-sm font-normal text-slate-400">Transaksi</span></h3>
+            </div>
+            <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 shrink-0">
+                <i class="fas fa-undo-alt text-xl"></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-green-500">
-            <div class="flex justify-between items-center">
-                <div class="min-w-0">
-                    <p class="text-xs sm:text-sm text-slate-500">Scan Pinjam Hari Ini</p>
-                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $todayLoanScans }}</p>
-                </div>
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
-                    <i class="fas fa-box-open text-green-500 text-lg sm:text-xl"></i>
-                </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">
+            <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Scan Pinjam Hari Ini</p>
+                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ $todayLoanScans }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+            </div>
+            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shrink-0">
+                <i class="fas fa-box-open text-xl"></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-amber-500">
-            <div class="flex justify-between items-center">
-                <div class="min-w-0">
-                    <p class="text-xs sm:text-sm text-slate-500">Scan Kembali Hari Ini</p>
-                    <p class="text-xl sm:text-2xl font-bold text-slate-800">{{ $todayReturnScans }}</p>
-                </div>
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
-                    <i class="fas fa-redo text-amber-500 text-lg sm:text-xl"></i>
-                </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">
+            <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Scan Kembali Hari Ini</p>
+                <h3 class="text-2xl font-bold text-blue-600 mt-1">{{ $todayReturnScans }} <span class="text-sm font-normal text-slate-400">Buku</span></h3>
+            </div>
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shrink-0">
+                <i class="fas fa-redo text-xl"></i>
             </div>
         </div>
     </div>

@@ -50,13 +50,12 @@
                             <!-- NPM -->
                             <div>
                                 <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">
-                                    NPM {{ $action === 'create' ? '(Opsional untuk petugas)' : '*' }}
+                                    NPM <span class="text-xs text-slate-400 font-normal">(Wajib untuk Pengunjung/Mahasiswa, kosongkan untuk Admin & Petugas)</span>
                                 </label>
                                 <input type="text" name="npm"
                                     value="{{ old('npm', $user?->npm) }}"
-                                    {{ $action !== 'create' ? 'required' : '' }}
                                     class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Masukkan NPM">
+                                    placeholder="Contoh: 714250017 (atau kosongkan)">
                             </div>
 
                             <!-- Name -->

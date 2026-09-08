@@ -15,19 +15,41 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? '';
+        $role   = $request->role ?? 'all';
         
         $query = User::query();
+        
+        if ($role && in_array($role, ['admin', 'petugas', 'pengunjung'])) {
+            $query->where('role', $role);
+        }
         
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('npm', 'like', "%{$search}%");
+                  ->orWhere('npm', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
             });
         }
         
-        $users = $query->latest()->paginate(10);
+        // Count totals for each group
+        $counts = [
+            'all'        => User::count(),
+            'admin'      => User::where('role', 'admin')->count(),
+            'petugas'    => User::where('role', 'petugas')->count(),
+            'pengunjung' => User::where('role', 'pengunjung')->count(),
+        ];
         
-        return view('admin.users.index', compact('users', 'search'));
+        // Sort with Admin first, then Petugas, then Pengunjung
+        $users = $query->orderByRaw("CASE 
+            WHEN role = 'admin' THEN 1 
+            WHEN role = 'petugas' THEN 2 
+            WHEN role = 'pengunjung' THEN 3 
+            ELSE 4 END")
+            ->latest('id')
+            ->paginate(10)
+            ->withQueryString();
+        
+        return view('admin.users.index', compact('users', 'search', 'role', 'counts'));
     }
 
     /**
@@ -86,9 +108,9 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
-            'npm' => 'required|string|max:20|unique:users,npm,' . $user->id,
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'npm'      => 'nullable|string|max:20|unique:users,npm,' . $user->id,
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email,' . $user->id,
             'role'     => 'required|in:admin,petugas,pengunjung',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
