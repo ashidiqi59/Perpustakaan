@@ -21,21 +21,34 @@
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 <div>
                                     <h3 class="text-base sm:text-lg font-semibold text-slate-800 mb-2">Status Peminjaman</h3>
-                                    @if($loan->getActualStatus() === 'peminjaman')
+                                    @php $actualStatus = $loan->getActualStatus(); @endphp
+                                    @if($actualStatus === 'menunggu_konfirmasi')
+                                        <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-yellow-100 text-yellow-700 rounded-full font-medium text-sm">
+                                            <i class="fas fa-clock mr-1 sm:mr-2"></i>Menunggu Konfirmasi Petugas
+                                        </span>
+                                    @elseif($actualStatus === 'peminjaman')
                                         <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-amber-100 text-amber-700 rounded-full font-medium text-sm">
                                             <i class="fas fa-hourglass-half mr-1 sm:mr-2"></i>Peminjaman Aktif
                                         </span>
-                                    @elseif($loan->getActualStatus() === 'dikembalikan')
+                                    @elseif($actualStatus === 'menunggu_pengembalian')
+                                        <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-indigo-100 text-indigo-700 rounded-full font-medium text-sm">
+                                            <i class="fas fa-undo mr-1 sm:mr-2"></i>Menunggu Pengembalian
+                                        </span>
+                                    @elseif($actualStatus === 'dikembalikan')
                                         <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-green-100 text-green-700 rounded-full font-medium text-sm">
                                             <i class="fas fa-check-circle mr-1 sm:mr-2"></i>Sudah Dikembalikan
                                         </span>
-                                    @else
+                                    @elseif($actualStatus === 'terlambat')
                                         <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-red-100 text-red-700 rounded-full font-medium text-sm">
                                             <i class="fas fa-exclamation-circle mr-1 sm:mr-2"></i>Terlambat
                                         </span>
+                                    @else
+                                        <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-100 text-slate-600 rounded-full font-medium text-sm">
+                                            <i class="fas fa-ban mr-1 sm:mr-2"></i>Barcode Hangus
+                                        </span>
                                     @endif
                                 </div>
-                                @if($loan->getActualStatus() === 'terlambat')
+                                @if($actualStatus === 'terlambat')
                                     <div class="text-left sm:text-right">
                                         <p class="text-red-600 font-semibold text-lg">{{ $loan->getDaysLate() }} hari terlambat</p>
                                     </div>
@@ -157,19 +170,15 @@
                             </div>
                         @endif
 
-                        <!-- ACTIONS -->
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <a href="{{ route('admin.loans.edit', $loan->id) }}" class="flex-1 px-4 py-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium text-sm text-center">
                                 <i class="fas fa-edit mr-2"></i>Edit Peminjaman
                             </a>
-                            @if($loan->getActualStatus() !== 'dikembalikan')
-                                <form action="{{ route('admin.loans.return', $loan->id) }}" method="POST" class="flex-1">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="w-full px-4 py-2.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium text-sm" onclick="return confirm('Kembalikan buku ini?')">
-                                        <i class="fas fa-undo mr-2"></i>Kembalikan
-                                    </button>
-                                </form>
+                            @if(!in_array($loan->getActualStatus(), ['dikembalikan', 'expired']))
+                                <div class="flex-1 px-4 py-2.5 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-lg text-sm text-center">
+                                    <i class="fas fa-qrcode mr-2"></i>
+                                    Proses via Scanner Petugas
+                                </div>
                             @endif
                             <a href="{{ route('admin.loans.index') }}" class="flex-1 px-4 py-2.5 bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition-colors font-medium text-sm text-center">
                                 <i class="fas fa-arrow-left mr-2"></i>Kembali
