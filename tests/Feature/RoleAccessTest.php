@@ -282,4 +282,34 @@ class RoleAccessTest extends TestCase
         $resPengunjung->assertRedirect(route('home'));
         $this->assertGuest();
     }
+
+    /** 16. Collection displays responsive pagination per device (mobile: 8, tablet: 16, desktop: 15) */
+    public function test_collection_pagination_per_device(): void
+    {
+        // 1. Mobile (iPhone UA) -> 8 items per page
+        $resMobile = $this->withHeaders([
+            'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1',
+        ])->get(route('books.collection'));
+        $resMobile->assertStatus(200);
+        $this->assertEquals(8, $resMobile->viewData('perPage'));
+
+        // 2. Tablet (iPad UA) -> 16 items per page
+        $resTablet = $this->withHeaders([
+            'User-Agent' => 'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1',
+        ])->get(route('books.collection'));
+        $resTablet->assertStatus(200);
+        $this->assertEquals(16, $resTablet->viewData('perPage'));
+
+        // 3. Desktop (Macintosh UA) -> 15 items per page
+        $resDesktop = $this->withHeaders([
+            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        ])->get(route('books.collection'));
+        $resDesktop->assertStatus(200);
+        $this->assertEquals(15, $resDesktop->viewData('perPage'));
+
+        // 4. Cookie device_per_page override
+        $resCookie = $this->withUnencryptedCookie('device_per_page', '16')->get(route('books.collection'));
+        $resCookie->assertStatus(200);
+        $this->assertEquals(16, $resCookie->viewData('perPage'));
+    }
 }

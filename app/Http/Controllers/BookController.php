@@ -194,10 +194,61 @@ class BookController extends Controller
             $query->where('category', $category);
         }
 
-        $books = $query->latest()->paginate(15);
+        $perPage = $this->getCollectionPerPage($request);
+        $books = $query->latest()->paginate($perPage);
         $categories = Book::select('category')->distinct()->pluck('category')->filter();
 
-        return view('books.collection', compact('books', 'categories', 'search', 'category'));
+        return view('books.collection', compact('books', 'categories', 'search', 'category', 'perPage'));
+    }
+
+    /**
+     * Hitung jumlah item per halaman untuk halaman koleksi:
+     * - Mobile (< 768px): 8 buku (2 kolom x 4 baris)
+     * - Tablet (768px - 1023px): 16 buku (4 kolom x 4 baris)
+     * - Desktop (>= 1024px): 15 buku (5 kolom x 3 baris)
+     */
+    private function getCollectionPerPage(Request $request): int
+    {
+        if ($request->filled('per_page')) {
+            $val = (int) $request->input('per_page');
+            if (in_array($val, [8, 15, 16, 20])) {
+                return $val;
+            }
+        }
+
+        if ($request->hasCookie('device_per_page')) {
+            $cookieVal = (int) $request->cookie('device_per_page');
+            if (in_array($cookieVal, [8, 15, 16, 20])) {
+                return $cookieVal;
+            }
+        }
+
+        $ua = strtolower($request->header('User-Agent', ''));
+
+        // Cek tablet terlebih dahulu (iPad, Android tablet, atau UA 'tablet')
+        $isTablet = str_contains($ua, 'ipad')
+            || (str_contains($ua, 'android') && !str_contains($ua, 'mobile'))
+            || str_contains($ua, 'tablet')
+            || str_contains($ua, 'playbook')
+            || str_contains($ua, 'silk');
+
+        if ($isTablet) {
+            return 16;
+        }
+
+        // Cek mobile (iPhone, Android phone, dsb.)
+        $isMobile = str_contains($ua, 'iphone')
+            || str_contains($ua, 'ipod')
+            || str_contains($ua, 'mobile')
+            || str_contains($ua, 'android')
+            || str_contains($ua, 'blackberry')
+            || str_contains($ua, 'webos');
+
+        if ($isMobile) {
+            return 8;
+        }
+
+        return 15;
     }
 
     /**

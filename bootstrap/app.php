@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
+        $middleware->encryptCookies(except: [
+            'device_per_page',
+        ]);
         $middleware->alias([
             'petugas' => \App\Http\Middleware\EnsurePetugas::class,
             'admin' => \App\Http\Middleware\EnsureAdmin::class,

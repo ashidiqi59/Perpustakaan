@@ -144,7 +144,7 @@
             </div>
             
             @if($books->count() > 0)
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
                     @foreach($books as $index => $book)
                     <a href="{{ route('books.show', $book->id) }}" class="fade-in-up delay-{{ ($index + 1) * 50 }} book-card block group">
                         <div class="bg-white rounded-lg overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
@@ -175,7 +175,7 @@
                 </div>
                 
                 <!-- Pagination -->
-                <div class="mt-12 flex justify-center fade-in-up">
+                <div class="mt-12 w-full fade-in-up">
                     {{ $books->appends(['search' => $search, 'category' => $category])->links() }}
                 </div>
             @else
@@ -196,6 +196,37 @@
     </section>
 
     @include('components.footer')
+
+    <script>
+        (function() {
+            var width = window.innerWidth;
+            var target = 15;
+            if (width < 768) {
+                target = 8;
+            } else if (width < 1024) {
+                target = 16;
+            }
+
+            var current = {{ $books->perPage() }};
+            var match = document.cookie.match(/(?:^|; )device_per_page=([^;]*)/);
+            var cookieVal = match ? parseInt(match[1]) : null;
+
+            if (cookieVal !== target) {
+                document.cookie = "device_per_page=" + target + "; path=/; max-age=604800; SameSite=Lax";
+            }
+
+            if (current !== target) {
+                var flagKey = 'synced_per_page_' + target;
+                if (!sessionStorage.getItem(flagKey)) {
+                    sessionStorage.setItem(flagKey, '1');
+                    [8, 15, 16].forEach(function(p) {
+                        if (p !== target) sessionStorage.removeItem('synced_per_page_' + p);
+                    });
+                    window.location.reload();
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
 
