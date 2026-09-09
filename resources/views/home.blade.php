@@ -179,23 +179,23 @@
     @endif
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-blue-50 via-white to-blue-50 py-16 lg:py-24">
+    <section class="bg-gradient-to-br from-blue-50 via-white to-blue-50 pt-10 pb-8 sm:pt-12 sm:pb-10 lg:py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 lg:gap-x-12 gap-y-8 lg:gap-y-0 items-center">
                 <!-- Hero Text: Heading & Description -->
                 <div class="fade-in-up order-1 lg:col-start-1 lg:row-start-1">
-                    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-5 lg:mb-6 leading-tight">
                         Selamat Datang di<br>
                         <span class="text-library-primary">Perpustakaan Digital</span>
                     </h1>
-                    <p class="text-gray-600 text-lg mb-0 lg:mb-8 leading-relaxed">
+                    <p class="text-gray-600 text-base sm:text-lg mb-0 lg:mb-8 leading-relaxed">
                         Akses ribuan koleksi buku digital, jurnal, dan referensi akademik. Temukan pengetahuan yang Anda butuhkan untuk mendukung pembelajaran dan penelitian.
                     </p>
                 </div>
 
                 <!-- Right - Featured Books Stack (Placed above search on mobile) -->
-                <div class="fade-in-up delay-200 order-2 lg:order-none lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center flex justify-center max-w-full overflow-hidden sm:overflow-visible py-4">
-                    <div class="relative h-[360px] sm:h-[440px] lg:h-[500px] w-[280px] sm:w-[300px]">
+                <div class="fade-in-up delay-200 order-2 lg:order-none lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center flex justify-center max-w-full overflow-hidden sm:overflow-visible py-2 lg:py-4">
+                    <div class="relative h-[340px] sm:h-[350px] lg:h-[500px] w-[280px] sm:w-[300px]">
                         @forelse($featuredBooks as $index => $book)
                             @php
                                 $rotations = [-5, 2, -3];
@@ -226,7 +226,7 @@
                 <!-- Search Bar & Stats (Placed below books on mobile) -->
                 <div class="fade-in-up order-3 lg:order-none lg:col-start-1 lg:row-start-2">
                     <!-- Search Bar -->
-                    <form action="{{ route('books.collection') }}" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex flex-col sm:flex-row gap-2 mb-6">
+                    <form action="{{ route('books.collection') }}" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex flex-col sm:flex-row gap-2 mb-5 lg:mb-6">
                         <input
                             type="text"
                             name="search"
@@ -261,7 +261,7 @@
             </div>
 
             <!-- Scroll Indicator -->
-            <div class="flex justify-center mt-12 fade-in-up delay-400">
+            <div class="flex justify-center mt-6 sm:mt-8 lg:mt-12 fade-in-up delay-400">
                 <a href="#koleksi" class="scroll-indicator cursor-pointer">
                     <svg class="w-6 h-6 text-gray-400 hover:text-library-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -272,7 +272,7 @@
     </section>
 
     <!-- Services Section -->
-    <section class="py-16 sm:py-20 relative overflow-hidden bg-gradient-to-b from-white via-slate-50/40 to-white">
+    <section class="pt-10 pb-16 sm:pt-12 sm:pb-20 lg:py-20 relative overflow-hidden bg-gradient-to-b from-white via-slate-50/40 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             
             <!-- Section Header -->
