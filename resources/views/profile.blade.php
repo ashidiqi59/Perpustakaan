@@ -206,270 +206,399 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
             <style>
-                /* Card shine sweep animation */
-                @keyframes cardShine {
-                    0%   { transform: translateX(-100%) skewX(-15deg); }
-                    100% { transform: translateX(250%) skewX(-15deg); }
+                .member-card-container {
+                    perspective: 1000px;
                 }
-                .member-card-wrap { cursor: pointer; }
-                .member-card-wrap:hover .card-shine-sweep { animation: cardShine 0.7s ease forwards; }
-                .member-card-wrap:hover .member-card { transform: translateY(-3px); box-shadow: 0 28px 60px rgba(15,40,84,0.55); }
-                .member-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+                .member-card {
+                    background: linear-gradient(135deg, #0A192F 0%, #0F2D59 45%, #1B4582 85%, #0B1C38 100%);
+                    box-shadow: 0 16px 36px -10px rgba(11, 28, 56, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.12);
+                    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+                }
+                .member-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 24px 48px -12px rgba(11, 28, 56, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.2);
+                }
 
-                /* Chip SVG glow */
-                .chip-glow { filter: drop-shadow(0 2px 6px rgba(255,255,255,0.2)); }
+                /* Subtle security line grid texture */
+                .card-security-pattern {
+                    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+                    background-size: 16px 16px;
+                }
 
-                /* Modal */
-                #card-modal { transition: opacity 0.25s ease; }
-                #card-modal.show { opacity: 1; pointer-events: all; }
-                #card-modal-inner { transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), opacity 0.25s ease; }
-                #card-modal.show #card-modal-inner { transform: scale(1) translateY(0); opacity: 1; }
-
-                /* QR inside card sizing fix */
-                #qr-member-card img, #qr-member-card canvas { border-radius: 6px !important; display: block !important; }
-                #qr-modal-big img, #qr-modal-big canvas { border-radius: 10px !important; display: block !important; }
+                /* Hapus render duplikat QR Code (hanya tampilkan img, sembunyikan canvas) */
+                .qr-box canvas,
+                #qr-member-card canvas,
+                #qr-member-card-mobile canvas,
+                #qr-modal-big canvas,
+                #qr-modal-card canvas {
+                    display: none !important;
+                }
+                .qr-box img,
+                #qr-member-card img,
+                #qr-member-card-mobile img,
+                #qr-modal-big img,
+                #qr-modal-card img {
+                    display: block !important;
+                    margin: 0 auto !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    object-fit: contain !important;
+                }
             </style>
 
             <div class="mb-8">
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md">
-                        <i class="fas fa-id-card text-sm"></i>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm">
+                            <i class="fas fa-id-card text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-gray-900">Kartu Anggota Digital</h2>
+                            <p class="text-xs text-gray-500">Klik kartu untuk perbesar kartu · Klik QR untuk perbesar QR presensi</p>
+                        </div>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-gray-900">Kartu Anggota Digital</h2>
-                        <p class="text-xs text-gray-500">Klik kartu untuk melihat QR Code lengkap · Tunjukkan kepada petugas saat tiba</p>
-                    </div>
+
+                    <button type="button" onclick="openCardModal()" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+                        <i class="fas fa-expand text-[11px]"></i>
+                        <span>Perbesar Kartu</span>
+                    </button>
                 </div>
 
-                {{-- ── KARTU YANG BISA DIKLIK ── --}}
-                <div class="member-card-wrap inline-block w-full max-w-xl select-none" onclick="openCardModal()">
-                    <div class="member-card relative overflow-hidden rounded-3xl shadow-2xl"
-                         style="background: linear-gradient(135deg, #0D1F4E 0%, #162C7A 35%, #1E3A8A 60%, #12235F 100%); min-height: 210px;">
+                {{-- ── KARTU DIGITAL ANGGOTA ── --}}
+                <div class="member-card-container w-full max-w-xl">
+                    <div class="member-card relative overflow-hidden rounded-3xl p-6 sm:p-7 text-white cursor-pointer select-none"
+                         onclick="openCardModal()"
+                         role="button"
+                         tabindex="0"
+                         title="Klik kartu untuk melihat tampilan penuh">
 
-                        {{-- Background texture rings --}}
-                        <div class="absolute inset-0 pointer-events-none">
-                            <div class="absolute -top-20 -right-20 w-72 h-72 rounded-full opacity-[0.07]"
-                                 style="background: radial-gradient(circle, #93C5FD, transparent);"></div>
-                            <div class="absolute -bottom-16 -left-16 w-56 h-56 rounded-full opacity-[0.07]"
-                                 style="background: radial-gradient(circle, #A5B4FC, transparent);"></div>
-                            <div class="absolute top-1/2 left-1/3 w-96 h-96 rounded-full opacity-[0.04]"
-                                 style="background: radial-gradient(circle, #BFDBFE, transparent); transform: translate(-50%,-50%);"></div>
-                            {{-- Shine sweep element --}}
-                            <div class="card-shine-sweep absolute inset-0 w-1/3"
-                                 style="background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-                                        transform: translateX(-100%) skewX(-15deg);"></div>
+                        {{-- Background Art & Watermark --}}
+                        <div class="absolute inset-0 card-security-pattern pointer-events-none opacity-40"></div>
+                        <div class="absolute -right-12 -bottom-12 w-64 h-64 pointer-events-none opacity-[0.06] text-white">
+                            <svg fill="currentColor" viewBox="0 0 24 24" class="w-full h-full transform rotate-6">
+                                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
                         </div>
+                        <div class="absolute top-0 right-1/4 w-48 h-48 rounded-full bg-blue-400/10 blur-3xl pointer-events-none"></div>
 
-                        <div class="relative z-10 p-5 sm:p-6 flex flex-col" style="min-height: 210px;">
-                            {{-- Top: logo chip + status --}}
-                            <div class="flex items-start justify-between mb-4">
+                        <div class="relative z-10 flex flex-col justify-between" style="min-height: 200px;">
+                            {{-- Header Kartu: Logo Lembaga & Status --}}
+                            <div class="flex items-center justify-between pb-4 border-b border-white/10">
                                 <div class="flex items-center gap-3">
-                                    {{-- EMV Chip SVG --}}
-                                    <svg class="chip-glow w-10 h-8" viewBox="0 0 50 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="1" y="1" width="48" height="36" rx="5" fill="url(#chipGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                                        <rect x="17" y="1" width="16" height="36" fill="rgba(255,255,255,0.07)"/>
-                                        <rect x="1" y="13" width="48" height="12" fill="rgba(255,255,255,0.07)"/>
-                                        <line x1="17" y1="1" x2="17" y2="37" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-                                        <line x1="33" y1="1" x2="33" y2="37" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-                                        <line x1="1" y1="13" x2="49" y2="13" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-                                        <line x1="1" y1="25" x2="49" y2="25" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-                                        <rect x="20" y="16" width="10" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
-                                        <defs>
-                                            <linearGradient id="chipGrad" x1="0" y1="0" x2="50" y2="38" gradientUnits="userSpaceOnUse">
-                                                <stop offset="0%" stop-color="#C8A84B"/>
-                                                <stop offset="50%" stop-color="#F0D080"/>
-                                                <stop offset="100%" stop-color="#A87820"/>
-                                            </linearGradient>
-                                        </defs>
-                                    </svg>
+                                    <div class="w-9 h-9 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-blue-200">
+                                        <i class="fas fa-book-reader text-sm"></i>
+                                    </div>
                                     <div>
-                                        <p class="text-white/45 text-[9px] uppercase tracking-[0.2em] font-semibold leading-none">Kartu Anggota</p>
-                                        <p class="text-white text-sm font-bold leading-tight mt-0.5">Perpustakaan</p>
+                                        <p class="text-[9px] uppercase tracking-[0.22em] font-semibold text-blue-200/70 leading-none">Kartu Tanda Anggota</p>
+                                        <h3 class="text-white font-bold text-sm sm:text-base tracking-wide mt-1 leading-none">Perpustakaan</h3>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-end gap-2">
-                                    <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
-                                          style="background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.3); color: #6EE7B7;">
-                                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 backdrop-blur-sm">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                                         Aktif
                                     </span>
-                                    {{-- Small QR hint --}}
-                                    <div class="hidden sm:flex items-center gap-1 text-white/30 text-[9px] uppercase tracking-wider">
-                                        <i class="fas fa-expand-alt text-[8px]"></i> Klik lihat QR
+                                </div>
+                            </div>
+
+                            {{-- Isi Kartu: Foto, Biodata & QR Code --}}
+                            <div class="py-4 flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-4 min-w-0">
+                                    {{-- Foto Member --}}
+                                    <div class="relative flex-shrink-0">
+                                        <img src="{{ $user->getAvatarUrl() }}"
+                                             alt="{{ $user->name }}"
+                                             class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover ring-2 ring-white/20 shadow-md">
+                                        <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] ring-2 ring-[#0A192F]" title="Terverifikasi">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </div>
+
+                                    {{-- Teks Biodata --}}
+                                    <div class="min-w-0">
+                                        <span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-white/10 text-blue-200 mb-1">
+                                            {{ $user->role === 'pengunjung' ? 'Anggota Pengunjung' : ucfirst($user->role) }}
+                                        </span>
+                                        <h4 class="text-lg sm:text-xl font-bold text-white tracking-tight truncate leading-snug">
+                                            {{ $user->name }}
+                                        </h4>
+                                        <div class="mt-1 space-y-0.5 text-xs text-blue-100/75">
+                                            @if($user->npm)
+                                                <p class="font-mono flex items-center gap-1.5 text-blue-200">
+                                                    <i class="fas fa-id-badge text-[10px] opacity-70"></i>
+                                                    <span>{{ $user->npm }}</span>
+                                                </p>
+                                            @endif
+                                            @if($user->prodi)
+                                                <p class="truncate flex items-center gap-1.5">
+                                                    <i class="fas fa-graduation-cap text-[10px] opacity-70"></i>
+                                                    <span class="truncate">{{ $user->prodi }}</span>
+                                                </p>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {{-- Middle: Photo + Info + QR --}}
-                            <div class="flex items-center gap-4 flex-1">
-                                {{-- Photo with ring --}}
-                                <div class="relative flex-shrink-0">
-                                    <img src="{{ $user->getAvatarUrl() }}"
-                                         alt="{{ $user->name }}"
-                                         class="w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] rounded-2xl object-cover"
-                                         style="box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 0 0 4px rgba(255,255,255,0.05);">
-                                </div>
-
-                                {{-- Info --}}
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="text-white font-bold text-xl leading-tight truncate"
-                                        style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">{{ $user->name }}</h3>
-                                    @if($user->npm)
-                                        <p class="text-blue-200/80 text-xs mt-1 font-mono tracking-wide">{{ $user->npm }}</p>
-                                    @endif
-                                    @if($user->prodi)
-                                        <p class="text-white/45 text-xs mt-0.5 truncate">{{ $user->prodi }}</p>
-                                    @endif
-                                </div>
-
-                                {{-- QR Code mini (desktop) --}}
-                                <div class="flex-shrink-0 hidden sm:flex flex-col items-center gap-1.5">
-                                    <div id="qr-member-card"
-                                         class="rounded-xl overflow-hidden"
-                                         style="padding: 6px; background: white; width: 108px; height: 108px;"
-                                         title="QR Code check-in perpustakaan"></div>
+                                {{-- QR Code Desktop: KLIK DI SINI BUKA MODAL QR --}}
+                                <div class="hidden sm:flex flex-col items-center flex-shrink-0 cursor-pointer group"
+                                     onclick="event.stopPropagation(); openQrModal();"
+                                     title="Klik untuk memperbesar QR Code presensi">
+                                    <div class="p-2 bg-white rounded-2xl shadow-md transition-transform group-hover:scale-105 group-hover:shadow-lg ring-2 ring-transparent group-hover:ring-blue-400/50">
+                                        <div id="qr-member-card" class="qr-box" style="width: 88px; height: 88px;"></div>
+                                    </div>
+                                    <span class="text-[9px] uppercase tracking-wider text-blue-200/70 group-hover:text-white font-medium mt-1.5 flex items-center gap-1 transition-colors">
+                                        <i class="fas fa-qrcode text-[8px]"></i> Klik QR
+                                    </span>
                                 </div>
                             </div>
 
-                            {{-- QR mobile --}}
-                            <div class="sm:hidden mt-4 flex justify-center">
-                                <div id="qr-member-card-mobile"
-                                     class="rounded-xl overflow-hidden"
-                                     style="padding: 6px; background: white; width: 120px; height: 120px;"></div>
-                            </div>
-
-                            {{-- Footer --}}
-                            <div class="flex items-end justify-between mt-4 pt-3.5" style="border-top: 1px solid rgba(255,255,255,0.08);">
+                            {{-- QR Code Mobile: KLIK DI SINI BUKA MODAL QR --}}
+                            <div class="sm:hidden pt-3 border-t border-white/10 flex items-center justify-between cursor-pointer"
+                                 onclick="event.stopPropagation(); openQrModal();">
                                 <div>
-                                    <p class="text-white/25 text-[8px] uppercase tracking-[0.2em] mb-0.5">Member ID</p>
-                                    <p class="text-white/50 text-[10px] font-mono tracking-wider">{{ $memberBarcode->barcode_code }}</p>
+                                    <p class="text-[10px] uppercase tracking-wider text-blue-200/70 font-semibold">QR Check-in</p>
+                                    <p class="text-xs text-white font-medium flex items-center gap-1">
+                                        <i class="fas fa-search-plus text-[10px]"></i> Ketuk untuk perbesar QR
+                                    </p>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <p class="text-white/25 text-[8px] uppercase tracking-widest">Since {{ $user->created_at->format('Y') }}</p>
-                                    {{-- Mastercard-style circles --}}
-                                    <div class="flex">
-                                        <div class="w-5 h-5 rounded-full opacity-50" style="background:#EB001B;"></div>
-                                        <div class="w-5 h-5 rounded-full opacity-50 -ml-2.5" style="background:#F79E1B;"></div>
-                                    </div>
+                                <div class="p-1.5 bg-white rounded-xl shadow-md">
+                                    <div id="qr-member-card-mobile" class="qr-box" style="width: 64px; height: 64px;"></div>
+                                </div>
+                            </div>
+
+                            {{-- Footer Kartu: ID Anggota & Waktu Bergabung --}}
+                            <div class="pt-3 border-t border-white/10 flex items-end justify-between">
+                                <div>
+                                    <p class="text-[8px] uppercase tracking-[0.2em] font-semibold text-blue-200/50">ID Anggota</p>
+                                    <p class="text-xs sm:text-sm font-mono font-bold tracking-wider text-white/90 mt-0.5">
+                                        {{ $memberBarcode->barcode_code }}
+                                    </p>
+                                </div>
+
+                                <div class="text-right">
+                                    <p class="text-[8px] uppercase tracking-[0.2em] font-semibold text-blue-200/50">Terdaftar Sejak</p>
+                                    <p class="text-[11px] font-medium text-blue-100/80 mt-0.5">
+                                        {{ $user->created_at->format('M Y') }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {{-- Hint di bawah kartu --}}
-                    <p class="text-center text-xs text-gray-400 mt-2.5 flex items-center justify-center gap-1.5">
-                        <i class="fas fa-hand-pointer text-gray-300"></i>
-                        Klik kartu untuk melihat QR Code lengkap
-                    </p>
+                    {{-- Petunjuk interaksi di bawah kartu --}}
+                    <div class="mt-2.5 flex items-center justify-center gap-4 text-xs text-gray-400">
+                        <span class="flex items-center gap-1.5 cursor-pointer hover:text-gray-600" onclick="openCardModal()">
+                            <i class="fas fa-id-card text-gray-400"></i>
+                            <span>Klik kartu untuk perbesar kartu</span>
+                        </span>
+                        <span class="text-gray-300">·</span>
+                        <span class="flex items-center gap-1.5 cursor-pointer hover:text-gray-600" onclick="openQrModal()">
+                            <i class="fas fa-qrcode text-gray-400"></i>
+                            <span>Klik QR untuk presensi</span>
+                        </span>
+                    </div>
                 </div>
             </div>
 
-            {{-- ══════════════════════════════════════════ --}}
-            {{-- MODAL KARTU PENUH                          --}}
-            {{-- ══════════════════════════════════════════ --}}
+            {{-- ══════════════════════════════════════════════════ --}}
+            {{-- MODAL 1: TAMPILAN KARTU PENUH DIPERBESAR          --}}
+            {{-- ══════════════════════════════════════════════════ --}}
             <div id="card-modal"
-                 class="fixed inset-0 z-[999] flex items-center justify-center p-4"
-                 style="background: rgba(0,0,0,0.75); backdrop-filter: blur(10px);
-                        opacity: 0; pointer-events: none;"
+                 class="fixed inset-0 z-[999] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
                  onclick="closeCardModal(event)">
 
                 <div id="card-modal-inner"
-                     class="w-full max-w-sm"
-                     style="transform: scale(0.85) translateY(20px); opacity: 0;">
+                     class="w-full max-w-lg transition-all duration-300 transform scale-95 opacity-0"
+                     onclick="event.stopPropagation()">
 
-                    {{-- Kartu Full di Modal --}}
-                    <div class="relative overflow-hidden rounded-3xl shadow-2xl mb-4"
-                         style="background: linear-gradient(135deg, #0D1F4E 0%, #162C7A 35%, #1E3A8A 60%, #12235F 100%);">
+                    {{-- Kartu Versi Besar --}}
+                    <div class="relative overflow-hidden rounded-3xl p-7 sm:p-8 text-white shadow-2xl"
+                         style="background: linear-gradient(135deg, #0A192F 0%, #0F2D59 45%, #1B4582 85%, #0B1C38 100%);
+                                box-shadow: 0 25px 60px -15px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.18);">
 
-                        {{-- BG blobs --}}
-                        <div class="absolute inset-0 pointer-events-none">
-                            <div class="absolute -top-20 -right-20 w-72 h-72 rounded-full opacity-[0.08]"
-                                 style="background: radial-gradient(circle, #93C5FD, transparent);"></div>
-                            <div class="absolute -bottom-16 -left-16 w-56 h-56 rounded-full opacity-[0.08]"
-                                 style="background: radial-gradient(circle, #A5B4FC, transparent);"></div>
+                        {{-- Background watermark --}}
+                        <div class="absolute inset-0 card-security-pattern pointer-events-none opacity-50"></div>
+                        <div class="absolute -right-16 -bottom-16 w-80 h-80 pointer-events-none opacity-[0.07] text-white">
+                            <svg fill="currentColor" viewBox="0 0 24 24" class="w-full h-full transform rotate-6">
+                                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
                         </div>
+                        <div class="absolute top-0 right-1/4 w-64 h-64 rounded-full bg-blue-400/15 blur-3xl pointer-events-none"></div>
 
-                        <div class="relative z-10 p-6">
-                            {{-- Header modal kartu --}}
-                            <div class="flex items-center justify-between mb-5">
-                                <div class="flex items-center gap-3">
-                                    <svg class="chip-glow w-10 h-8" viewBox="0 0 50 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="1" y="1" width="48" height="36" rx="5" fill="url(#chipGrad2)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                                        <rect x="17" y="1" width="16" height="36" fill="rgba(255,255,255,0.07)"/>
-                                        <rect x="1" y="13" width="48" height="12" fill="rgba(255,255,255,0.07)"/>
-                                        <line x1="17" y1="1" x2="17" y2="37" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-                                        <line x1="33" y1="1" x2="33" y2="37" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-                                        <line x1="1" y1="13" x2="49" y2="13" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-                                        <line x1="1" y1="25" x2="49" y2="25" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-                                        <rect x="20" y="16" width="10" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
-                                        <defs>
-                                            <linearGradient id="chipGrad2" x1="0" y1="0" x2="50" y2="38" gradientUnits="userSpaceOnUse">
-                                                <stop offset="0%" stop-color="#C8A84B"/>
-                                                <stop offset="50%" stop-color="#F0D080"/>
-                                                <stop offset="100%" stop-color="#A87820"/>
-                                            </linearGradient>
-                                        </defs>
-                                    </svg>
+                        <div class="relative z-10 flex flex-col justify-between">
+                            {{-- Header Kartu Besar --}}
+                            <div class="flex items-center justify-between pb-5 border-b border-white/15">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-blue-200 shadow-inner">
+                                        <i class="fas fa-book-reader text-lg"></i>
+                                    </div>
                                     <div>
-                                        <p class="text-white/45 text-[9px] uppercase tracking-[0.2em] font-semibold">Kartu Anggota</p>
-                                        <p class="text-white text-sm font-bold">Perpustakaan</p>
+                                        <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-blue-200/80 leading-none">Kartu Tanda Anggota Digital</p>
+                                        <h3 class="text-white font-extrabold text-lg sm:text-xl tracking-wide mt-1.5 leading-none">Perpustakaan</h3>
                                     </div>
                                 </div>
-                                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
-                                      style="background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.3); color: #6EE7B7;">
-                                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                                    Aktif
-                                </span>
-                            </div>
 
-                            {{-- Photo + name --}}
-                            <div class="flex items-center gap-4 mb-5">
-                                <img src="{{ $user->getAvatarUrl() }}"
-                                     alt="{{ $user->name }}"
-                                     class="w-16 h-16 rounded-2xl object-cover flex-shrink-0"
-                                     style="box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 0 0 4px rgba(255,255,255,0.05);">
-                                <div class="min-w-0">
-                                    <h3 class="text-white font-bold text-lg leading-tight truncate">{{ $user->name }}</h3>
-                                    @if($user->npm)
-                                        <p class="text-blue-200/80 text-xs mt-1 font-mono">{{ $user->npm }}</p>
-                                    @endif
-                                    @if($user->prodi)
-                                        <p class="text-white/45 text-xs mt-0.5">{{ $user->prodi }}</p>
-                                    @endif
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 backdrop-blur-sm">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        Aktif
+                                    </span>
+                                    <button type="button" onclick="closeCardModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors ml-1">
+                                        <i class="fas fa-times text-sm"></i>
+                                    </button>
                                 </div>
                             </div>
 
-                            {{-- QR Code Besar (center) --}}
-                            <div class="flex flex-col items-center mb-5">
-                                <div id="qr-modal-big"
-                                     class="rounded-2xl overflow-hidden"
-                                     style="padding: 10px; background: white; width: 200px; height: 200px;"></div>
-                                <p class="text-white/30 text-[9px] uppercase tracking-widest mt-2">Scan untuk Check-In</p>
+                            {{-- Isi Kartu Besar: Foto, Biodata & QR Code --}}
+                            <div class="py-6 flex items-center justify-between gap-5">
+                                <div class="flex items-center gap-4 sm:gap-5 min-w-0 flex-1">
+                                    {{-- Foto Member --}}
+                                    <div class="relative flex-shrink-0">
+                                        <img src="{{ $user->getAvatarUrl() }}"
+                                             alt="{{ $user->name }}"
+                                             class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-white/20 shadow-xl">
+                                        <span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs ring-2 ring-[#0A192F]" title="Terverifikasi">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </div>
+
+                                    {{-- Teks Biodata --}}
+                                    <div class="min-w-0">
+                                        <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-white/10 text-blue-200 mb-1.5">
+                                            {{ $user->role === 'pengunjung' ? 'Anggota Pengunjung' : ucfirst($user->role) }}
+                                        </span>
+                                        <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug truncate">
+                                            {{ $user->name }}
+                                        </h4>
+                                        <div class="mt-1.5 space-y-1 text-xs sm:text-sm text-blue-100/80">
+                                            @if($user->npm)
+                                                <p class="font-mono flex items-center gap-2 text-blue-200">
+                                                    <i class="fas fa-id-badge text-xs opacity-75"></i>
+                                                    <span>{{ $user->npm }}</span>
+                                                </p>
+                                            @endif
+                                            @if($user->prodi)
+                                                <p class="flex items-center gap-2 truncate">
+                                                    <i class="fas fa-graduation-cap text-xs opacity-75"></i>
+                                                    <span class="truncate">{{ $user->prodi }}</span>
+                                                </p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- QR Code di Kartu Besar (Klik ini untuk buka modal QR scanner) --}}
+                                <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group"
+                                     onclick="closeCardModal(); openQrModal();"
+                                     title="Klik untuk fokus QR Code scan">
+                                    <div class="p-2 bg-white rounded-2xl shadow-xl transition-transform group-hover:scale-105">
+                                        <div id="qr-modal-card" class="qr-box" style="width: 96px; height: 96px;"></div>
+                                    </div>
+                                    <span class="text-[9px] uppercase tracking-wider text-blue-200/70 font-semibold mt-1.5 flex items-center gap-1 group-hover:text-white transition-colors">
+                                        <i class="fas fa-expand text-[8px]"></i> Perbesar QR
+                                    </span>
+                                </div>
                             </div>
 
-                            {{-- Footer kartu modal --}}
-                            <div class="flex items-end justify-between pt-4" style="border-top: 1px solid rgba(255,255,255,0.08);">
+                            {{-- Footer Kartu Besar --}}
+                            <div class="pt-4 border-t border-white/15 flex items-end justify-between">
                                 <div>
-                                    <p class="text-white/25 text-[8px] uppercase tracking-widest mb-0.5">Member ID</p>
-                                    <p class="text-white/55 text-[10px] font-mono tracking-wider">{{ $memberBarcode->barcode_code }}</p>
-                                    <p class="text-white/25 text-[8px] uppercase tracking-widest mt-1">Since {{ $user->created_at->format('Y') }}</p>
+                                    <p class="text-[9px] uppercase tracking-[0.22em] font-semibold text-blue-200/60">Nomor Identitas Anggota</p>
+                                    <p class="text-sm sm:text-base font-mono font-bold tracking-wider text-white mt-0.5">
+                                        {{ $memberBarcode->barcode_code }}
+                                    </p>
                                 </div>
-                                <div class="flex">
-                                    <div class="w-6 h-6 rounded-full opacity-50" style="background:#EB001B;"></div>
-                                    <div class="w-6 h-6 rounded-full opacity-50 -ml-3" style="background:#F79E1B;"></div>
+
+                                <div class="text-right">
+                                    <p class="text-[9px] uppercase tracking-[0.22em] font-semibold text-blue-200/60">Terdaftar Sejak</p>
+                                    <p class="text-xs sm:text-sm font-medium text-blue-100 mt-0.5">
+                                        {{ $user->created_at->translatedFormat('d F Y') ?? $user->created_at->format('d M Y') }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {{-- Tombol tutup --}}
-                    <button onclick="closeCardModal()"
-                            class="w-full py-3 rounded-2xl text-white text-sm font-semibold transition-all"
-                            style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15);"
-                            onmouseover="this.style.background='rgba(255,255,255,0.2)'"
-                            onmouseout="this.style.background='rgba(255,255,255,0.12)'">
-                        <i class="fas fa-times mr-2"></i>Tutup
-                    </button>
+                    {{-- Tombol Tutup --}}
+                    <div class="mt-4 flex items-center justify-between">
+                        <button type="button" onclick="closeCardModal(); openQrModal();"
+                                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-900/30 transition-colors">
+                            <i class="fas fa-qrcode"></i>
+                            <span>Buka QR Presensi</span>
+                        </button>
+                        <button type="button" onclick="closeCardModal()"
+                                class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-colors">
+                            <i class="fas fa-times"></i>
+                            <span>Tutup</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ══════════════════════════════════════════════════ --}}
+            {{-- MODAL 2: KHUSUS QR CODE PRESENSI (SCAN PETUGAS)   --}}
+            {{-- ══════════════════════════════════════════════════ --}}
+            <div id="qr-modal"
+                 class="fixed inset-0 z-[1000] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+                 onclick="closeQrModal(event)">
+
+                <div id="qr-modal-inner"
+                     class="w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 transition-all duration-300 transform scale-95 opacity-0"
+                     onclick="event.stopPropagation()">
+
+                    {{-- Header Modal QR --}}
+                    <div class="p-6 text-white relative overflow-hidden"
+                         style="background: linear-gradient(135deg, #0A192F 0%, #0F2D59 50%, #1B4582 100%);">
+                        <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-blue-400/10 blur-2xl"></div>
+
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-blue-200 text-xs">
+                                    <i class="fas fa-qrcode"></i>
+                                </div>
+                                <span class="text-xs font-bold tracking-wide uppercase">Presensi Perpustakaan</span>
+                            </div>
+                            <button type="button" onclick="closeQrModal()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-3.5">
+                            <img src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}"
+                                 class="w-12 h-12 rounded-xl object-cover ring-2 ring-white/20 shadow-md flex-shrink-0">
+                            <div class="min-w-0">
+                                <h4 class="font-bold text-base text-white truncate">{{ $user->name }}</h4>
+                                @if($user->npm)
+                                    <p class="text-xs text-blue-200 font-mono">{{ $user->npm }}</p>
+                                @endif
+                                <p class="text-[11px] text-blue-100/70 truncate">{{ $user->prodi ?? 'Anggota Perpustakaan' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Badan Modal QR: QR Code Tunggal, Besar & Jelas --}}
+                    <div class="p-6 text-center">
+                        <div class="inline-block p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-inner mb-4">
+                            <div id="qr-modal-big" class="qr-box flex items-center justify-center" style="width: 180px; height: 180px;"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">Kode Anggota</span>
+                            <span class="font-mono text-sm font-bold text-gray-800 bg-gray-100 px-3.5 py-1.5 rounded-lg inline-block border border-gray-200 tracking-wider">
+                                {{ $memberBarcode->barcode_code }}
+                            </span>
+                        </div>
+
+                        <p class="text-xs text-gray-500 leading-relaxed max-w-xs mx-auto mb-5">
+                            Arahkan QR Code ini ke kamera atau pemindai petugas untuk verifikasi kunjungan harian.
+                        </p>
+
+                        <button type="button" onclick="closeQrModal()"
+                                class="w-full py-2.5 px-4 bg-gray-900 hover:bg-black text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+                            Selesai
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -477,72 +606,145 @@
                 document.addEventListener('DOMContentLoaded', function () {
                     const code = '{{ $memberBarcode->barcode_code }}';
 
-                    // QR kecil dalam kartu (desktop)
-                    new QRCode(document.getElementById('qr-member-card'), {
-                        text: code, width: 96, height: 96,
-                        colorDark: '#0D1F4E', colorLight: '#FFFFFF',
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
+                    // 1. QR kecil desktop di kartu
+                    const deskEl = document.getElementById('qr-member-card');
+                    if (deskEl) {
+                        new QRCode(deskEl, {
+                            text: code,
+                            width: 88,
+                            height: 88,
+                            colorDark: '#0A192F',
+                            colorLight: '#FFFFFF',
+                            correctLevel: QRCode.CorrectLevel.M
+                        });
+                    }
 
-                    // QR kecil mobile
-                    const mobileEl = document.getElementById('qr-member-card-mobile');
-                    if (mobileEl) {
-                        new QRCode(mobileEl, {
-                            text: code, width: 108, height: 108,
-                            colorDark: '#0D1F4E', colorLight: '#FFFFFF',
+                    // 2. QR kecil mobile di kartu
+                    const mobEl = document.getElementById('qr-member-card-mobile');
+                    if (mobEl) {
+                        new QRCode(mobEl, {
+                            text: code,
+                            width: 64,
+                            height: 64,
+                            colorDark: '#0A192F',
+                            colorLight: '#FFFFFF',
                             correctLevel: QRCode.CorrectLevel.M
                         });
                     }
                 });
 
+                let qrCardRendered = false;
                 let qrBigRendered = false;
 
+                // ── BUKA MODAL KARTU PENUH ──
                 function openCardModal() {
                     const modal = document.getElementById('card-modal');
                     const inner = document.getElementById('card-modal-inner');
-                    modal.style.opacity = '0';
-                    modal.style.pointerEvents = 'all';
-                    modal.style.display = 'flex';
-                    requestAnimationFrame(() => {
-                        modal.style.transition = 'opacity 0.25s ease';
-                        modal.style.opacity = '1';
-                        inner.style.transition = 'transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.25s ease';
-                        inner.style.transform = 'scale(1) translateY(0)';
-                        inner.style.opacity = '1';
-                    });
+
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
                     document.body.style.overflow = 'hidden';
 
-                    if (!qrBigRendered) {
-                        new QRCode(document.getElementById('qr-modal-big'), {
-                            text: '{{ $memberBarcode->barcode_code }}',
-                            width: 180, height: 180,
-                            colorDark: '#0D1F4E', colorLight: '#FFFFFF',
-                            correctLevel: QRCode.CorrectLevel.M
-                        });
-                        qrBigRendered = true;
+                    requestAnimationFrame(() => {
+                        inner.classList.remove('scale-95', 'opacity-0');
+                        inner.classList.add('scale-100', 'opacity-100');
+                    });
+
+                    if (!qrCardRendered) {
+                        const el = document.getElementById('qr-modal-card');
+                        if (el) {
+                            new QRCode(el, {
+                                text: '{{ $memberBarcode->barcode_code }}',
+                                width: 96,
+                                height: 96,
+                                colorDark: '#0A192F',
+                                colorLight: '#FFFFFF',
+                                correctLevel: QRCode.CorrectLevel.M
+                            });
+                            qrCardRendered = true;
+                        }
                     }
                 }
 
                 function closeCardModal(e) {
-                    if (e && e.target !== document.getElementById('card-modal') && e.target !== document.getElementById('card-modal')) {
-                        if (!e.target.closest('#card-modal > div') === false) return;
+                    if (e && e.target && e.target !== document.getElementById('card-modal')) {
+                        return;
                     }
                     const modal = document.getElementById('card-modal');
                     const inner = document.getElementById('card-modal-inner');
-                    modal.style.opacity = '0';
-                    inner.style.transform = 'scale(0.9) translateY(10px)';
-                    inner.style.opacity = '0';
+
+                    inner.classList.remove('scale-100', 'opacity-100');
+                    inner.classList.add('scale-95', 'opacity-0');
+
                     setTimeout(() => {
-                        modal.style.display = 'none';
-                        document.body.style.overflow = '';
-                    }, 250);
+                        modal.classList.remove('flex');
+                        modal.classList.add('hidden');
+                        if (document.getElementById('qr-modal').classList.contains('hidden')) {
+                            document.body.style.overflow = '';
+                        }
+                    }, 180);
                 }
 
-                // Close on ESC
-                document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCardModal(); });
-                // Close on backdrop click
-                document.getElementById('card-modal').addEventListener('click', function(e) {
-                    if (e.target === this) closeCardModal();
+                // ── BUKA MODAL QR PRESENSI KHUSUS ──
+                function openQrModal() {
+                    const modal = document.getElementById('qr-modal');
+                    const inner = document.getElementById('qr-modal-inner');
+
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    document.body.style.overflow = 'hidden';
+
+                    requestAnimationFrame(() => {
+                        inner.classList.remove('scale-95', 'opacity-0');
+                        inner.classList.add('scale-100', 'opacity-100');
+                    });
+
+                    if (!qrBigRendered) {
+                        const bigEl = document.getElementById('qr-modal-big');
+                        if (bigEl) {
+                            new QRCode(bigEl, {
+                                text: '{{ $memberBarcode->barcode_code }}',
+                                width: 180,
+                                height: 180,
+                                colorDark: '#0A192F',
+                                colorLight: '#FFFFFF',
+                                correctLevel: QRCode.CorrectLevel.H
+                            });
+                            qrBigRendered = true;
+                        }
+                    }
+                }
+
+                function closeQrModal(e) {
+                    if (e && e.target && e.target !== document.getElementById('qr-modal')) {
+                        return;
+                    }
+                    const modal = document.getElementById('qr-modal');
+                    const inner = document.getElementById('qr-modal-inner');
+
+                    inner.classList.remove('scale-100', 'opacity-100');
+                    inner.classList.add('scale-95', 'opacity-0');
+
+                    setTimeout(() => {
+                        modal.classList.remove('flex');
+                        modal.classList.add('hidden');
+                        if (document.getElementById('card-modal').classList.contains('hidden')) {
+                            document.body.style.overflow = '';
+                        }
+                    }, 180);
+                }
+
+                // ESC key handler
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        const qrModal = document.getElementById('qr-modal');
+                        const cardModal = document.getElementById('card-modal');
+                        if (qrModal && !qrModal.classList.contains('hidden')) {
+                            closeQrModal();
+                        } else if (cardModal && !cardModal.classList.contains('hidden')) {
+                            closeCardModal();
+                        }
+                    }
                 });
             </script>
             @endif
