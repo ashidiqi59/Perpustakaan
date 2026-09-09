@@ -199,6 +199,11 @@
                                             <i class="fas fa-id-card text-slate-400 mr-1.5 text-[10px]"></i>
                                             {{ $user->npm }}
                                         </span>
+                                    @elseif($user->isPengunjung())
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200" title="Mahasiswa belum mengisi NPM">
+                                            <i class="fas fa-exclamation-circle text-amber-500 text-[10px]"></i>
+                                            Belum Diisi
+                                        </span>
                                     @else
                                         <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-50 text-slate-400 italic">
                                             Staf Sistem

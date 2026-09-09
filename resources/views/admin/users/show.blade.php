@@ -104,7 +104,13 @@
                                 </div>
                                 <div class="min-w-0">
                                     <p class="text-xs text-slate-500 font-medium">Nomor Pokok Mahasiswa (NPM)</p>
-                                    <p class="text-sm font-semibold text-slate-800">{{ $user->npm ?: '-' }}</p>
+                                    @if($user->npm)
+                                        <p class="text-sm font-semibold text-slate-800 font-mono">{{ $user->npm }}</p>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 mt-0.5">
+                                            <i class="fas fa-exclamation-circle text-[10px] text-amber-500"></i> Belum Diisi
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
