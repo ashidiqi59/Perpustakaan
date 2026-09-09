@@ -537,7 +537,7 @@
         <a href="{{ route('admin.users.index') }}" 
            class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm">
             <i class="fas fa-arrow-left"></i>
-            <span>Kembali ke Daftar</span>
+            <span>Kembali</span>
         </a>
     </div>
 
