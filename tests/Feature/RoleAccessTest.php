@@ -176,4 +176,38 @@ class RoleAccessTest extends TestCase
         $this->actingAs($this->pengunjung);
         $this->get(route('login'))->assertRedirect(route('home'));
     }
+
+    /** 12. Admin users show view differentiates staff from student/pengunjung */
+    public function test_admin_user_show_distinguishes_staff_from_pengunjung(): void
+    {
+        $this->actingAs($this->admin);
+
+        // Show Admin
+        $responseAdmin = $this->get(route('admin.users.show', $this->admin->id));
+        $responseAdmin->assertStatus(200);
+        $responseAdmin->assertDontSee('Aktivitas Peminjaman Buku');
+        $responseAdmin->assertDontSee('Nomor Pokok Mahasiswa (NPM)');
+        $responseAdmin->assertDontSee('Program Studi / Jurusan');
+        $responseAdmin->assertSee('Informasi Profil &amp; Kredensial Staf', false);
+        $responseAdmin->assertSee('Wewenang &amp; Cakupan Akses Fitur', false);
+        $responseAdmin->assertSee('Jabatan Operasional');
+
+        // Show Petugas
+        $responsePetugas = $this->get(route('admin.users.show', $this->petugas->id));
+        $responsePetugas->assertStatus(200);
+        $responsePetugas->assertDontSee('Aktivitas Peminjaman Buku');
+        $responsePetugas->assertDontSee('Nomor Pokok Mahasiswa (NPM)');
+        $responsePetugas->assertDontSee('Program Studi / Jurusan');
+        $responsePetugas->assertSee('Informasi Profil &amp; Kredensial Staf', false);
+        $responsePetugas->assertSee('Petugas Pelayanan &amp; Sirkulasi', false);
+
+        // Show Pengunjung
+        $responsePengunjung = $this->get(route('admin.users.show', $this->pengunjung->id));
+        $responsePengunjung->assertStatus(200);
+        $responsePengunjung->assertSee('Aktivitas Peminjaman Buku');
+        $responsePengunjung->assertSee('Biodata Mahasiswa &amp; Anggota', false);
+        $responsePengunjung->assertSee('Nomor Pokok Mahasiswa (NPM)');
+        $responsePengunjung->assertSee('Program Studi / Jurusan');
+        $responsePengunjung->assertDontSee('Wewenang &amp; Cakupan Akses Fitur', false);
+    }
 }

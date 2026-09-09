@@ -96,16 +96,28 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load(['loans' => function($q) {
-            $q->with('book')->latest();
-        }]);
-
         $loanStats = [
-            'total'    => $user->loans->count(),
-            'active'   => $user->loans->filter(fn($l) => $l->getActualStatus() === 'peminjaman')->count(),
-            'returned' => $user->loans->filter(fn($l) => $l->getActualStatus() === 'dikembalikan')->count(),
-            'overdue'  => $user->loans->filter(fn($l) => $l->getActualStatus() === 'terlambat')->count(),
+            'total'    => 0,
+            'active'   => 0,
+            'returned' => 0,
+            'overdue'  => 0,
         ];
+
+        if ($user->isPengunjung()) {
+            $user->load([
+                'loans' => function($q) {
+                    $q->with('book')->latest();
+                },
+                'memberBarcode',
+            ]);
+
+            $loanStats = [
+                'total'    => $user->loans->count(),
+                'active'   => $user->loans->filter(fn($l) => $l->getActualStatus() === 'peminjaman')->count(),
+                'returned' => $user->loans->filter(fn($l) => $l->getActualStatus() === 'dikembalikan')->count(),
+                'overdue'  => $user->loans->filter(fn($l) => $l->getActualStatus() === 'terlambat')->count(),
+            ];
+        }
 
         return view('admin.users.show', compact('user', 'loanStats'));
     }
