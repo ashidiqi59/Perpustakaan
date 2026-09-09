@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeaturedBookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PetugasController;
+use App\Http\Controllers\AttendanceController;
 
 Route::get('/', [BookController::class, 'publicIndex'])->name('home');
 
@@ -23,6 +24,7 @@ Route::get('/koleksi', [BookController::class, 'collection'])->name('books.colle
 // ============================================================
 Route::middleware('auth')->group(function () {
     Route::get('/my-loans', [LoanController::class, 'myLoans'])->name('my-loans');
+    Route::get('/my-attendance', [AttendanceController::class, 'userHistory'])->name('my-attendance');
     Route::post('/borrow', [LoanController::class, 'borrow'])->name('borrow');
 
     // Return request (user generates return barcode)
@@ -34,6 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // Kartu Anggota: generate barcode jika belum ada
+    Route::post('/member-barcode/generate', [AttendanceController::class, 'generateBarcode'])->name('member-barcode.generate');
 });
 
 // ============================================================
@@ -44,6 +49,10 @@ Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->gro
     Route::post('/scan/loan', [PetugasController::class, 'scanLoan'])->name('scan.loan');
     Route::post('/scan/return', [PetugasController::class, 'scanReturn'])->name('scan.return');
     Route::post('/api/scan', [PetugasController::class, 'apiScan'])->name('api.scan');
+
+    // Presensi / Kartu Anggota
+    Route::post('/api/scan-member', [AttendanceController::class, 'apiScan'])->name('api.scan-member');
+    Route::get('/attendance', [AttendanceController::class, 'history'])->name('attendance.history');
 });
 
 // ============================================================

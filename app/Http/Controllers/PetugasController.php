@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Loan;
 use App\Models\Book;
+use App\Models\AttendanceLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,12 +34,22 @@ class PetugasController extends Controller
         $pendingLoans     = Loan::where('status', Loan::STATUS_MENUNGGU_KONFIRMASI)->count();
         $pendingReturns   = Loan::where('status', Loan::STATUS_MENUNGGU_PENGEMBALIAN)->count();
 
+        // Attendance stats
+        $todayAttendance    = AttendanceLog::whereDate('scan_date', today())->count();
+        $recentAttendances  = AttendanceLog::with('user')
+            ->whereDate('scan_date', today())
+            ->orderBy('scanned_at', 'desc')
+            ->limit(10)
+            ->get();
+
         return view('petugas.dashboard', compact(
             'recentScans',
             'todayLoanScans',
             'todayReturnScans',
             'pendingLoans',
-            'pendingReturns'
+            'pendingReturns',
+            'todayAttendance',
+            'recentAttendances'
         ));
     }
 

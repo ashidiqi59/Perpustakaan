@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Models\MemberBarcode;
+use App\Models\AttendanceLog;
 
 class ProfileController extends Controller
 {
@@ -15,7 +17,20 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        return view('profile', compact('user'));
+
+        // Load atau generate kartu anggota digital (hanya untuk pengunjung)
+        $memberBarcode = null;
+        if ($user->isPengunjung()) {
+            $memberBarcode = MemberBarcode::getOrCreateForUser($user);
+        }
+
+        // Riwayat 5 presensi terakhir
+        $recentAttendance = AttendanceLog::where('user_id', $user->id)
+            ->orderBy('scanned_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('profile', compact('user', 'memberBarcode', 'recentAttendance'));
     }
 
     /**

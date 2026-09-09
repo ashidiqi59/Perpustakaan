@@ -49,6 +49,11 @@
                         <a href="{{ route('my-loans') }}" class="{{ request()->routeIs('my-loans') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">
                             <i class="fas fa-history mr-1"></i>Peminjaman
                         </a>
+                        @if(Auth::user()->isPengunjung())
+                        <a href="{{ route('my-attendance') }}" class="{{ request()->routeIs('my-attendance') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">
+                            <i class="fas fa-calendar-check mr-1"></i>Kunjungan
+                        </a>
+                        @endif
                         <a href="{{ route('profile') }}" class="{{ request()->routeIs('profile') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors flex items-center">
                             <i class="fas fa-user-circle mr-1"></i>Profil
                             @if(!Auth::user()->isProfileComplete())
@@ -110,6 +115,11 @@
                     <a href="{{ route('my-loans') }}" class="block py-2 px-3 rounded-lg {{ request()->routeIs('my-loans') ? 'bg-library-light text-library-primary font-semibold' : 'text-gray-600 hover:bg-gray-50' }} transition-colors">
                         <i class="fas fa-history mr-1"></i>Peminjaman
                     </a>
+                    @if(Auth::user()->isPengunjung())
+                    <a href="{{ route('my-attendance') }}" class="block py-2 px-3 rounded-lg {{ request()->routeIs('my-attendance') ? 'bg-library-light text-library-primary font-semibold' : 'text-gray-600 hover:bg-gray-50' }} transition-colors">
+                        <i class="fas fa-calendar-check mr-1"></i>Riwayat Kunjungan
+                    </a>
+                    @endif
                     <a href="{{ route('profile') }}" class="block py-2 px-3 rounded-lg {{ request()->routeIs('profile') ? 'bg-library-light text-library-primary font-semibold' : 'text-gray-600 hover:bg-gray-50' }} transition-colors flex items-center justify-between">
                         <span><i class="fas fa-user-circle mr-1"></i>Profil Saya</span>
                         @if(!Auth::user()->isProfileComplete())

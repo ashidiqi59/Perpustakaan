@@ -103,6 +103,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the member barcode (digital library card) for the user
+     */
+    public function memberBarcode()
+    {
+        return $this->hasOne(MemberBarcode::class);
+    }
+
+    /**
+     * Get the attendance logs for the user
+     */
+    public function attendanceLogs()
+    {
+        return $this->hasMany(AttendanceLog::class);
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
