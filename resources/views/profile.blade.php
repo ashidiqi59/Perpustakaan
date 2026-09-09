@@ -257,11 +257,6 @@
                             <p class="text-xs text-gray-500">Klik kartu untuk perbesar kartu · Klik QR untuk perbesar QR presensi</p>
                         </div>
                     </div>
-
-                    <button type="button" onclick="openCardModal()" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
-                        <i class="fas fa-expand text-[11px]"></i>
-                        <span>Perbesar Kartu</span>
-                    </button>
                 </div>
 
                 {{-- ── KARTU DIGITAL ANGGOTA ── --}}
@@ -518,20 +513,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {{-- Tombol Tutup --}}
-                    <div class="mt-4 flex items-center justify-between">
-                        <button type="button" onclick="closeCardModal(); openQrModal();"
-                                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-900/30 transition-colors">
-                            <i class="fas fa-qrcode"></i>
-                            <span>Buka QR Presensi</span>
-                        </button>
-                        <button type="button" onclick="closeCardModal()"
-                                class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-colors">
-                            <i class="fas fa-times"></i>
-                            <span>Tutup</span>
-                        </button>
                     </div>
                 </div>
             </div>
