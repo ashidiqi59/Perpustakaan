@@ -131,12 +131,12 @@
                                 </div>
 
                                 <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                                    <button type="submit" class="flex-1 px-6 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium text-sm">
-                                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
-                                    </button>
                                     <a href="{{ route('admin.loans.index') }}" class="flex-1 px-6 py-2.5 bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition-colors font-medium text-sm text-center">
                                         <i class="fas fa-times mr-2"></i>Batal
                                     </a>
+                                    <button type="submit" class="flex-1 px-6 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium text-sm">
+                                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                                    </button>
                                 </div>
                             </form>
                         </div>
