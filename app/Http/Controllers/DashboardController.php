@@ -15,6 +15,36 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        // 1. Auto-expire peminjaman yang barcode-nya sudah lewat waktu
+        $expiredLoans = Loan::where('status', Loan::STATUS_MENUNGGU_KONFIRMASI)
+            ->whereNotNull('loan_barcode_expires_at')
+            ->where('loan_barcode_expires_at', '<', now())
+            ->get();
+
+        foreach ($expiredLoans as $loan) {
+            $loan->book?->increment('stock');
+            $loan->update(['status' => Loan::STATUS_EXPIRED]);
+        }
+
+        // 2. Auto-expire return barcodes yang lewat waktu
+        $expiredReturns = Loan::where('status', Loan::STATUS_MENUNGGU_PENGEMBALIAN)
+            ->whereNotNull('return_barcode_expires_at')
+            ->where('return_barcode_expires_at', '<', now())
+            ->get();
+
+        foreach ($expiredReturns as $loan) {
+            $newStatus = ($loan->due_date && $loan->due_date->isBefore(today()))
+                ? Loan::STATUS_TERLAMBAT
+                : Loan::STATUS_PEMINJAMAN;
+            $loan->update(['status' => $newStatus]);
+        }
+
+        // 3. Auto-update peminjaman aktif yang sudah melewati jatuh tempo menjadi terlambat
+        Loan::where('status', Loan::STATUS_PEMINJAMAN)
+            ->whereNull('return_date')
+            ->where('due_date', '<', today())
+            ->update(['status' => Loan::STATUS_TERLAMBAT]);
+
         // Get counts for stat cards
         $totalBooks = Book::count();
         $totalUsers = User::count();

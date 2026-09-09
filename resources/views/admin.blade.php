@@ -93,14 +93,37 @@
                                                 </div>
                                             </div>
                                             <div class="text-right shrink-0">
-                                                @if($loan->getActualStatus() === 'peminjaman')
-                                                    <span class="text-xs text-amber-600 font-medium">Dipinjam</span>
-                                                @elseif($loan->getActualStatus() === 'dikembalikan')
-                                                    <span class="text-xs text-green-600 font-medium">Dikembalikan</span>
+                                                @php $actualStatus = $loan->getActualStatus(); @endphp
+                                                @if($actualStatus === 'menunggu_konfirmasi')
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                                                        <i class="fas fa-clock text-[10px]"></i> Menunggu
+                                                    </span>
+                                                @elseif($actualStatus === 'menunggu_pengembalian')
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
+                                                        <i class="fas fa-undo text-[10px]"></i> Mau Kembali
+                                                    </span>
+                                                @elseif($actualStatus === 'peminjaman')
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                                                        <i class="fas fa-book-reader text-[10px]"></i> Dipinjam
+                                                    </span>
+                                                @elseif($actualStatus === 'dikembalikan')
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                                        <i class="fas fa-check-circle text-[10px]"></i> Selesai
+                                                    </span>
+                                                @elseif($actualStatus === 'terlambat')
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-700 border border-rose-200">
+                                                        <i class="fas fa-exclamation-triangle text-[10px]"></i> Terlambat
+                                                    </span>
+                                                @elseif($actualStatus === 'expired')
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                                                        <i class="fas fa-ban text-[10px]"></i> Hangus
+                                                    </span>
                                                 @else
-                                                    <span class="text-xs text-red-600 font-medium">Terlambat</span>
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                                                        {{ ucfirst($actualStatus) }}
+                                                    </span>
                                                 @endif
-                                                <p class="text-xs text-slate-400">{{ $loan->loan_date->format('d/m/Y') }}</p>
+                                                <p class="text-xs text-slate-400 mt-1">{{ $loan->loan_date ? $loan->loan_date->format('d/m/Y') : '-' }}</p>
                                             </div>
                                         </div>
                                     @endforeach

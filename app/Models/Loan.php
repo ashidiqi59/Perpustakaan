@@ -205,6 +205,9 @@ class Loan extends Model
         }
 
         if ($this->status === self::STATUS_MENUNGGU_KONFIRMASI) {
+            if ($this->loan_barcode_expires_at && now()->isAfter($this->loan_barcode_expires_at)) {
+                return self::STATUS_EXPIRED;
+            }
             return self::STATUS_MENUNGGU_KONFIRMASI;
         }
 
