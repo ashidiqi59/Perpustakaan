@@ -20,11 +20,6 @@
                 <h2 class="text-xl font-bold text-slate-900 mb-2">{{ $user->name }}</h2>
                 
                 @if(!$user->isPengunjung())
-                    <p class="text-xs font-medium text-slate-600 bg-slate-200/60 px-3 py-1 rounded-md mb-3 inline-flex items-center gap-1.5">
-                        <i class="fas {{ $user->isAdmin() ? 'fa-shield-alt text-amber-600' : 'fa-id-badge text-blue-600' }}"></i>
-                        <span>{{ $user->isAdmin() ? 'Administrator Sistem' : 'Petugas Layanan & Sirkulasi' }}</span>
-                    </p>
-
                     <!-- ROLE BADGE UNTUK STAF -->
                     <div class="mb-4">
                         @if($user->role === 'admin')
@@ -208,17 +203,6 @@
                                 </div>
                             </div>
 
-                            <!-- NO. KONTAK / WHATSAPP -->
-                            <div class="flex items-start gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
-                                    <i class="fas fa-phone text-sm"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <p class="text-xs text-slate-500 font-medium">No. Telepon / WhatsApp</p>
-                                    <p class="text-sm font-semibold text-slate-800">{{ $user->phone ?: '-' }}</p>
-                                </div>
-                            </div>
-
                             <!-- STATUS PENUGASAN -->
                             <div class="flex items-start gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
@@ -232,31 +216,6 @@
                                             Staf Internal Aktif
                                         </span>
                                     </div>
-                                </div>
-                            </div>
-
-                            <!-- KEAMANAN PASSWORD -->
-                            <div class="flex items-start gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 mt-0.5">
-                                    <i class="fas fa-lock text-sm"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <p class="text-xs text-slate-500 font-medium">Kata Sandi (Password)</p>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-sm font-mono text-slate-400 select-none tracking-widest">••••••••••••</span>
-                                        <span class="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-medium">Terenkripsi Aman</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- ALAMAT DINAS / DOMISILI -->
-                            <div class="flex items-start gap-3 sm:col-span-2">
-                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 mt-0.5">
-                                    <i class="fas fa-map-marker-alt text-sm"></i>
-                                </div>
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-xs text-slate-500 font-medium">Domisili / Alamat</p>
-                                    <p class="text-sm font-semibold text-slate-800 leading-relaxed">{{ $user->address ?: '-' }}</p>
                                 </div>
                             </div>
                         </div>
