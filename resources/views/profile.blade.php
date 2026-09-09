@@ -251,7 +251,67 @@
 
                 {{-- ── KARTU DIGITAL ANGGOTA ── --}}
                 <div class="member-card-container w-full max-w-xl">
-                    <div class="member-card relative overflow-hidden rounded-3xl p-6 sm:p-7 text-white cursor-pointer select-none"
+                    {{-- Tampilan Mobile: Persis seperti di Halaman Kunjungan --}}
+                    <div class="sm:hidden relative overflow-hidden rounded-2xl p-5 cursor-pointer group text-white select-none transition-all duration-300 active:scale-[0.99]"
+                         style="background: linear-gradient(135deg, #0A192F 0%, #0F2D59 45%, #1B4582 85%, #0B1C38 100%);
+                                box-shadow: 0 16px 36px -10px rgba(11, 28, 56, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.12);"
+                         onclick="openCardModal()" title="Klik untuk memperbesar kartu">
+
+                        {{-- Watermark & Texture --}}
+                        <div class="absolute inset-0 card-security-pattern pointer-events-none opacity-40"></div>
+                        <div class="absolute -right-8 -bottom-8 w-44 h-44 pointer-events-none opacity-[0.06] text-white">
+                            <svg fill="currentColor" viewBox="0 0 24 24" class="w-full h-full transform rotate-6">
+                                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+
+                        {{-- Top bar --}}
+                        <div class="relative z-10 flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center text-blue-200 text-xs">
+                                    <i class="fas fa-book-reader"></i>
+                                </div>
+                                <span class="text-[9px] uppercase tracking-[0.2em] font-semibold text-blue-200/80">Kartu Anggota</span>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/15 border border-emerald-400/30 text-emerald-300">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Aktif
+                            </span>
+                        </div>
+
+                        {{-- Body --}}
+                        <div class="relative z-10 flex items-center justify-between gap-3 mb-3">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <img src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}"
+                                     class="w-11 h-11 rounded-xl object-cover ring-2 ring-white/20 shadow flex-shrink-0">
+                                <div class="min-w-0">
+                                    <p class="text-white font-bold text-sm truncate">{{ $user->name }}</p>
+                                    @if($user->npm)
+                                        <p class="text-blue-200 text-xs font-mono">{{ $user->npm }}</p>
+                                    @endif
+                                    <p class="text-blue-100/60 text-[11px] truncate">{{ $user->prodi ?? 'Pengunjung' }}</p>
+                                </div>
+                            </div>
+
+                            {{-- Tombol Klik QR --}}
+                            <div class="flex-shrink-0" onclick="event.stopPropagation(); openQrModal();" title="Klik untuk perbesar QR presensi">
+                                <div class="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-slate-900 group-hover:scale-105 transition-transform hover:ring-2 hover:ring-blue-400">
+                                    <i class="fas fa-qrcode text-lg text-slate-800"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Footer --}}
+                        <div class="relative z-10 pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px]">
+                            <span class="text-blue-200/70 font-mono font-semibold">{{ $memberBarcode->barcode_code }}</span>
+                            <span class="text-blue-200/50 uppercase tracking-wider flex items-center gap-1">
+                                Perbesar <i class="fas fa-expand text-[8px]"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    {{-- Tampilan Desktop (Tampilan Penuh) --}}
+                    <div class="hidden sm:block member-card relative overflow-hidden rounded-3xl p-6 sm:p-7 text-white cursor-pointer select-none"
                          onclick="openCardModal()"
                          role="button"
                          tabindex="0"
@@ -275,7 +335,7 @@
                                     </div>
                                     <div>
                                         <p class="text-[9px] uppercase tracking-[0.22em] font-semibold text-blue-200/70 leading-none">Kartu Tanda Anggota</p>
-                                        <h3 class="text-white font-bold text-sm sm:text-base tracking-wide mt-1 leading-none">Perpustakaan</h3>
+                                        <h3 class="text-white font-bold text-base tracking-wide mt-1 leading-none">Perpustakaan</h3>
                                     </div>
                                 </div>
 
@@ -294,7 +354,7 @@
                                     <div class="relative flex-shrink-0">
                                         <img src="{{ $user->getAvatarUrl() }}"
                                              alt="{{ $user->name }}"
-                                             class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover ring-2 ring-white/20 shadow-md">
+                                             class="w-20 h-20 rounded-2xl object-cover ring-2 ring-white/20 shadow-md">
                                         <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] ring-2 ring-[#0A192F]" title="Terverifikasi">
                                             <i class="fas fa-check"></i>
                                         </span>
@@ -305,7 +365,7 @@
                                         <span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-white/10 text-blue-200 mb-1">
                                             {{ $user->role === 'pengunjung' ? 'Anggota Pengunjung' : ucfirst($user->role) }}
                                         </span>
-                                        <h4 class="text-lg sm:text-xl font-bold text-white tracking-tight truncate leading-snug">
+                                        <h4 class="text-xl font-bold text-white tracking-tight truncate leading-snug">
                                             {{ $user->name }}
                                         </h4>
                                         <div class="mt-1 space-y-0.5 text-xs text-blue-100/75">
@@ -326,7 +386,7 @@
                                 </div>
 
                                 {{-- QR Code Desktop: KLIK DI SINI BUKA MODAL QR --}}
-                                <div class="hidden sm:flex flex-col items-center flex-shrink-0 cursor-pointer group"
+                                <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group"
                                      onclick="event.stopPropagation(); openQrModal();"
                                      title="Klik untuk memperbesar QR Code presensi">
                                     <div class="p-2 bg-white rounded-2xl shadow-md transition-transform group-hover:scale-105 group-hover:shadow-lg ring-2 ring-transparent group-hover:ring-blue-400/50">
@@ -344,31 +404,11 @@
                                 </div>
                             </div>
 
-                            {{-- QR Code Mobile: KLIK DI SINI BUKA MODAL QR --}}
-                            <div class="sm:hidden pt-3 border-t border-white/10 flex items-center justify-between cursor-pointer"
-                                 onclick="event.stopPropagation(); openQrModal();">
-                                <div>
-                                    <p class="text-[10px] uppercase tracking-wider text-blue-200/70 font-semibold">QR Check-in</p>
-                                    <p class="text-xs text-white font-medium flex items-center gap-1">
-                                        <i class="fas fa-search-plus text-[10px]"></i> Ketuk untuk perbesar QR
-                                    </p>
-                                </div>
-                                <div class="p-1.5 bg-white rounded-xl shadow-md">
-                                    <div id="qr-member-card-mobile" class="qr-box flex items-center justify-center bg-white rounded-lg overflow-hidden" style="width: 64px; height: 64px;">
-                                        <img src="{{ $memberBarcode->getQrCodeDataUri(100) }}"
-                                             alt="QR Code"
-                                             class="w-[64px] h-[64px] object-contain rounded-md shadow-sm"
-                                             loading="eager"
-                                             onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode($memberBarcode->barcode_code) }}&format=png&margin=1'">
-                                    </div>
-                                </div>
-                            </div>
-
                             {{-- Footer Kartu: ID Anggota & Waktu Bergabung --}}
                             <div class="pt-3 border-t border-white/10 flex items-end justify-between">
                                 <div>
                                     <p class="text-[8px] uppercase tracking-[0.2em] font-semibold text-blue-200/50">ID Anggota</p>
-                                    <p class="text-xs sm:text-sm font-mono font-bold tracking-wider text-white/90 mt-0.5">
+                                    <p class="text-sm font-mono font-bold tracking-wider text-white/90 mt-0.5">
                                         {{ $memberBarcode->barcode_code }}
                                     </p>
                                 </div>
