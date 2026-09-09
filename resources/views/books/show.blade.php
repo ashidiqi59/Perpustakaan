@@ -67,16 +67,13 @@
     <x-page-loader />
     @include('components.navbar')
 
-    <!-- Breadcrumb -->
-    <div class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <nav class="flex items-center text-sm text-gray-500">
-                <a href="{{ route('home') }}" class="hover:text-library-primary">Beranda</a>
-                <svg class="w-5 h-5 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <span class="text-gray-800">{{ $book->title }}</span>
-            </nav>
-        </div>
-    </div>
+    <!-- Sub-Navbar / Breadcrumb -->
+    @include('components.sub-navbar', [
+        'title' => $book->title,
+        'links' => [
+            ['label' => 'Koleksi Buku', 'url' => route('books.collection')]
+        ]
+    ])
 
     <!-- Book Detail Section -->
     <section class="py-12 fade-in-up">

@@ -69,20 +69,8 @@
     <x-page-loader />
     @include('components.navbar')
 
-    <!-- Breadcrumb (Persis seperti di Halaman Koleksi) -->
-    <div class="bg-white shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3">
-            <nav class="flex items-center text-sm text-gray-500" aria-label="Breadcrumb">
-                <a href="{{ route('home') }}" class="hover:text-library-primary transition-colors flex items-center">
-                    Beranda
-                </a>
-                <svg class="w-5 h-5 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-                <span class="text-gray-800 font-medium">Riwayat Kunjungan</span>
-            </nav>
-        </div>
-    </div>
+    <!-- Sub-Navbar / Breadcrumb -->
+    @include('components.sub-navbar', ['title' => 'Riwayat Kunjungan', 'maxWidth' => 'max-w-5xl'])
 
     <div class="min-h-screen pt-6 sm:pt-8 pb-12 sm:pb-16">
         <div class="max-w-5xl mx-auto px-4 sm:px-6">
