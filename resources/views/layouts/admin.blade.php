@@ -265,7 +265,7 @@
                         </button>
                         <div>
                             <h2 class="text-lg sm:text-xl font-semibold text-slate-800">@yield('title', 'Dashboard')</h2>
-                            <p class="text-xs sm:text-sm text-slate-500">@yield('subtitle', 'Selamat datang, ' . Auth::user()->name)</p>
+                            <p class="text-xs sm:text-sm text-slate-500">@yield('subtitle', 'Selamat datang, ' . (Auth::user()?->name ?? 'User'))</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 sm:gap-4">

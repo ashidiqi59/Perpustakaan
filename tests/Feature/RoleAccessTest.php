@@ -210,4 +210,45 @@ class RoleAccessTest extends TestCase
         $responsePengunjung->assertSee('Program Studi / Jurusan');
         $responsePengunjung->assertDontSee('Wewenang &amp; Cakupan Akses Fitur', false);
     }
+
+    /** 13. Edit user form locks admin role and hides NPM for staff */
+    public function test_admin_user_edit_form_locks_admin_role_and_hides_npm(): void
+    {
+        $this->actingAs($this->admin);
+
+        // Edit Admin: Role is locked, NPM is hidden
+        $resAdmin = $this->get(route('admin.users.edit', $this->admin->id));
+        $resAdmin->assertStatus(200);
+        $resAdmin->assertSee('Peran Administrator bersifat permanen');
+        $resAdmin->assertSee('type="hidden" name="role" value="admin"', false);
+        $resAdmin->assertSee('id="npm-field-group" class="hidden"', false);
+
+        // Edit Petugas: Role dropdown is available, NPM is hidden
+        $resPetugas = $this->get(route('admin.users.edit', $this->petugas->id));
+        $resPetugas->assertStatus(200);
+        $resPetugas->assertSee('id="role-select"', false);
+        $resPetugas->assertSee('id="npm-field-group" class="hidden"', false);
+
+        // Edit Pengunjung: Role dropdown available, NPM is visible
+        $resPengunjung = $this->get(route('admin.users.edit', $this->pengunjung->id));
+        $resPengunjung->assertStatus(200);
+        $resPengunjung->assertDontSee('id="npm-field-group" class="hidden"', false);
+    }
+
+    /** 14. Admin role cannot be changed via update request */
+    public function test_admin_role_cannot_be_changed_via_update(): void
+    {
+        $this->actingAs($this->admin);
+
+        $response = $this->put(route('admin.users.update', $this->admin->id), [
+            'name'  => 'Admin Updated',
+            'email' => $this->admin->email,
+            'role'  => 'petugas', // attempt to change admin to petugas
+        ]);
+
+        $response->assertRedirect(route('admin.users.index'));
+        $this->admin->refresh();
+        $this->assertEquals('admin', $this->admin->role);
+        $this->assertEquals('Admin Updated', $this->admin->name);
+    }
 }

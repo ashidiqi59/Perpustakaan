@@ -83,6 +83,9 @@ class UserController extends Controller
         }
 
         $data = $validator->validated();
+        if ($data['role'] !== 'pengunjung') {
+            $data['npm'] = null;
+        }
         $data['password'] = Hash::make($data['password']);
 
         User::create($data);
@@ -156,6 +159,14 @@ class UserController extends Controller
         }
 
         $data = $validator->validated();
+        // Role admin bersifat permanen dan tidak dapat diubah
+        if ($user->role === 'admin') {
+            $data['role'] = 'admin';
+        }
+
+        if ($data['role'] !== 'pengunjung') {
+            $data['npm'] = null;
+        }
 
         // Only update password if provided
         if (!empty($data['password'])) {
