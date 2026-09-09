@@ -3,13 +3,6 @@
 @section('title', 'Edit Peminjaman')
 @section('subtitle', 'Perbarui data peminjaman')
 
-@section('header-actions')
-    <a href="{{ route('admin.loans.index') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-slate-500 text-white text-xs sm:text-sm rounded-lg hover:bg-slate-600 transition-colors flex items-center gap-1 sm:gap-2">
-        <i class="fas fa-arrow-left"></i>
-        <span class="hidden sm:inline">Kembali</span>
-    </a>
-@endsection
-
 @section('content')
                     <div class="max-w-2xl mx-auto">
                         <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">

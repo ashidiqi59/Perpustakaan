@@ -3,13 +3,6 @@
 @section('title', $action == 'create' ? 'Tambah Buku Baru' : 'Edit Buku')
 @section('subtitle', $action == 'create' ? 'Tambahkan buku baru ke koleksi' : 'Perbarui informasi buku')
 
-@section('header-actions')
-    <a href="{{ route('admin.books.index') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-slate-500 text-white text-xs sm:text-sm rounded-lg hover:bg-slate-600 transition-colors flex items-center gap-1 sm:gap-2">
-        <i class="fas fa-arrow-left"></i>
-        <span class="hidden sm:inline">Kembali</span>
-    </a>
-@endsection
-
 @section('content')
                     <!-- ALERT MESSAGES -->
                     @if($errors->any())
