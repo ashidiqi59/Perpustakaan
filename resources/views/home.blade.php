@@ -179,22 +179,27 @@
     @endif
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-blue-50 via-white to-blue-50 pt-10 pb-8 sm:pt-12 sm:pb-10 lg:py-24">
+    <section class="relative bg-gradient-to-b from-blue-50/60 via-slate-50/30 to-white pt-10 pb-8 sm:pt-12 sm:pb-10 lg:py-24 overflow-hidden">
+        <!-- Ambient Background Glows -->
+        <div class="absolute -top-24 -left-20 w-96 h-96 bg-blue-200/35 rounded-full blur-3xl pointer-events-none -z-10"></div>
+        <div class="absolute top-1/3 -right-24 w-96 h-96 bg-indigo-200/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 lg:gap-x-12 gap-y-8 lg:gap-y-0 items-center">
                 <!-- Hero Text: Heading & Description -->
                 <div class="fade-in-up order-1 lg:col-start-1 lg:row-start-1">
-                    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-5 lg:mb-6 leading-tight">
+                    <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-5 lg:mb-6 leading-tight tracking-tight">
                         Selamat Datang di<br>
-                        <span class="text-library-primary">Perpustakaan Digital</span>
+                        <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">Perpustakaan Digital</span>
                     </h1>
-                    <p class="text-gray-600 text-base sm:text-lg mb-0 lg:mb-8 leading-relaxed">
+                    <p class="text-slate-600 text-base sm:text-lg mb-0 lg:mb-8 leading-relaxed max-w-xl">
                         Akses ribuan koleksi buku digital, jurnal, dan referensi akademik. Temukan pengetahuan yang Anda butuhkan untuk mendukung pembelajaran dan penelitian.
                     </p>
                 </div>
 
                 <!-- Right - Featured Books Stack (Placed above search on mobile) -->
-                <div class="fade-in-up delay-200 order-2 lg:order-none lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center flex justify-center max-w-full overflow-hidden sm:overflow-visible py-2 lg:py-4">
+                <div class="fade-in-up delay-200 order-2 lg:order-none lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center flex justify-center max-w-full overflow-hidden sm:overflow-visible py-2 lg:py-4 relative">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-400/10 via-indigo-400/10 to-purple-400/10 rounded-3xl blur-2xl -z-10 pointer-events-none scale-90"></div>
                     <div class="relative h-[360px] sm:h-[385px] lg:h-[445px] w-[270px] sm:w-[290px] lg:w-[320px]">
                         @forelse($featuredBooks as $index => $book)
                             @php
@@ -226,35 +231,55 @@
                 <!-- Search Bar & Stats (Placed below books on mobile) -->
                 <div class="fade-in-up order-3 lg:order-none lg:col-start-1 lg:row-start-2">
                     <!-- Search Bar -->
-                    <form action="{{ route('books.collection') }}" method="GET" class="bg-white rounded-xl shadow-lg p-2 flex flex-col sm:flex-row gap-2 mb-5 lg:mb-6">
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ $search ?? '' }}"
-                            placeholder="Cari judul buku, penulis, atau ISBN..."
-                            class="w-full sm:flex-1 px-4 py-3 border-0 focus:outline-none focus:ring-0 text-gray-700 text-sm sm:text-base"
-                        >
-                        <button type="submit" class="bg-library-primary text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <form action="{{ route('books.collection') }}" method="GET" class="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg shadow-blue-900/5 p-2 sm:p-2.5 border border-slate-200/80 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all flex flex-col sm:flex-row gap-2 mb-3">
+                        <div class="relative w-full sm:flex-1 flex items-center">
+                            <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 transform -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
-                            Cari
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ $search ?? '' }}"
+                                placeholder="Cari judul buku, penulis, atau ISBN..."
+                                class="w-full pl-11 pr-4 py-2.5 sm:py-3 border-0 bg-transparent focus:outline-none focus:ring-0 text-slate-700 text-sm sm:text-base placeholder:text-slate-400"
+                            >
+                        </div>
+                        <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base shrink-0">
+                            <i class="fas fa-search text-xs"></i>
+                            <span>Cari</span>
                         </button>
                     </form>
 
                     <!-- Quick Stats -->
-                    <div class="grid grid-cols-3 gap-2 sm:gap-4">
-                        <div class="bg-white rounded-lg p-2.5 sm:p-4 shadow-sm text-center">
-                            <div class="text-lg sm:text-2xl font-bold text-library-primary">1,250+</div>
-                            <div class="text-[11px] sm:text-xs text-gray-600 mt-1">Koleksi Buku</div>
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3.5">
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs border border-slate-200/70 hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left group">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xs sm:text-base shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-book-bookmark"></i>
+                            </div>
+                            <div>
+                                <div class="text-base sm:text-xl font-bold text-slate-900 tracking-tight">1,250+</div>
+                                <div class="text-[10px] sm:text-xs text-slate-500 font-medium">Koleksi Buku</div>
+                            </div>
                         </div>
-                        <div class="bg-white rounded-lg p-2.5 sm:p-4 shadow-sm text-center">
-                            <div class="text-lg sm:text-2xl font-bold text-library-primary">500+</div>
-                            <div class="text-[11px] sm:text-xs text-gray-600 mt-1">Anggota Aktif</div>
+
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs border border-slate-200/70 hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left group">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs sm:text-base shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <div class="text-base sm:text-xl font-bold text-slate-900 tracking-tight">500+</div>
+                                <div class="text-[10px] sm:text-xs text-slate-500 font-medium">Anggota Aktif</div>
+                            </div>
                         </div>
-                        <div class="bg-white rounded-lg p-2.5 sm:p-4 shadow-sm text-center">
-                            <div class="text-lg sm:text-2xl font-bold text-library-primary">24/7</div>
-                            <div class="text-[11px] sm:text-xs text-gray-600 mt-1">Akses Online</div>
+
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs border border-slate-200/70 hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left group">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs sm:text-base shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div>
+                                <div class="text-base sm:text-xl font-bold text-slate-900 tracking-tight">24/7</div>
+                                <div class="text-[10px] sm:text-xs text-slate-500 font-medium">Akses Online</div>
+                            </div>
                         </div>
                     </div>
                 </div>
