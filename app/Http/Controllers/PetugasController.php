@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\AttendanceLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PetugasController extends Controller
 {
@@ -15,16 +16,18 @@ class PetugasController extends Controller
      */
     public function dashboard()
     {
+        $greatestFunc = DB::getDriverName() === 'sqlite' ? 'MAX' : 'GREATEST';
+
         // Get recent scan activity (last 20 scans)
         $recentScans = Loan::with('user', 'book')
             ->where(function ($q) {
                 $q->whereNotNull('loan_barcode_scanned_at')
                   ->orWhereNotNull('return_barcode_scanned_at');
             })
-            ->orderByRaw('GREATEST(
-                COALESCE(loan_barcode_scanned_at, "1970-01-01"),
-                COALESCE(return_barcode_scanned_at, "1970-01-01")
-            ) DESC')
+            ->orderByRaw("{$greatestFunc}(
+                COALESCE(loan_barcode_scanned_at, '1970-01-01'),
+                COALESCE(return_barcode_scanned_at, '1970-01-01')
+            ) DESC")
             ->limit(20)
             ->get();
 

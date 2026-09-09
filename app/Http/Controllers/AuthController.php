@@ -15,6 +15,16 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
+        if (Auth::check()) {
+            if (Auth::user()->isAdmin()) {
+                return redirect()->route('admin.dashboard');
+            }
+            if (Auth::user()->isPetugas()) {
+                return redirect()->route('petugas.dashboard');
+            }
+            return redirect()->route('home');
+        }
+
         return view('login', ['page' => 'login']);
     }
 
@@ -57,6 +67,16 @@ class AuthController extends Controller
      */
     public function showRegister()
     {
+        if (Auth::check()) {
+            if (Auth::user()->isAdmin()) {
+                return redirect()->route('admin.dashboard');
+            }
+            if (Auth::user()->isPetugas()) {
+                return redirect()->route('petugas.dashboard');
+            }
+            return redirect()->route('home');
+        }
+
         return view('login', ['page' => 'register']);
     }
 
@@ -65,6 +85,16 @@ class AuthController extends Controller
      */
     public function redirectToGoogle()
     {
+        if (Auth::check()) {
+            if (Auth::user()->isAdmin()) {
+                return redirect()->route('admin.dashboard');
+            }
+            if (Auth::user()->isPetugas()) {
+                return redirect()->route('petugas.dashboard');
+            }
+            return redirect()->route('home');
+        }
+
         return Socialite::driver('google')
             ->with(['prompt' => 'select_account'])
             ->redirect();
@@ -163,10 +193,12 @@ class AuthController extends Controller
     /**
      * Handle logout
      */
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/')->with('success', 'Logout berhasil!');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login')->with('success', 'Logout berhasil!');
     }
 
     /**

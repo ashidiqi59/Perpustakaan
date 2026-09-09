@@ -6,11 +6,11 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsurePetugas
+class EnsureAdmin
 {
     /**
      * Handle an incoming request.
-     * Only allows access for 'petugas' and 'admin' roles.
+     * Only allows access for 'admin' role.
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -20,8 +20,14 @@ class EnsurePetugas
 
         $user = auth()->user();
 
-        if (!$user->canScan()) {
-            return redirect()->route('home')->with('error', 'Akses ditolak. Halaman petugas hanya dapat diakses oleh Petugas atau Administrator.');
+        if (!$user->isAdmin()) {
+            if ($user->isPetugas()) {
+                return redirect()->route('petugas.dashboard')
+                    ->with('error', 'Akses ditolak. Halaman admin hanya dapat diakses oleh Administrator.');
+            }
+
+            return redirect()->route('home')
+                ->with('error', 'Akses ditolak. Halaman admin hanya dapat diakses oleh Administrator.');
         }
 
         return $next($request);

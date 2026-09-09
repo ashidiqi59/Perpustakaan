@@ -148,6 +148,36 @@
     <x-page-loader />
     @include('components.navbar')
 
+    {{-- FLASH ALERTS --}}
+    @if(session('error') || session('warning') || session('info') || session('success'))
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+            @if(session('error'))
+                <div class="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl text-sm flex items-center gap-3 shadow-sm mb-3">
+                    <i class="fas fa-exclamation-circle text-rose-500 text-base shrink-0"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+            @if(session('warning'))
+                <div class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl text-sm flex items-center gap-3 shadow-sm mb-3">
+                    <i class="fas fa-exclamation-triangle text-amber-500 text-base shrink-0"></i>
+                    <span>{{ session('warning') }}</span>
+                </div>
+            @endif
+            @if(session('info'))
+                <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-xl text-sm flex items-center gap-3 shadow-sm mb-3">
+                    <i class="fas fa-info-circle text-blue-500 text-base shrink-0"></i>
+                    <span>{{ session('info') }}</span>
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl text-sm flex items-center gap-3 shadow-sm mb-3">
+                    <i class="fas fa-check-circle text-emerald-500 text-base shrink-0"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+        </div>
+    @endif
+
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-blue-50 via-white to-blue-50 py-16 lg:py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

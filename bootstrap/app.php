@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
         $middleware->alias([
             'petugas' => \App\Http\Middleware\EnsurePetugas::class,
+            'admin' => \App\Http\Middleware\EnsureAdmin::class,
+            'prevent.staff' => \App\Http\Middleware\PreventStaffAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

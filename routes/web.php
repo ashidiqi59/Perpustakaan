@@ -11,38 +11,40 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\AttendanceController;
 
-Route::get('/', [BookController::class, 'publicIndex'])->name('home');
-
-// Public Book Routes
-Route::get('/books/{book}', [BookController::class, 'publicShow'])->name('books.show');
-
-// Public Collection Route
-Route::get('/koleksi', [BookController::class, 'collection'])->name('books.collection');
-
 // ============================================================
-// User Routes (protected by auth middleware)
+// Halaman Pengunjung (Public & Anggota Perpustakaan)
+// Diproteksi prevent.staff: Admin & Petugas tidak boleh mengakses
+// Jika Admin/Petugas mencoba akses, dipaksa redirect ke Dashboard masing-masing
 // ============================================================
-Route::middleware('auth')->group(function () {
-    Route::get('/my-loans', [LoanController::class, 'myLoans'])->name('my-loans');
-    Route::get('/my-attendance', [AttendanceController::class, 'userHistory'])->name('my-attendance');
-    Route::post('/borrow', [LoanController::class, 'borrow'])->name('borrow');
+Route::middleware('prevent.staff')->group(function () {
+    // Public Visitor Routes
+    Route::get('/', [BookController::class, 'publicIndex'])->name('home');
+    Route::get('/books/{book}', [BookController::class, 'publicShow'])->name('books.show');
+    Route::get('/koleksi', [BookController::class, 'collection'])->name('books.collection');
 
-    // Return request (user generates return barcode)
-    Route::post('/loans/{loan}/request-return', [LoanController::class, 'requestReturn'])->name('loans.request-return');
-    Route::post('/loans/{loan}/cancel', [LoanController::class, 'cancelLoan'])->name('loans.cancel');
-    Route::post('/loans/{loan}/cancel-return', [LoanController::class, 'cancelReturn'])->name('loans.cancel-return');
+    // Authenticated Pengunjung Routes (membutuhkan login akun pengunjung)
+    Route::middleware('auth')->group(function () {
+        Route::get('/my-loans', [LoanController::class, 'myLoans'])->name('my-loans');
+        Route::get('/my-attendance', [AttendanceController::class, 'userHistory'])->name('my-attendance');
+        Route::post('/borrow', [LoanController::class, 'borrow'])->name('borrow');
 
-    // Profile & Biodata Routes
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+        // Return request (user generates return barcode)
+        Route::post('/loans/{loan}/request-return', [LoanController::class, 'requestReturn'])->name('loans.request-return');
+        Route::post('/loans/{loan}/cancel', [LoanController::class, 'cancelLoan'])->name('loans.cancel');
+        Route::post('/loans/{loan}/cancel-return', [LoanController::class, 'cancelReturn'])->name('loans.cancel-return');
 
-    // Kartu Anggota: generate barcode jika belum ada
-    Route::post('/member-barcode/generate', [AttendanceController::class, 'generateBarcode'])->name('member-barcode.generate');
+        // Profile & Biodata Routes
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+        // Kartu Anggota: generate barcode jika belum ada
+        Route::post('/member-barcode/generate', [AttendanceController::class, 'generateBarcode'])->name('member-barcode.generate');
+    });
 });
 
 // ============================================================
-// Petugas Routes (only for petugas and admin)
+// Petugas Routes (hanya untuk petugas dan admin)
 // ============================================================
 Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [PetugasController::class, 'dashboard'])->name('dashboard');
@@ -56,51 +58,52 @@ Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->gro
 });
 
 // ============================================================
-// Admin Routes
+// Admin Routes (hanya untuk role admin)
+// Diproteksi auth & admin: Pengunjung & Petugas tidak boleh mengakses
 // ============================================================
-Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-// Admin Users Routes (View, Edit, Delete, Create Petugas)
-Route::resource('/admin/users', UserController::class)->names([
-    'index'   => 'admin.users.index',
-    'create'  => 'admin.users.create',
-    'store'   => 'admin.users.store',
-    'show'    => 'admin.users.show',
-    'edit'    => 'admin.users.edit',
-    'update'  => 'admin.users.update',
-    'destroy' => 'admin.users.destroy',
-])->middleware('auth');
+    // Admin Users Routes (View, Edit, Delete, Create Petugas)
+    Route::resource('users', UserController::class)->names([
+        'index'   => 'admin.users.index',
+        'create'  => 'admin.users.create',
+        'store'   => 'admin.users.store',
+        'show'    => 'admin.users.show',
+        'edit'    => 'admin.users.edit',
+        'update'  => 'admin.users.update',
+        'destroy' => 'admin.users.destroy',
+    ]);
 
-// Admin Books Routes (CRUD)
-Route::resource('/admin/books', BookController::class)->names([
-    'index'   => 'admin.books.index',
-    'create'  => 'admin.books.create',
-    'store'   => 'admin.books.store',
-    'show'    => 'admin.books.show',
-    'edit'    => 'admin.books.edit',
-    'update'  => 'admin.books.update',
-    'destroy' => 'admin.books.destroy',
-])->middleware('auth');
+    // Admin Books Routes (CRUD)
+    Route::resource('books', BookController::class)->names([
+        'index'   => 'admin.books.index',
+        'create'  => 'admin.books.create',
+        'store'   => 'admin.books.store',
+        'show'    => 'admin.books.show',
+        'edit'    => 'admin.books.edit',
+        'update'  => 'admin.books.update',
+        'destroy' => 'admin.books.destroy',
+    ]);
 
-// Admin Featured Books (Buku Beranda) Routes
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/featured-books', [FeaturedBookController::class, 'index'])->name('featured-books.index');
-    Route::post('/featured-books/{book}', [FeaturedBookController::class, 'update'])->name('featured-books.update');
+    // Admin Featured Books (Buku Beranda) Routes
+    Route::name('admin.')->group(function () {
+        Route::get('/featured-books', [FeaturedBookController::class, 'index'])->name('featured-books.index');
+        Route::post('/featured-books/{book}', [FeaturedBookController::class, 'update'])->name('featured-books.update');
+
+        // Admin Loans Routes (CRUD)
+        Route::get('/loans', [LoanController::class, 'adminIndex'])->name('loans.index');
+        Route::get('/loans/create', [LoanController::class, 'adminCreate'])->name('loans.create');
+        Route::post('/loans', [LoanController::class, 'adminStore'])->name('loans.store');
+        Route::get('/loans/{loan}', [LoanController::class, 'adminShow'])->name('loans.show');
+        Route::get('/loans/{loan}/edit', [LoanController::class, 'adminEdit'])->name('loans.edit');
+        Route::put('/loans/{loan}', [LoanController::class, 'adminUpdate'])->name('loans.update');
+        Route::delete('/loans/{loan}', [LoanController::class, 'adminDestroy'])->name('loans.destroy');
+    });
 });
 
 // Public API for featured books
 Route::get('/api/featured-books', [FeaturedBookController::class, 'apiFeatured'])->name('api.featured-books');
-
-// Admin Loans Routes (CRUD)
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/loans', [LoanController::class, 'adminIndex'])->name('loans.index');
-    Route::get('/loans/create', [LoanController::class, 'adminCreate'])->name('loans.create');
-    Route::post('/loans', [LoanController::class, 'adminStore'])->name('loans.store');
-    Route::get('/loans/{loan}', [LoanController::class, 'adminShow'])->name('loans.show');
-    Route::get('/loans/{loan}/edit', [LoanController::class, 'adminEdit'])->name('loans.edit');
-    Route::put('/loans/{loan}', [LoanController::class, 'adminUpdate'])->name('loans.update');
-    Route::delete('/loans/{loan}', [LoanController::class, 'adminDestroy'])->name('loans.destroy');
-});
 
 // ============================================================
 // Auth Routes
