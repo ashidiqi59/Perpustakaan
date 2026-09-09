@@ -328,7 +328,7 @@
     @if($memberBarcode)
     <div id="card-modal"
          class="fixed inset-0 z-[999] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
-         onclick="closeCardModal(event)">
+         onclick="if(event.target === this) closeCardModal();">
 
         <div id="card-modal-inner"
              class="w-full max-w-lg transition-all duration-300 transform scale-95 opacity-0"
@@ -366,8 +366,12 @@
                                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                                 Aktif
                             </span>
-                            <button type="button" onclick="closeCardModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors ml-1">
-                                <i class="fas fa-times text-sm"></i>
+                            <button type="button"
+                                    id="btn-close-card-modal"
+                                    onclick="event.stopPropagation(); closeCardModal();"
+                                    class="w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 active:scale-90 text-white flex items-center justify-center transition-all cursor-pointer touch-manipulation z-20 ml-1"
+                                    aria-label="Tutup Kartu">
+                                <i class="fas fa-times text-sm pointer-events-none"></i>
                             </button>
                         </div>
                     </div>
@@ -412,10 +416,16 @@
 
                         {{-- QR Code di Kartu Besar --}}
                         <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group"
-                             onclick="closeCardModal(); openQrModal();"
+                             onclick="openQrModal();"
                              title="Klik untuk fokus QR Code scan">
                             <div class="p-2 bg-white rounded-2xl shadow-xl transition-transform group-hover:scale-105">
-                                <div id="qr-modal-card" class="qr-box" style="width: 96px; height: 96px;"></div>
+                                <div id="qr-modal-card" class="qr-box flex items-center justify-center bg-white rounded-xl overflow-hidden" style="width: 96px; height: 96px;">
+                                    <img src="{{ $memberBarcode->getQrCodeDataUri(150) }}"
+                                         alt="QR Code"
+                                         class="w-[96px] h-[96px] object-contain rounded-lg shadow-sm"
+                                         loading="eager"
+                                         onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($memberBarcode->barcode_code) }}&format=png&margin=1'">
+                                </div>
                             </div>
                             <span class="text-[9px] uppercase tracking-wider text-blue-200/70 font-semibold mt-1.5 flex items-center gap-1 group-hover:text-white transition-colors">
                                 <i class="fas fa-expand text-[8px]"></i> Perbesar QR
@@ -441,13 +451,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
     {{-- ══════════════════════════════════════════════════ --}}
     {{-- MODAL 2: KHUSUS QR CODE PRESENSI (SCAN PETUGAS)   --}}
     {{-- ══════════════════════════════════════════════════ --}}
     <div id="qr-modal"
          class="fixed inset-0 z-[1000] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
-         onclick="closeQrModal(event)">
+         onclick="if(event.target === this) closeQrModal();">
 
         <div id="qr-modal-inner"
              class="w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 transition-all duration-300 transform scale-95 opacity-0"
@@ -465,8 +477,12 @@
                         </div>
                         <span class="text-xs font-bold tracking-wide uppercase">Presensi Perpustakaan</span>
                     </div>
-                    <button type="button" onclick="closeQrModal()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
-                        <i class="fas fa-times text-xs"></i>
+                    <button type="button"
+                            id="btn-close-qr-modal"
+                            onclick="event.stopPropagation(); closeQrModal();"
+                            class="w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 active:scale-90 text-white flex items-center justify-center transition-all cursor-pointer touch-manipulation z-20 shadow-sm"
+                            aria-label="Tutup Presensi">
+                        <i class="fas fa-times text-sm pointer-events-none"></i>
                     </button>
                 </div>
 
@@ -485,8 +501,14 @@
 
             {{-- Badan Modal QR: QR Code Tunggal, Besar & Jelas --}}
             <div class="p-6 text-center">
-                <div class="inline-block p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-inner mb-4">
-                    <div id="qr-modal-big" class="qr-box flex items-center justify-center" style="width: 180px; height: 180px;"></div>
+                <div class="inline-block p-4 bg-white rounded-2xl border border-gray-100 shadow-inner mb-4">
+                    <div id="qr-modal-big" class="qr-box flex items-center justify-center bg-white rounded-xl" style="width: 180px; height: 180px;">
+                        <img src="{{ $memberBarcode->getQrCodeDataUri(240) }}"
+                             alt="QR Code Presensi"
+                             class="w-[180px] h-[180px] object-contain rounded-lg shadow-sm"
+                             loading="eager"
+                             onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=240x240&data={{ urlencode($memberBarcode->barcode_code) }}&format=png&margin=2'">
+                    </div>
                 </div>
 
                 <div class="mb-4">
@@ -500,8 +522,9 @@
                     Arahkan QR Code ini ke kamera atau pemindai petugas untuk verifikasi kunjungan harian.
                 </p>
 
-                <button type="button" onclick="closeQrModal()"
-                        class="w-full py-2.5 px-4 bg-gray-900 hover:bg-black text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+                <button type="button"
+                        onclick="event.stopPropagation(); closeQrModal();"
+                        class="w-full py-3 px-4 bg-gray-900 hover:bg-black active:scale-[0.98] text-white text-sm font-semibold rounded-xl transition-all shadow-sm cursor-pointer touch-manipulation">
                     Selesai
                 </button>
             </div>
@@ -509,12 +532,10 @@
     </div>
 
     <script>
-        let qrCardRendered = false;
-        let qrBigRendered = false;
-
         // ── BUKA MODAL KARTU PENUH ──
         function openCardModal() {
             const modal = document.getElementById('card-modal');
+            if (!modal) return;
             const inner = document.getElementById('card-modal-inner');
 
             modal.classList.remove('hidden');
@@ -522,40 +543,28 @@
             document.body.style.overflow = 'hidden';
 
             requestAnimationFrame(() => {
-                inner.classList.remove('scale-95', 'opacity-0');
-                inner.classList.add('scale-100', 'opacity-100');
-            });
-
-            if (!qrCardRendered) {
-                const el = document.getElementById('qr-modal-card');
-                if (el) {
-                    new QRCode(el, {
-                        text: '{{ $memberBarcode->barcode_code }}',
-                        width: 96,
-                        height: 96,
-                        colorDark: '#0A192F',
-                        colorLight: '#FFFFFF',
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
-                    qrCardRendered = true;
+                if (inner) {
+                    inner.classList.remove('scale-95', 'opacity-0');
+                    inner.classList.add('scale-100', 'opacity-100');
                 }
-            }
+            });
         }
 
-        function closeCardModal(e) {
-            if (e && e.target && e.target !== document.getElementById('card-modal')) {
-                return;
-            }
+        function closeCardModal() {
             const modal = document.getElementById('card-modal');
+            if (!modal) return;
             const inner = document.getElementById('card-modal-inner');
 
-            inner.classList.remove('scale-100', 'opacity-100');
-            inner.classList.add('scale-95', 'opacity-0');
+            if (inner) {
+                inner.classList.remove('scale-100', 'opacity-100');
+                inner.classList.add('scale-95', 'opacity-0');
+            }
 
             setTimeout(() => {
                 modal.classList.remove('flex');
                 modal.classList.add('hidden');
-                if (document.getElementById('qr-modal').classList.contains('hidden')) {
+                const qrModal = document.getElementById('qr-modal');
+                if (!qrModal || qrModal.classList.contains('hidden')) {
                     document.body.style.overflow = '';
                 }
             }, 180);
@@ -564,6 +573,7 @@
         // ── BUKA MODAL QR PRESENSI KHUSUS ──
         function openQrModal() {
             const modal = document.getElementById('qr-modal');
+            if (!modal) return;
             const inner = document.getElementById('qr-modal-inner');
 
             modal.classList.remove('hidden');
@@ -571,44 +581,51 @@
             document.body.style.overflow = 'hidden';
 
             requestAnimationFrame(() => {
-                inner.classList.remove('scale-95', 'opacity-0');
-                inner.classList.add('scale-100', 'opacity-100');
-            });
-
-            if (!qrBigRendered) {
-                const bigEl = document.getElementById('qr-modal-big');
-                if (bigEl) {
-                    new QRCode(bigEl, {
-                        text: '{{ $memberBarcode->barcode_code }}',
-                        width: 180,
-                        height: 180,
-                        colorDark: '#0A192F',
-                        colorLight: '#FFFFFF',
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                    qrBigRendered = true;
+                if (inner) {
+                    inner.classList.remove('scale-95', 'opacity-0');
+                    inner.classList.add('scale-100', 'opacity-100');
                 }
-            }
+            });
         }
 
-        function closeQrModal(e) {
-            if (e && e.target && e.target !== document.getElementById('qr-modal')) {
-                return;
-            }
+        function closeQrModal() {
             const modal = document.getElementById('qr-modal');
+            if (!modal) return;
             const inner = document.getElementById('qr-modal-inner');
 
-            inner.classList.remove('scale-100', 'opacity-100');
-            inner.classList.add('scale-95', 'opacity-0');
+            if (inner) {
+                inner.classList.remove('scale-100', 'opacity-100');
+                inner.classList.add('scale-95', 'opacity-0');
+            }
 
             setTimeout(() => {
                 modal.classList.remove('flex');
                 modal.classList.add('hidden');
-                if (document.getElementById('card-modal').classList.contains('hidden')) {
+                const cardModal = document.getElementById('card-modal');
+                if (!cardModal || cardModal.classList.contains('hidden')) {
                     document.body.style.overflow = '';
                 }
             }, 180);
         }
+
+        // Pasang event listener langsung ke tombol close untuk memastikan klik mobile selalu terdeteksi
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnCloseQr = document.getElementById('btn-close-qr-modal');
+            if (btnCloseQr) {
+                btnCloseQr.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    closeQrModal();
+                });
+            }
+
+            const btnCloseCard = document.getElementById('btn-close-card-modal');
+            if (btnCloseCard) {
+                btnCloseCard.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    closeCardModal();
+                });
+            }
+        });
 
         // ESC key handler
         document.addEventListener('keydown', function(e) {

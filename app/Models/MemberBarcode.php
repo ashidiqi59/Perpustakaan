@@ -46,4 +46,31 @@ class MemberBarcode extends Model
             ['barcode_code' => self::generateCode($user->id)]
         );
     }
+
+    /**
+     * Generate pure SVG string for the QR code
+     */
+    public function getQrCodeSvg(int $size = 200): string
+    {
+        try {
+            return (string) \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')
+                ->size($size)
+                ->errorCorrection('H')
+                ->generate($this->barcode_code);
+        } catch (\Throwable $e) {
+            return '';
+        }
+    }
+
+    /**
+     * Generate base64 Data URI for <img> tag
+     */
+    public function getQrCodeDataUri(int $size = 200): string
+    {
+        $svg = $this->getQrCodeSvg($size);
+        if (!empty($svg)) {
+            return 'data:image/svg+xml;base64,' . base64_encode($svg);
+        }
+        return 'https://api.qrserver.com/v1/create-qr-code/?size=' . $size . 'x' . $size . '&data=' . urlencode($this->barcode_code) . '&format=png&margin=2';
+    }
 }
