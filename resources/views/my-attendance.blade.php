@@ -77,19 +77,11 @@
 
             {{-- Header --}}
             <div class="mb-6 sm:mb-8">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-                            <i class="fas fa-calendar-check library-primary"></i>
-                            <span>Riwayat Kunjungan</span>
-                        </h1>
-                        <p class="text-xs sm:text-base text-gray-600">Catatan kehadiran Anda di perpustakaan</p>
-                    </div>
-                    <a href="{{ route('profile') }}"
-                       class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-600 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl shadow-sm transition-colors">
-                        <i class="fas fa-id-card text-indigo-500"></i> Kelola di Profil
-                    </a>
-                </div>
+                <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+                    <i class="fas fa-calendar-check library-primary"></i>
+                    <span>Riwayat Kunjungan</span>
+                </h1>
+                <p class="text-xs sm:text-base text-gray-600">Catatan kehadiran Anda di perpustakaan</p>
             </div>
 
             {{-- Alert --}}
