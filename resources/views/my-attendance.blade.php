@@ -322,15 +322,15 @@
     {{-- ══════════════════════════════════════════════════ --}}
     @if($memberBarcode)
     <div id="card-modal"
-         class="fixed inset-0 z-[999] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+         class="fixed inset-0 z-[999] hidden items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md"
          onclick="if(event.target === this) closeCardModal();">
 
         <div id="card-modal-inner"
-             class="w-full max-w-lg transition-all duration-300 transform scale-95 opacity-0"
+             class="w-full max-w-xl transition-all duration-300 transform scale-95 opacity-0"
              onclick="event.stopPropagation()">
 
             {{-- Kartu Versi Besar --}}
-            <div class="relative overflow-hidden rounded-3xl p-7 sm:p-8 text-white shadow-2xl"
+            <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl p-5 sm:p-8 text-white shadow-2xl"
                  style="background: linear-gradient(135deg, #0A192F 0%, #0F2D59 45%, #1B4582 85%, #0B1C38 100%);
                         box-shadow: 0 25px 60px -15px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.18);">
 
@@ -345,63 +345,63 @@
 
                 <div class="relative z-10 flex flex-col justify-between">
                     {{-- Header Kartu Besar --}}
-                    <div class="flex items-center justify-between pb-5 border-b border-white/15">
-                        <div class="flex items-center gap-3.5">
-                            <div class="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-blue-200 shadow-inner">
-                                <i class="fas fa-book-reader text-lg"></i>
+                    <div class="flex items-center justify-between pb-3.5 sm:pb-5 border-b border-white/15">
+                        <div class="flex items-center gap-2.5 sm:gap-3.5">
+                            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-blue-200 shadow-inner">
+                                <i class="fas fa-book-reader text-sm sm:text-lg"></i>
                             </div>
                             <div>
-                                <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-blue-200/80 leading-none">Kartu Tanda Anggota Digital</p>
-                                <h3 class="text-white font-extrabold text-lg sm:text-xl tracking-wide mt-1.5 leading-none">Perpustakaan</h3>
+                                <p class="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold text-blue-200/80 leading-none">Kartu Tanda Anggota Digital</p>
+                                <h3 class="text-white font-extrabold text-base sm:text-xl tracking-wide mt-1 sm:mt-1.5 leading-none">Perpustakaan</h3>
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 backdrop-blur-sm">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <div class="flex items-center gap-1.5 sm:gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 backdrop-blur-sm">
+                                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                                 Aktif
                             </span>
                             <button type="button"
                                     id="btn-close-card-modal"
                                     onclick="event.stopPropagation(); closeCardModal();"
-                                    class="w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 active:scale-90 text-white flex items-center justify-center transition-all cursor-pointer touch-manipulation z-20 ml-1"
+                                    class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 active:scale-90 text-white flex items-center justify-center transition-all cursor-pointer touch-manipulation z-20 ml-1"
                                     aria-label="Tutup Kartu">
-                                <i class="fas fa-times text-sm pointer-events-none"></i>
+                                <i class="fas fa-times text-xs sm:text-sm pointer-events-none"></i>
                             </button>
                         </div>
                     </div>
 
                     {{-- Isi Kartu Besar: Foto, Biodata & QR Code --}}
-                    <div class="py-6 flex items-center justify-between gap-5">
-                        <div class="flex items-center gap-4 sm:gap-5 min-w-0 flex-1">
+                    <div class="py-4 sm:py-6 flex items-center justify-between gap-3 sm:gap-5">
+                        <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
                             {{-- Foto Member --}}
                             <div class="relative flex-shrink-0">
                                 <img src="{{ $user->getAvatarUrl() }}"
                                      alt="{{ $user->name }}"
-                                     class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-white/20 shadow-xl">
-                                <span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs ring-2 ring-[#0A192F]" title="Terverifikasi">
+                                     class="w-14 h-14 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl object-cover ring-2 sm:ring-4 ring-white/20 shadow-xl">
+                                <span class="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] sm:text-xs ring-2 ring-[#0A192F]" title="Terverifikasi">
                                     <i class="fas fa-check"></i>
                                 </span>
                             </div>
 
-                            {{-- Teks Biodata --}}
-                            <div class="min-w-0">
-                                <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-white/10 text-blue-200 mb-1.5">
+                            {{-- Teks Biodata (Responsif, tidak terpotong) --}}
+                            <div class="min-w-0 flex-1">
+                                <span class="inline-block px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider bg-white/10 text-blue-200 mb-1 sm:mb-1.5">
                                     {{ $user->role === 'pengunjung' ? 'Anggota Pengunjung' : ucfirst($user->role) }}
                                 </span>
-                                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug truncate">
+                                <h4 class="text-sm sm:text-2xl font-bold text-white tracking-tight leading-snug break-words">
                                     {{ $user->name }}
                                 </h4>
-                                <div class="mt-1.5 space-y-1 text-xs sm:text-sm text-blue-100/80">
+                                <div class="mt-1 sm:mt-1.5 space-y-0.5 sm:space-y-1 text-xs sm:text-sm text-blue-100/80">
                                     @if($user->npm)
-                                        <p class="font-mono flex items-center gap-2 text-blue-200">
-                                            <i class="fas fa-id-badge text-xs opacity-75"></i>
+                                        <p class="font-mono flex items-center gap-1.5 sm:gap-2 text-blue-200">
+                                            <i class="fas fa-id-badge text-[10px] sm:text-xs opacity-75"></i>
                                             <span>{{ $user->npm }}</span>
                                         </p>
                                     @endif
                                     @if($user->prodi)
-                                        <p class="flex items-center gap-2 truncate">
-                                            <i class="fas fa-graduation-cap text-xs opacity-75"></i>
+                                        <p class="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs truncate text-blue-100/70">
+                                            <i class="fas fa-graduation-cap text-[10px] sm:text-xs opacity-75"></i>
                                             <span class="truncate">{{ $user->prodi }}</span>
                                         </p>
                                     @endif
@@ -413,33 +413,33 @@
                         <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group"
                              onclick="openQrModal();"
                              title="Klik untuk fokus QR Code scan">
-                            <div class="p-2 bg-white rounded-2xl shadow-xl transition-transform group-hover:scale-105">
-                                <div id="qr-modal-card" class="qr-box flex items-center justify-center bg-white rounded-xl overflow-hidden" style="width: 96px; height: 96px;">
+                            <div class="p-1.5 sm:p-2 bg-white rounded-xl sm:rounded-2xl shadow-xl transition-transform group-hover:scale-105">
+                                <div id="qr-modal-card" class="qr-box flex items-center justify-center bg-white rounded-lg sm:rounded-xl overflow-hidden w-[72px] h-[72px] sm:w-[96px] sm:h-[96px]">
                                     <img src="{{ $memberBarcode->getQrCodeDataUri(150) }}"
                                          alt="QR Code"
-                                         class="w-[96px] h-[96px] object-contain rounded-lg shadow-sm"
+                                         class="w-[72px] h-[72px] sm:w-[96px] sm:h-[96px] object-contain rounded-md sm:rounded-lg shadow-sm"
                                          loading="eager"
                                          onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($memberBarcode->barcode_code) }}&format=png&margin=1'">
                                 </div>
                             </div>
-                            <span class="text-[9px] uppercase tracking-wider text-blue-200/70 font-semibold mt-1.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                                <i class="fas fa-expand text-[8px]"></i> Perbesar QR
+                            <span class="text-[8px] sm:text-[9px] uppercase tracking-wider text-blue-200/70 font-semibold mt-1 sm:mt-1.5 flex items-center gap-1 group-hover:text-white transition-colors">
+                                <i class="fas fa-expand text-[7px] sm:text-[8px]"></i> Perbesar QR
                             </span>
                         </div>
                     </div>
 
                     {{-- Footer Kartu Besar --}}
-                    <div class="pt-4 border-t border-white/15 flex items-end justify-between">
+                    <div class="pt-3.5 sm:pt-4 border-t border-white/15 flex items-end justify-between text-[9px] sm:text-[10px]">
                         <div>
-                            <p class="text-[9px] uppercase tracking-[0.22em] font-semibold text-blue-200/60">Nomor Identitas Anggota</p>
-                            <p class="text-sm sm:text-base font-mono font-bold tracking-wider text-white mt-0.5">
+                            <p class="uppercase tracking-[0.2em] sm:tracking-[0.22em] font-semibold text-blue-200/60">Nomor Identitas Anggota</p>
+                            <p class="text-xs sm:text-base font-mono font-bold tracking-wider text-white mt-0.5">
                                 {{ $memberBarcode->barcode_code }}
                             </p>
                         </div>
 
                         <div class="text-right">
-                            <p class="text-[9px] uppercase tracking-[0.22em] font-semibold text-blue-200/60">Terdaftar Sejak</p>
-                            <p class="text-xs sm:text-sm font-medium text-blue-100 mt-0.5">
+                            <p class="uppercase tracking-[0.2em] sm:tracking-[0.22em] font-semibold text-blue-200/60">Terdaftar Sejak</p>
+                            <p class="text-[11px] sm:text-sm font-medium text-blue-100 mt-0.5">
                                 {{ $user->created_at->translatedFormat('d F Y') ?? $user->created_at->format('d M Y') }}
                             </p>
                         </div>
