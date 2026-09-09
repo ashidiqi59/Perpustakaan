@@ -42,7 +42,7 @@
                 </div>
 
                 <!-- Navigation Links (Desktop) -->
-                <div class="hidden md:flex items-center space-x-6">
+                <div class="hidden lg:flex items-center space-x-6">
                     <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">Beranda</a>
                     <a href="{{ route('books.collection') }}" class="{{ request()->routeIs('books.collection') || request()->routeIs('books.show') ? 'text-gray-900 font-semibold border-b-2 border-library-primary' : 'text-gray-600 hover:text-library-primary' }} transition-colors">Koleksi</a>
                     @auth
@@ -68,7 +68,7 @@
                 <!-- Right Icons -->
                 <div class="flex items-center space-x-4">
                     <!-- Mobile Menu Button -->
-                    <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 p-2">
+                    <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-600 p-2">
                         <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
@@ -76,7 +76,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
-                    <div class="hidden md:flex items-center space-x-4">
+                    <div class="hidden lg:flex items-center space-x-4">
                         @auth
                             <div class="flex items-center space-x-3">
                                 <a href="{{ route('profile') }}" class="flex items-center space-x-3 group hover:opacity-90 transition-opacity">
@@ -106,7 +106,7 @@
         </nav>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white">
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-100 bg-white">
             <div class="px-4 py-4 space-y-3">
                 <!-- Mobile Navigation Links -->
                 <a href="{{ route('home') }}" class="block py-2 px-3 rounded-lg {{ request()->routeIs('home') ? 'bg-library-light text-library-primary font-semibold' : 'text-gray-600 hover:bg-gray-50' }} transition-colors">Beranda</a>
