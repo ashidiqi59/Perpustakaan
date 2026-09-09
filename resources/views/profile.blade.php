@@ -35,21 +35,23 @@
     <x-page-loader />
     @include('components.navbar')
 
-    <main class="flex-grow pt-20 sm:pt-24 pb-16">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6">
-
-            <!-- Breadcrumb -->
-            <nav class="flex mb-6 text-sm text-gray-500" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-2">
-                    <li>
-                        <a href="{{ route('home') }}" class="hover:text-library-primary transition-colors flex items-center">
-                            <i class="fas fa-home mr-1.5"></i>Beranda
-                        </a>
-                    </li>
-                    <li><i class="fas fa-chevron-right text-xs text-gray-400"></i></li>
-                    <li class="font-semibold text-gray-800">Profil & Biodata</li>
-                </ol>
+    <!-- Breadcrumb (Persis seperti di Halaman Koleksi) -->
+    <div class="bg-white shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3">
+            <nav class="flex items-center text-sm text-gray-500" aria-label="Breadcrumb">
+                <a href="{{ route('home') }}" class="hover:text-library-primary transition-colors flex items-center">
+                    Beranda
+                </a>
+                <svg class="w-5 h-5 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+                <span class="text-gray-800 font-medium">Profil &amp; Biodata</span>
             </nav>
+        </div>
+    </div>
+
+    <main class="flex-grow pt-6 sm:pt-8 pb-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
             <!-- Alerts -->
             @if(session('success'))
