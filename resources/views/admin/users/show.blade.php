@@ -335,9 +335,18 @@
                                     </td>
                                     <td class="py-3 px-4 text-xs text-slate-600">
                                         @if($loan->return_date)
-                                            <span class="text-emerald-600 font-medium">
-                                                <i class="fas fa-check-circle mr-1"></i>{{ $loan->return_date->format('d/m/Y') }}
-                                            </span>
+                                            @if($loan->isReturnedLate())
+                                                <span class="text-amber-600 font-medium inline-flex items-center gap-1.5" title="Dikembalikan terlambat (Tenggat: {{ $loan->due_date?->format('d/m/Y') }})">
+                                                    <i class="fas fa-exclamation-triangle text-amber-500 text-xs"></i>
+                                                    <span>{{ $loan->return_date->format('d/m/Y') }}</span>
+                                                    <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-semibold">+{{ $loan->getDaysLate() }} hari</span>
+                                                </span>
+                                            @else
+                                                <span class="text-emerald-600 font-medium inline-flex items-center gap-1.5" title="Tepat waktu">
+                                                    <i class="fas fa-check-circle text-xs"></i>
+                                                    <span>{{ $loan->return_date->format('d/m/Y') }}</span>
+                                                </span>
+                                            @endif
                                         @elseif($loan->due_date)
                                             <span class="{{ $loan->getActualStatus() === 'terlambat' ? 'text-rose-600 font-semibold' : 'text-slate-600' }}">
                                                 {{ $loan->due_date->format('d/m/Y') }}
@@ -351,7 +360,15 @@
                                         @if($status === 'peminjaman')
                                             <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700">Dipinjam</span>
                                         @elseif($status === 'dikembalikan')
-                                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Dikembalikan</span>
+                                            @if($loan->isReturnedLate())
+                                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 whitespace-nowrap">
+                                                    Kembali (Terlambat)
+                                                </span>
+                                            @else
+                                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700 whitespace-nowrap">
+                                                    Dikembalikan
+                                                </span>
+                                            @endif
                                         @elseif($status === 'menunggu_konfirmasi')
                                             <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-700">Menunggu</span>
                                         @elseif($status === 'terlambat')

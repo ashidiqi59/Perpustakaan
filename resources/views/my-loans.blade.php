@@ -268,11 +268,20 @@
                                                     </p>
                                                 @endif
                                             @elseif($status === 'dikembalikan')
-                                                <span class="status-pill status-dikembalikan">
-                                                    <i class="fas fa-check-circle"></i> {{ $loan->isReturnedLate() ? 'Dikembalikan (Terlambat)' : 'Dikembalikan' }}
-                                                </span>
-                                                @if($loan->return_date)
-                                                    <p class="text-xs text-gray-500 mt-1">{{ $loan->return_date->format('d/m/Y') }}</p>
+                                                @if($loan->isReturnedLate())
+                                                    <span class="status-pill bg-amber-100 text-amber-800 border border-amber-200">
+                                                        <i class="fas fa-check-circle text-amber-600"></i> Dikembalikan (Terlambat)
+                                                    </span>
+                                                    @if($loan->return_date)
+                                                        <p class="text-xs text-amber-600 mt-1 font-medium">{{ $loan->return_date->format('d/m/Y') }} (+{{ $loan->getDaysLate() }} hari)</p>
+                                                    @endif
+                                                @else
+                                                    <span class="status-pill status-dikembalikan">
+                                                        <i class="fas fa-check-circle"></i> Dikembalikan
+                                                    </span>
+                                                    @if($loan->return_date)
+                                                        <p class="text-xs text-gray-500 mt-1">{{ $loan->return_date->format('d/m/Y') }}</p>
+                                                    @endif
                                                 @endif
                                             @elseif($status === 'terlambat')
                                                 <span class="status-pill status-terlambat">
@@ -352,7 +361,11 @@
                                     @elseif($status === 'menunggu_pengembalian')
                                         <span class="status-pill status-menunggu-kembali ml-2 whitespace-nowrap">Mau Kembali</span>
                                     @elseif($status === 'dikembalikan')
-                                        <span class="status-pill status-dikembalikan ml-2 whitespace-nowrap">Kembali</span>
+                                        @if($loan->isReturnedLate())
+                                            <span class="status-pill bg-amber-100 text-amber-800 border border-amber-200 ml-2 whitespace-nowrap">Kembali (Terlambat)</span>
+                                        @else
+                                            <span class="status-pill status-dikembalikan ml-2 whitespace-nowrap">Kembali</span>
+                                        @endif
                                     @elseif($status === 'terlambat')
                                         <span class="status-pill status-terlambat ml-2 whitespace-nowrap">Lambat</span>
                                     @else
@@ -372,7 +385,12 @@
                                     @if($status === 'dikembalikan' && $loan->return_date)
                                         <div>
                                             <p class="text-gray-600 text-xs">Kembali</p>
-                                            <p class="font-medium text-gray-900">{{ $loan->return_date->format('d/m/Y') }}</p>
+                                            <p class="font-medium {{ $loan->isReturnedLate() ? 'text-amber-700 font-semibold' : 'text-gray-900' }}">
+                                                {{ $loan->return_date->format('d/m/Y') }}
+                                                @if($loan->isReturnedLate())
+                                                    <span class="text-[11px] text-amber-600 font-normal block">+{{ $loan->getDaysLate() }} hari</span>
+                                                @endif
+                                            </p>
                                         </div>
                                     @endif
                                     @if($status === 'terlambat')
