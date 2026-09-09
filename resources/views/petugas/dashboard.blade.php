@@ -694,7 +694,7 @@ function prependAttendanceRow(user) {
         </td>
         <td class="px-4 py-3">
             <span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs rounded-full font-semibold whitespace-nowrap">
-                <i class="fas fa-clock mr-1"></i>${timeStr}
+                <i class="fas fa-clock mr-1"></i>${user.scanned_at ? user.scanned_at : timeStr}
             </span>
         </td>
     `;
