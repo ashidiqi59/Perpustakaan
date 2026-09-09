@@ -195,7 +195,7 @@
 
                 <!-- Right - Featured Books Stack (Placed above search on mobile) -->
                 <div class="fade-in-up delay-200 order-2 lg:order-none lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center flex justify-center max-w-full overflow-hidden sm:overflow-visible py-2 lg:py-4">
-                    <div class="relative h-[360px] sm:h-[385px] lg:h-[475px] w-[270px] sm:w-[290px] lg:w-[340px]">
+                    <div class="relative h-[360px] sm:h-[385px] lg:h-[445px] w-[270px] sm:w-[290px] lg:w-[320px]">
                         @forelse($featuredBooks as $index => $book)
                             @php
                                 $rotations = [-5, 2, -3];
@@ -203,7 +203,7 @@
                                 $topPositions = [0, 6, 12];
                                 $leftPositions = [0, 12, 24];
                             @endphp
-                            <div class="absolute w-[230px] h-[345px] sm:w-[250px] sm:h-[375px] lg:w-[290px] lg:h-[435px] rounded-lg shadow-2xl transform hover:rotate-0 transition-transform duration-300 group cursor-pointer"
+                            <div class="absolute w-[230px] h-[345px] sm:w-[250px] sm:h-[375px] lg:w-[270px] lg:h-[405px] rounded-lg shadow-2xl transform hover:rotate-0 transition-transform duration-300 group cursor-pointer"
                                 style="top: {{ $topPositions[$index] }}px; left: {{ $leftPositions[$index] }}px; transform: rotate({{ $rotations[$index] }}deg); z-index: {{ $zIndexes[$index] }};">
                                 <img src="{{ $book->image ? asset($book->image) : asset('images/books/spine&cover.jpg') }}" alt="{{ $book->title }}" class="w-full h-full object-cover rounded-lg shadow-2xl">
                                 <a href="{{ route('books.show', $book->id) }}" class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center">
@@ -216,9 +216,9 @@
                             </div>
                         @empty
                             <!-- Fallback if no books available -->
-                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 1" class="absolute top-0 left-0 w-[230px] h-[345px] sm:w-[250px] sm:h-[375px] lg:w-[290px] lg:h-[435px] object-cover rounded-lg shadow-2xl transform rotate-[-5deg] z-30 hover:rotate-0 transition-transform duration-300">
-                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 2" class="absolute top-6 left-12 w-[230px] h-[345px] sm:w-[250px] sm:h-[375px] lg:w-[290px] lg:h-[435px] object-cover rounded-lg shadow-2xl transform rotate-[2deg] z-20 hover:rotate-0 transition-transform duration-300">
-                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 3" class="absolute top-12 left-24 w-[230px] h-[345px] sm:w-[250px] sm:h-[375px] lg:w-[290px] lg:h-[435px] object-cover rounded-lg shadow-2xl transform rotate-[-3deg] z-10 hover:rotate-0 transition-transform duration-300">
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 1" class="absolute top-0 left-0 w-[230px] h-[345px] sm:w-[250px] sm:h-[375px] lg:w-[270px] lg:h-[405px] object-cover rounded-lg shadow-2xl transform rotate-[-5deg] z-30 hover:rotate-0 transition-transform duration-300">
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 2" class="absolute top-6 left-12 w-[230px] h-[345px] sm:w-[250px] sm:h-[375px] lg:w-[270px] lg:h-[405px] object-cover rounded-lg shadow-2xl transform rotate-[2deg] z-20 hover:rotate-0 transition-transform duration-300">
+                            <img src="{{ asset('images/books/spine&cover.jpg') }}" alt="Featured Book 3" class="absolute top-12 left-24 w-[230px] h-[345px] sm:w-[250px] sm:h-[375px] lg:w-[270px] lg:h-[405px] object-cover rounded-lg shadow-2xl transform rotate-[-3deg] z-10 hover:rotate-0 transition-transform duration-300">
                         @endforelse
                     </div>
                 </div>
