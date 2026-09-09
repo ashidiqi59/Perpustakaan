@@ -57,6 +57,64 @@ class PetugasController extends Controller
     }
 
     /**
+     * Halaman khusus scanner peminjaman & pengembalian buku (sirkulasi)
+     */
+    public function scannerSirkulasi()
+    {
+        $greatestFunc = DB::getDriverName() === 'sqlite' ? 'MAX' : 'GREATEST';
+
+        $recentScans = Loan::with('user', 'book')
+            ->where(function ($q) {
+                $q->whereNotNull('loan_barcode_scanned_at')
+                  ->orWhereNotNull('return_barcode_scanned_at');
+            })
+            ->orderByRaw("{$greatestFunc}(
+                COALESCE(loan_barcode_scanned_at, '1970-01-01'),
+                COALESCE(return_barcode_scanned_at, '1970-01-01')
+            ) DESC")
+            ->limit(20)
+            ->get();
+
+        $todayLoanScans   = Loan::whereDate('loan_barcode_scanned_at', today())->count();
+        $todayReturnScans = Loan::whereDate('return_barcode_scanned_at', today())->count();
+        $pendingLoans     = Loan::where('status', Loan::STATUS_MENUNGGU_KONFIRMASI)->count();
+        $pendingReturns   = Loan::where('status', Loan::STATUS_MENUNGGU_PENGEMBALIAN)->count();
+
+        return view('petugas.scanner-sirkulasi', compact(
+            'recentScans',
+            'todayLoanScans',
+            'todayReturnScans',
+            'pendingLoans',
+            'pendingReturns'
+        ));
+    }
+
+    /**
+     * Halaman khusus scanner presensi / check-in anggota perpustakaan
+     */
+    public function scannerPresensi()
+    {
+        $todayAttendance   = AttendanceLog::whereDate('scan_date', today())->count();
+        $totalWeek         = AttendanceLog::thisWeek()->count();
+        $totalMonth        = AttendanceLog::whereMonth('scan_date', now()->month)
+            ->whereYear('scan_date', now()->year)
+            ->count();
+
+        $recentAttendances = AttendanceLog::with('user')
+            ->whereDate('scan_date', today())
+            ->orderBy('scanned_at', 'desc')
+            ->limit(25)
+            ->get();
+
+        return view('petugas.scanner-presensi', compact(
+            'todayAttendance',
+            'totalWeek',
+            'totalMonth',
+            'recentAttendances'
+        ));
+    }
+
+    /**
      * Process scan of loan barcode (PINJAM).
      * Called when petugas scans the loan barcode → confirms the loan is active.
      */

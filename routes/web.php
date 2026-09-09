@@ -48,6 +48,8 @@ Route::middleware('prevent.staff')->group(function () {
 // ============================================================
 Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [PetugasController::class, 'dashboard'])->name('dashboard');
+    Route::get('/scanner-sirkulasi', [PetugasController::class, 'scannerSirkulasi'])->name('scanner.sirkulasi');
+    Route::get('/scanner-presensi', [PetugasController::class, 'scannerPresensi'])->name('scanner.presensi');
     Route::post('/scan/loan', [PetugasController::class, 'scanLoan'])->name('scan.loan');
     Route::post('/scan/return', [PetugasController::class, 'scanReturn'])->name('scan.return');
     Route::post('/api/scan', [PetugasController::class, 'apiScan'])->name('api.scan');

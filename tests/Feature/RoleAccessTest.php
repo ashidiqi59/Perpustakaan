@@ -143,14 +143,18 @@ class RoleAccessTest extends TestCase
 
         $this->get(route('admin.dashboard'))->assertStatus(200);
         $this->get(route('petugas.dashboard'))->assertStatus(200);
+        $this->get(route('petugas.scanner.sirkulasi'))->assertStatus(200);
+        $this->get(route('petugas.scanner.presensi'))->assertStatus(200);
     }
 
-    /** 9. Petugas CAN access petugas dashboard */
+    /** 9. Petugas CAN access petugas dashboard & scanners */
     public function test_petugas_can_access_petugas_dashboard(): void
     {
         $this->actingAs($this->petugas);
 
         $this->get(route('petugas.dashboard'))->assertStatus(200);
+        $this->get(route('petugas.scanner.sirkulasi'))->assertStatus(200);
+        $this->get(route('petugas.scanner.presensi'))->assertStatus(200);
     }
 
     /** 10. Pengunjung CAN access visitor pages */
