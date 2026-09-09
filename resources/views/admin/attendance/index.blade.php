@@ -60,15 +60,19 @@
                        class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
             </div>
 
+            <input type="hidden" name="filter" value="1">
+
             <div class="flex gap-2 w-full sm:w-auto">
                 <button type="submit"
                         class="flex-1 sm:flex-none px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
                     <i class="fas fa-search"></i> Cari
                 </button>
-                <a href="{{ route('admin.attendance.index') }}"
-                   class="flex-1 sm:flex-none px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
-                    <i class="fas fa-undo"></i> Reset
-                </a>
+                @if(request()->has('filter') || request()->hasAny(['date', 'name']))
+                    <a href="{{ route('admin.attendance.index') }}"
+                       class="flex-1 sm:flex-none px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                        <i class="fas fa-undo"></i> Reset
+                    </a>
+                @endif
             </div>
         </form>
     </div>
