@@ -72,9 +72,6 @@
                             <img src="{{ $user->getAvatarUrl() }}"
                                  alt="{{ $user->name }}"
                                  class="w-14 h-14 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl object-cover ring-2 sm:ring-4 ring-white/20 shadow-xl">
-                            <span class="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] sm:text-xs ring-2 ring-[#0A192F]" title="Terverifikasi">
-                                <i class="fas fa-check"></i>
-                            </span>
                         </div>
 
                         {{-- Teks Biodata (Responsif, tidak terpotong) --}}
