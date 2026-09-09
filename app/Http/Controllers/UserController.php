@@ -104,11 +104,14 @@ class UserController extends Controller
         ];
 
         if ($user->isPengunjung()) {
+            // Pastikan kartu anggota digital ada / dibuatkan otomatis jika belum ada
+            $memberBarcode = \App\Models\MemberBarcode::getOrCreateForUser($user);
+            $user->setRelation('memberBarcode', $memberBarcode);
+
             $user->load([
                 'loans' => function($q) {
                     $q->with('book')->latest();
                 },
-                'memberBarcode',
             ]);
 
             $loanStats = [

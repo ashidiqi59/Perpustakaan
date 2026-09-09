@@ -4,6 +4,15 @@
 @section('subtitle', 'Informasi lengkap akun pengguna perpustakaan')
 
 @section('header-actions')
+    @if($user->isPengunjung() && $user->memberBarcode)
+        <button type="button" 
+                onclick="openCardModal()" 
+                class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 sm:gap-2 shadow-sm cursor-pointer">
+            <i class="fas fa-id-card"></i>
+            <span class="hidden sm:inline">Lihat Kartu Anggota</span>
+            <span class="sm:hidden">Kartu</span>
+        </button>
+    @endif
     <a href="{{ route('admin.users.edit', $user->id) }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-amber-500 text-slate-900 text-xs sm:text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors flex items-center gap-1 sm:gap-2 shadow-sm">
         <i class="fas fa-edit"></i>
         <span class="hidden sm:inline">Edit Akun</span>
@@ -70,6 +79,16 @@
                     @endif
                 </div>
 
+                @if($user->isPengunjung() && $user->memberBarcode)
+                    <!-- LIHAT KARTU ANGGOTA BUTTON (KHUSUS MAHASISWA) -->
+                    <button type="button" 
+                            onclick="openCardModal()" 
+                            class="w-full max-w-[220px] mb-3 px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 hover:shadow-md active:scale-95 cursor-pointer">
+                        <i class="fas fa-id-card text-sm"></i>
+                        <span>Lihat Kartu Anggota</span>
+                    </button>
+                @endif
+
                 <!-- GOOGLE OAUTH INDICATOR -->
                 @if($user->isGoogleUser())
                     <span class="inline-flex items-center gap-1.5 text-xs text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-full shadow-2xs">
@@ -97,9 +116,16 @@
                                 <p class="text-xs text-slate-500">Rincian akun dinas pengelola dan operator sistem perpustakaan</p>
                             @endif
                         </div>
-                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
-                            ID: #{{ $user->id }}
-                        </span>
+                        @if($user->isPengunjung())
+                            <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs inline-flex items-center gap-1.5" title="Nomor Identitas Anggota Perpustakaan">
+                                <i class="fas fa-id-card text-blue-500"></i>
+                                <span>ID: {{ $user->memberBarcode?->barcode_code ?? ('MEMBER-' . $user->id) }}</span>
+                            </span>
+                        @else
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+                                ID: #{{ $user->id }}
+                            </span>
+                        @endif
                     </div>
 
                     @if($user->isPengunjung())
@@ -152,20 +178,27 @@
                             <!-- STATUS KARTU ANGGOTA / BARCODE -->
                             <div class="flex items-start gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 mt-0.5">
-                                    <i class="fas fa-qrcode text-sm"></i>
+                                    <i class="fas fa-id-card text-sm"></i>
                                 </div>
-                                <div class="min-w-0">
+                                <div class="min-w-0 flex-1">
                                     <p class="text-xs text-slate-500 font-medium">Kartu Anggota Digital</p>
-                                    <p class="text-sm font-semibold text-slate-800">
+                                    <div class="mt-1 flex flex-wrap items-center gap-2">
                                         @if($user->memberBarcode)
-                                            <span class="inline-flex items-center text-teal-700 font-mono text-xs">
+                                            <span class="inline-flex items-center text-teal-700 font-mono text-xs font-semibold bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200">
                                                 <i class="fas fa-check-circle mr-1 text-teal-500"></i>
                                                 {{ $user->memberBarcode->barcode_code }}
                                             </span>
+                                            <button type="button" 
+                                                    onclick="openCardModal()" 
+                                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-2xs transition-all active:scale-95 cursor-pointer"
+                                                    title="Lihat Kartu Anggota Digital">
+                                                <i class="fas fa-eye text-[10px]"></i>
+                                                <span>Lihat Kartu</span>
+                                            </button>
                                         @else
                                             <span class="text-xs text-slate-400">Belum di-generate</span>
                                         @endif
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -574,4 +607,27 @@
             <span>Kembali ke Daftar</span>
         </a>
     </div>
+
+    @if($user->isPengunjung() && $user->memberBarcode)
+        @include('components.member-card-modals', ['user' => $user, 'memberBarcode' => $user->memberBarcode])
+    @endif
 @endsection
+
+@push('styles')
+<style>
+    .card-security-pattern {
+        background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+        background-size: 16px 16px;
+    }
+    .qr-box canvas,
+    #qr-modal-big canvas,
+    #qr-modal-card canvas {
+        display: none !important;
+    }
+    .qr-box img,
+    #qr-modal-big img,
+    #qr-modal-card img {
+        display: block !important;
+    }
+</style>
+@endpush
