@@ -70,10 +70,10 @@
     @include('components.navbar')
 
     <!-- Sub-Navbar / Breadcrumb -->
-    @include('components.sub-navbar', ['title' => 'Riwayat Kunjungan', 'maxWidth' => 'max-w-5xl'])
+    @include('components.sub-navbar', ['title' => 'Riwayat Kunjungan', 'maxWidth' => 'max-w-6xl'])
 
     <div class="min-h-screen pt-6 sm:pt-8 pb-12 sm:pb-16">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
             {{-- Header --}}
             <div class="mb-6 sm:mb-8">
