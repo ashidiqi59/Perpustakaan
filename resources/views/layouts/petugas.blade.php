@@ -276,24 +276,24 @@
                 <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
                     <a href="{{ route('petugas.dashboard') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('petugas.dashboard') ? 'bg-amber-500 text-slate-900 font-semibold shadow-sm' : 'text-slate-300 hover:bg-slate-800' }}">
                         <i class="fas fa-qrcode w-5 text-center text-base"></i>
-                        <span class="nav-text">Scanner Utama (Auto)</span>
+                        <span class="nav-text">Scanner Barcode</span>
                     </a>
 
                     <div class="border-t border-slate-700/60 my-2"></div>
-                    <p class="nav-text text-[10px] text-slate-400 px-4 py-1 uppercase font-semibold tracking-wider">Scanner Khusus</p>
+                    <p class="nav-text text-[10px] text-slate-400 px-4 py-1 uppercase font-semibold tracking-wider">Aktivitas Hari Ini</p>
 
                     <a href="{{ route('petugas.scanner.sirkulasi') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors {{ request()->routeIs('petugas.scanner.sirkulasi') ? 'bg-indigo-600 text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-slate-800' }}">
-                        <i class="fas fa-book-reader w-5 text-center"></i>
-                        <span class="nav-text">Pinjam & Kembali</span>
+                        <i class="fas fa-exchange-alt w-5 text-center"></i>
+                        <span class="nav-text">Sirkulasi Buku</span>
                     </a>
 
                     <a href="{{ route('petugas.scanner.presensi') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors {{ request()->routeIs('petugas.scanner.presensi') ? 'bg-violet-600 text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-slate-800' }}">
-                        <i class="fas fa-id-card w-5 text-center"></i>
+                        <i class="fas fa-users w-5 text-center"></i>
                         <span class="nav-text">Presensi Pengunjung</span>
                     </a>
 
                     <a href="{{ route('petugas.attendance.history') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors {{ request()->routeIs('petugas.attendance.history') ? 'bg-slate-700 text-white font-semibold shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200' }}">
-                        <i class="fas fa-clipboard-check w-5 text-center"></i>
+                        <i class="fas fa-history w-5 text-center"></i>
                         <span class="nav-text">Riwayat Presensi</span>
                     </a>
 

@@ -161,7 +161,7 @@
                 </div>
                 <a href="{{ route('petugas.scanner.sirkulasi') }}"
                    class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
-                    Scanner Khusus <i class="fas fa-arrow-right text-[10px]"></i>
+                    Selengkapnya <i class="fas fa-arrow-right text-[10px]"></i>
                 </a>
             </div>
 
@@ -237,9 +237,9 @@
                     <span class="px-2.5 py-1 bg-violet-100 text-violet-700 text-xs rounded-full font-bold" id="badge-attendance-count">
                         {{ $todayAttendance }} Orang
                     </span>
-                    <a href="{{ route('petugas.attendance.history') }}"
+                    <a href="{{ route('petugas.scanner.presensi') }}"
                        class="text-xs font-semibold text-violet-600 hover:text-violet-800 flex items-center gap-1">
-                        Riwayat <i class="fas fa-arrow-right text-[10px]"></i>
+                        Selengkapnya <i class="fas fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
             </div>

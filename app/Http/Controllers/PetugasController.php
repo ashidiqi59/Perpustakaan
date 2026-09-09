@@ -57,31 +57,28 @@ class PetugasController extends Controller
     }
 
     /**
-     * Halaman khusus scanner peminjaman & pengembalian buku (sirkulasi)
+     * Halaman data sirkulasi buku hari ini (siapa yang pinjam & kembalikan)
      */
-    public function scannerSirkulasi()
+    public function scannerSirkulasi(Request $request)
     {
-        $greatestFunc = DB::getDriverName() === 'sqlite' ? 'MAX' : 'GREATEST';
-
-        $recentScans = Loan::with('user', 'book')
-            ->where(function ($q) {
-                $q->whereNotNull('loan_barcode_scanned_at')
-                  ->orWhereNotNull('return_barcode_scanned_at');
-            })
-            ->orderByRaw("{$greatestFunc}(
-                COALESCE(loan_barcode_scanned_at, '1970-01-01'),
-                COALESCE(return_barcode_scanned_at, '1970-01-01')
-            ) DESC")
-            ->limit(20)
+        $todayLoans = Loan::with('user', 'book')
+            ->whereDate('loan_barcode_scanned_at', today())
+            ->orderBy('loan_barcode_scanned_at', 'desc')
             ->get();
 
-        $todayLoanScans   = Loan::whereDate('loan_barcode_scanned_at', today())->count();
-        $todayReturnScans = Loan::whereDate('return_barcode_scanned_at', today())->count();
+        $todayReturns = Loan::with('user', 'book')
+            ->whereDate('return_barcode_scanned_at', today())
+            ->orderBy('return_barcode_scanned_at', 'desc')
+            ->get();
+
+        $todayLoanScans   = $todayLoans->count();
+        $todayReturnScans = $todayReturns->count();
         $pendingLoans     = Loan::where('status', Loan::STATUS_MENUNGGU_KONFIRMASI)->count();
         $pendingReturns   = Loan::where('status', Loan::STATUS_MENUNGGU_PENGEMBALIAN)->count();
 
         return view('petugas.scanner-sirkulasi', compact(
-            'recentScans',
+            'todayLoans',
+            'todayReturns',
             'todayLoanScans',
             'todayReturnScans',
             'pendingLoans',
@@ -90,27 +87,37 @@ class PetugasController extends Controller
     }
 
     /**
-     * Halaman khusus scanner presensi / check-in anggota perpustakaan
+     * Halaman data presensi / kehadiran pengunjung hari ini
      */
-    public function scannerPresensi()
+    public function scannerPresensi(Request $request)
     {
-        $todayAttendance   = AttendanceLog::whereDate('scan_date', today())->count();
-        $totalWeek         = AttendanceLog::thisWeek()->count();
-        $totalMonth        = AttendanceLog::whereMonth('scan_date', now()->month)
+        $search = $request->input('search');
+
+        $query = AttendanceLog::with('user')
+            ->whereDate('scan_date', today())
+            ->orderBy('scanned_at', 'desc');
+
+        if ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('npm', 'like', "%{$search}%")
+                  ->orWhere('prodi', 'like', "%{$search}%");
+            });
+        }
+
+        $attendances     = $query->paginate(25)->withQueryString();
+        $todayAttendance = AttendanceLog::whereDate('scan_date', today())->count();
+        $totalWeek       = AttendanceLog::thisWeek()->count();
+        $totalMonth      = AttendanceLog::whereMonth('scan_date', now()->month)
             ->whereYear('scan_date', now()->year)
             ->count();
 
-        $recentAttendances = AttendanceLog::with('user')
-            ->whereDate('scan_date', today())
-            ->orderBy('scanned_at', 'desc')
-            ->limit(25)
-            ->get();
-
         return view('petugas.scanner-presensi', compact(
+            'attendances',
             'todayAttendance',
             'totalWeek',
             'totalMonth',
-            'recentAttendances'
+            'search'
         ));
     }
 
