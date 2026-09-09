@@ -26,40 +26,70 @@
     @endif
 
     {{-- STATS CARDS --}}
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
-        <div class="bg-gradient-to-br from-violet-600 to-indigo-700 rounded-xl p-4 sm:p-5 shadow-md text-white col-span-2 sm:col-span-1">
-            <p class="text-[11px] font-semibold text-violet-200 uppercase tracking-wider">Pengunjung Hari Ini</p>
-            <h3 class="text-2xl font-bold mt-1" id="stat-today-attendance">
-                {{ $todayAttendance }} <span class="text-xs font-normal text-violet-200">Orang</span>
-            </h3>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+        {{-- Pengunjung Hari Ini --}}
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between col-span-2 sm:col-span-1">
+            <div>
+                <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Pengunjung Hari Ini</p>
+                <h3 class="text-2xl font-bold text-violet-600 mt-1" id="stat-today-attendance">
+                    {{ $todayAttendance }} <span class="text-xs font-normal text-slate-400">Orang</span>
+                </h3>
+            </div>
+            <div class="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-violet-600 shrink-0">
+                <i class="fas fa-users text-xl"></i>
+            </div>
         </div>
 
-        <div class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-slate-200/80">
-            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Scan Pinjam Hari Ini</p>
-            <h3 class="text-2xl font-bold text-emerald-600 mt-1" id="stat-today-loans">
-                {{ $todayLoanScans }} <span class="text-xs font-normal text-slate-400">Buku</span>
-            </h3>
+        {{-- Dipinjam Hari Ini --}}
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+            <div>
+                <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Dipinjam Hari Ini</p>
+                <h3 class="text-2xl font-bold text-emerald-600 mt-1" id="stat-today-loans">
+                    {{ $todayLoanScans }} <span class="text-xs font-normal text-slate-400">Buku</span>
+                </h3>
+            </div>
+            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shrink-0">
+                <i class="fas fa-book text-xl"></i>
+            </div>
         </div>
 
-        <div class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-slate-200/80">
-            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Scan Kembali Hari Ini</p>
-            <h3 class="text-2xl font-bold text-blue-600 mt-1" id="stat-today-returns">
-                {{ $todayReturnScans }} <span class="text-xs font-normal text-slate-400">Buku</span>
-            </h3>
+        {{-- Dikembalikan Hari Ini --}}
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+            <div>
+                <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Dikembalikan Hari Ini</p>
+                <h3 class="text-2xl font-bold text-blue-600 mt-1" id="stat-today-returns">
+                    {{ $todayReturnScans }} <span class="text-xs font-normal text-slate-400">Buku</span>
+                </h3>
+            </div>
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shrink-0">
+                <i class="fas fa-undo text-xl"></i>
+            </div>
         </div>
 
-        <div class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-slate-200/80">
-            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Menunggu Pinjam</p>
-            <h3 class="text-2xl font-bold text-amber-500 mt-1" id="stat-pending-loans">
-                {{ $pendingLoans }} <span class="text-xs font-normal text-slate-400">Tiket</span>
-            </h3>
+        {{-- Menunggu Pinjam --}}
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+            <div>
+                <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Menunggu Pinjam</p>
+                <h3 class="text-2xl font-bold text-amber-500 mt-1" id="stat-pending-loans">
+                    {{ $pendingLoans }} <span class="text-xs font-normal text-slate-400">Tiket</span>
+                </h3>
+            </div>
+            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 shrink-0">
+                <i class="fas fa-clock text-xl"></i>
+            </div>
         </div>
 
-        <div class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-slate-200/80 col-span-2 sm:col-span-1 lg:col-span-1">
-            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Menunggu Kembali</p>
-            <h3 class="text-2xl font-bold text-indigo-600 mt-1" id="stat-pending-returns">
-                {{ $pendingReturns }} <span class="text-xs font-normal text-slate-400">Tiket</span>
-            </h3>
+        {{-- Menunggu Kembali --}}
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between col-span-2 sm:col-span-1 lg:col-span-1">
+            <div>
+                <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Menunggu Kembali</p>
+                <h3 class="text-2xl font-bold text-indigo-600 mt-1" id="stat-pending-returns">
+                    {{ $pendingReturns }} <span class="text-xs font-normal text-slate-400">Tiket</span>
+                </h3>
+            </div>
+            <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 shrink-0">
+                <i class="fas fa-undo-alt text-xl"></i>
+            </div>
         </div>
     </div>
 
@@ -156,7 +186,7 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-slate-800">Sirkulasi Buku Terbaru</h3>
-                        <p class="text-xs text-slate-500">Aktivitas pinjam & kembali terkini</p>
+                        <p class="text-xs text-slate-500">5 aktivitas pinjam & kembali terkini</p>
                     </div>
                 </div>
                 <a href="{{ route('petugas.scanner.sirkulasi') }}"
@@ -230,7 +260,7 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-slate-800">Check-In Hari Ini</h3>
-                        <p class="text-xs text-slate-500">{{ now()->translatedFormat('l, d F Y') }}</p>
+                        <p class="text-xs text-slate-500">5 pengunjung terbaru hari ini</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -565,6 +595,9 @@ function prependAttendanceRow(user) {
         </td>
     `;
     tbody.prepend(tr);
+    while (tbody.children.length > 5) {
+        tbody.lastElementChild.remove();
+    }
     setTimeout(() => tr.classList.remove('bg-violet-50/80'), 3000);
 }
 
@@ -599,6 +632,9 @@ function prependCirculationRow(data) {
         </td>
     `;
     tbody.prepend(tr);
+    while (tbody.children.length > 5) {
+        tbody.lastElementChild.remove();
+    }
     setTimeout(() => tr.classList.remove('bg-indigo-50/80'), 3000);
 }
 
@@ -611,7 +647,7 @@ function incrementAttendanceCounter() {
     }
     if (stat) {
         const current = parseInt(stat.textContent) || 0;
-        stat.innerHTML = (current + 1) + ' <span class="text-xs font-normal text-violet-200">Orang</span>';
+        stat.innerHTML = (current + 1) + ' <span class="text-xs font-normal text-slate-400">Orang</span>';
     }
 }
 

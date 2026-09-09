@@ -129,7 +129,7 @@ class AttendanceController extends Controller
             ->whereYear('scan_date', now()->year)
             ->count();
 
-        return view('petugas.attendance', compact('logs', 'date', 'name', 'totalToday', 'totalWeek', 'totalMonth'));
+        return view('admin.attendance.index', compact('logs', 'date', 'name', 'totalToday', 'totalWeek', 'totalMonth'));
     }
 
     /**

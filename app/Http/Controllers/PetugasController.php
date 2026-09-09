@@ -28,7 +28,7 @@ class PetugasController extends Controller
                 COALESCE(loan_barcode_scanned_at, '1970-01-01'),
                 COALESCE(return_barcode_scanned_at, '1970-01-01')
             ) DESC")
-            ->limit(20)
+            ->limit(5)
             ->get();
 
         // Today's scan stats
@@ -42,7 +42,7 @@ class PetugasController extends Controller
         $recentAttendances  = AttendanceLog::with('user')
             ->whereDate('scan_date', today())
             ->orderBy('scanned_at', 'desc')
-            ->limit(10)
+            ->limit(5)
             ->get();
 
         return view('petugas.dashboard', compact(

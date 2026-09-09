@@ -134,6 +134,10 @@ class RoleAccessTest extends TestCase
         $this->get(route('admin.dashboard'))
             ->assertRedirect(route('petugas.dashboard'))
             ->assertSessionHas('error');
+
+        $this->get(route('admin.attendance.index'))
+            ->assertRedirect(route('petugas.dashboard'))
+            ->assertSessionHas('error');
     }
 
     /** 8. Admin CAN access admin dashboard and petugas scanner */
@@ -142,6 +146,7 @@ class RoleAccessTest extends TestCase
         $this->actingAs($this->admin);
 
         $this->get(route('admin.dashboard'))->assertStatus(200);
+        $this->get(route('admin.attendance.index'))->assertStatus(200);
         $this->get(route('petugas.dashboard'))->assertStatus(200);
         $this->get(route('petugas.scanner.sirkulasi'))->assertStatus(200);
         $this->get(route('petugas.scanner.presensi'))->assertStatus(200);

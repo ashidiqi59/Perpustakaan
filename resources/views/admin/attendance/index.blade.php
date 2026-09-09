@@ -1,19 +1,19 @@
-@extends('layouts.petugas')
+@extends('layouts.admin')
 
 @section('title', 'Riwayat Presensi Anggota')
-@section('subtitle', 'Catatan kehadiran pengunjung perpustakaan')
+@section('subtitle', 'Arsip dan catatan kehadiran pengunjung perpustakaan')
 
 @section('content')
 
     {{-- STATS CARDS --}}
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div class="bg-gradient-to-br from-violet-600 to-indigo-700 rounded-xl p-5 shadow-md flex items-center justify-between">
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
             <div>
-                <p class="text-xs font-semibold text-violet-200 uppercase tracking-wider">Pengunjung Hari Ini</p>
-                <h3 class="text-2xl font-bold text-white mt-1">{{ $totalToday }} <span class="text-sm font-normal text-violet-300">Orang</span></h3>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pengunjung Hari Ini</p>
+                <h3 class="text-2xl font-bold text-violet-600 mt-1">{{ $totalToday }} <span class="text-sm font-normal text-slate-400">Orang</span></h3>
             </div>
-            <div class="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center text-white shrink-0">
-                <i class="fas fa-calendar-day text-xl"></i>
+            <div class="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-violet-600 shrink-0">
+                <i class="fas fa-users text-xl"></i>
             </div>
         </div>
 
@@ -40,10 +40,10 @@
 
     {{-- FILTER BAR --}}
     <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4 sm:p-5 mb-6">
-        <form method="GET" action="{{ route('petugas.attendance.history') }}"
+        <form method="GET" action="{{ route('admin.attendance.index') }}"
               class="flex flex-col sm:flex-row gap-3 items-end">
 
-            <div class="flex-1">
+            <div class="flex-1 w-full">
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5">
                     <i class="fas fa-calendar mr-1 text-violet-500"></i> Filter Tanggal
                 </label>
@@ -51,7 +51,7 @@
                        class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
             </div>
 
-            <div class="flex-1">
+            <div class="flex-1 w-full">
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5">
                     <i class="fas fa-search mr-1 text-violet-500"></i> Cari Nama
                 </label>
@@ -60,13 +60,13 @@
                        class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
             </div>
 
-            <div class="flex gap-2">
+            <div class="flex gap-2 w-full sm:w-auto">
                 <button type="submit"
-                        class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-1.5">
-                    <i class="fas fa-filter"></i> Filter
+                        class="flex-1 sm:flex-none px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                    <i class="fas fa-search"></i> Cari
                 </button>
-                <a href="{{ route('petugas.attendance.history') }}"
-                   class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-lg transition-colors flex items-center gap-1.5">
+                <a href="{{ route('admin.attendance.index') }}"
+                   class="flex-1 sm:flex-none px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
                     <i class="fas fa-undo"></i> Reset
                 </a>
             </div>

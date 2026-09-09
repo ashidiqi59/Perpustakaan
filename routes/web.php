@@ -56,7 +56,6 @@ Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->gro
 
     // Presensi / Kartu Anggota
     Route::post('/api/scan-member', [AttendanceController::class, 'apiScan'])->name('api.scan-member');
-    Route::get('/attendance', [AttendanceController::class, 'history'])->name('attendance.history');
 });
 
 // ============================================================
@@ -101,6 +100,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::get('/loans/{loan}/edit', [LoanController::class, 'adminEdit'])->name('loans.edit');
         Route::put('/loans/{loan}', [LoanController::class, 'adminUpdate'])->name('loans.update');
         Route::delete('/loans/{loan}', [LoanController::class, 'adminDestroy'])->name('loans.destroy');
+
+        // Admin Attendance History (Riwayat Kunjungan)
+        Route::get('/attendance', [AttendanceController::class, 'history'])->name('attendance.index');
     });
 });
 

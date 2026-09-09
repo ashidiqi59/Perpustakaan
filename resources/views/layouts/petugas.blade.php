@@ -292,21 +292,20 @@
                         <span class="nav-text">Presensi Pengunjung</span>
                     </a>
 
-                    <a href="{{ route('petugas.attendance.history') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors {{ request()->routeIs('petugas.attendance.history') ? 'bg-slate-700 text-white font-semibold shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200' }}">
-                        <i class="fas fa-history w-5 text-center"></i>
-                        <span class="nav-text">Riwayat Presensi</span>
-                    </a>
-
                     @if(auth()->user()->isAdmin())
                         <div class="border-t border-slate-700 my-2"></div>
                         <p class="nav-text text-xs text-slate-500 px-4 py-1 uppercase font-semibold tracking-wider">Admin</p>
-                        <a href="{{ route('admin.dashboard') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-slate-300 hover:bg-slate-800">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors text-slate-300 hover:bg-slate-800">
                             <i class="fas fa-tachometer-alt w-5 text-center"></i>
                             <span class="nav-text">Admin Dashboard</span>
                         </a>
-                        <a href="{{ route('admin.loans.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-slate-300 hover:bg-slate-800">
+                        <a href="{{ route('admin.loans.index') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors text-slate-300 hover:bg-slate-800">
                             <i class="fas fa-clipboard-list w-5 text-center"></i>
                             <span class="nav-text">Kelola Peminjaman</span>
+                        </a>
+                        <a href="{{ route('admin.attendance.index') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors text-slate-300 hover:bg-slate-800">
+                            <i class="fas fa-history w-5 text-center"></i>
+                            <span class="nav-text">Riwayat Presensi</span>
                         </a>
                     @endif
                 </nav>

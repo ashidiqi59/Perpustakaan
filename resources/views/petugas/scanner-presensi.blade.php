@@ -16,11 +16,7 @@
                 <p class="text-xs text-slate-500">Seluruh anggota yang telah melakukan check-in pada hari ini</p>
             </div>
         </div>
-        <div class="flex items-center gap-2">
-            <a href="{{ route('petugas.attendance.history') }}"
-               class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-all flex items-center gap-1.5">
-                <i class="fas fa-history text-slate-500"></i> Riwayat Lengkap
-            </a>
+        <div>
             <a href="{{ route('petugas.dashboard') }}"
                class="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold rounded-xl transition-all shadow-sm flex items-center gap-1.5">
                 <i class="fas fa-qrcode"></i> Buka Scanner Barcode
@@ -30,15 +26,15 @@
 
     {{-- STATS CARDS --}}
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div class="bg-gradient-to-br from-violet-600 to-indigo-700 rounded-xl p-5 shadow-md flex items-center justify-between text-white">
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
             <div>
-                <p class="text-xs font-semibold text-violet-200 uppercase tracking-wider">Pengunjung Hari Ini</p>
-                <h3 class="text-2xl font-bold mt-1">
-                    {{ $todayAttendance }} <span class="text-sm font-normal text-violet-200">Orang</span>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pengunjung Hari Ini</p>
+                <h3 class="text-2xl font-bold text-violet-600 mt-1">
+                    {{ $todayAttendance }} <span class="text-sm font-normal text-slate-400">Orang</span>
                 </h3>
             </div>
-            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
-                <i class="fas fa-user-check text-xl"></i>
+            <div class="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-violet-600 shrink-0">
+                <i class="fas fa-users text-xl"></i>
             </div>
         </div>
 
@@ -77,8 +73,8 @@
                        class="w-full pl-9 pr-4 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent">
             </div>
             <button type="submit"
-                    class="w-full sm:w-auto px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold rounded-xl transition-colors shrink-0">
-                <i class="fas fa-filter mr-1"></i> Filter
+                    class="w-full sm:w-auto px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition-colors shrink-0">
+                <i class="fas fa-search mr-1"></i> Cari
             </button>
             @if($search)
                 <a href="{{ route('petugas.scanner.presensi') }}"
