@@ -251,4 +251,26 @@ class RoleAccessTest extends TestCase
         $this->assertEquals('admin', $this->admin->role);
         $this->assertEquals('Admin Updated', $this->admin->name);
     }
+
+    /** 15. Logout redirects to home page for all roles */
+    public function test_logout_redirects_to_home_for_all_roles(): void
+    {
+        // 1. Admin
+        $this->actingAs($this->admin);
+        $resAdmin = $this->post(route('logout'));
+        $resAdmin->assertRedirect(route('home'));
+        $this->assertGuest();
+
+        // 2. Petugas
+        $this->actingAs($this->petugas);
+        $resPetugas = $this->post(route('logout'));
+        $resPetugas->assertRedirect(route('home'));
+        $this->assertGuest();
+
+        // 3. Pengunjung
+        $this->actingAs($this->pengunjung);
+        $resPengunjung = $this->post(route('logout'));
+        $resPengunjung->assertRedirect(route('home'));
+        $this->assertGuest();
+    }
 }

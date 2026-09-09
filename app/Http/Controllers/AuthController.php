@@ -198,7 +198,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login')->with('success', 'Logout berhasil!');
+        return redirect()->route('home')->with('success', 'Logout berhasil!');
     }
 
     /**
