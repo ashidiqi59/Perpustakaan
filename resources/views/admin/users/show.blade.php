@@ -3,27 +3,6 @@
 @section('title', 'Detail Pengguna')
 @section('subtitle', 'Informasi lengkap akun pengguna perpustakaan')
 
-@section('header-actions')
-    @if($user->isPengunjung() && $user->memberBarcode)
-        <button type="button" 
-                onclick="openCardModal()" 
-                class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 sm:gap-2 shadow-sm cursor-pointer">
-            <i class="fas fa-id-card"></i>
-            <span class="hidden sm:inline">Lihat Kartu Anggota</span>
-            <span class="sm:hidden">Kartu</span>
-        </button>
-    @endif
-    <a href="{{ route('admin.users.edit', $user->id) }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-amber-500 text-slate-900 text-xs sm:text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors flex items-center gap-1 sm:gap-2 shadow-sm">
-        <i class="fas fa-edit"></i>
-        <span class="hidden sm:inline">Edit Akun</span>
-        <span class="sm:hidden">Edit</span>
-    </a>
-    <a href="{{ route('admin.users.index') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-slate-500 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-slate-600 transition-colors flex items-center gap-1 sm:gap-2 shadow-sm">
-        <i class="fas fa-arrow-left"></i>
-        <span class="hidden sm:inline">Kembali</span>
-    </a>
-@endsection
-
 @section('content')
     <!-- PROFILE OVERVIEW CARD -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden mb-6">
@@ -38,55 +17,38 @@
                         {{ $user->role === 'admin' ? 'bg-amber-500' : ($user->role === 'petugas' ? 'bg-blue-500' : 'bg-emerald-500') }}"></span>
                 </div>
 
-                <h2 class="text-xl font-bold text-slate-900 mb-1">{{ $user->name }}</h2>
+                <h2 class="text-xl font-bold text-slate-900 mb-2">{{ $user->name }}</h2>
                 
-                @if($user->isPengunjung())
-                    @if($user->npm)
-                        <p class="text-xs font-mono text-slate-600 bg-slate-200/70 px-2.5 py-1 rounded-md mb-3 inline-flex items-center gap-1.5">
-                            <i class="fas fa-id-card text-slate-500"></i>
-                            <span>NPM: {{ $user->npm }}</span>
-                        </p>
-                    @else
-                        <p class="text-xs text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-3 border border-amber-200 inline-flex items-center gap-1">
-                            <i class="fas fa-exclamation-circle text-amber-500"></i>
-                            <span>NPM Belum Diisi</span>
-                        </p>
-                    @endif
-                @else
+                @if(!$user->isPengunjung())
                     <p class="text-xs font-medium text-slate-600 bg-slate-200/60 px-3 py-1 rounded-md mb-3 inline-flex items-center gap-1.5">
                         <i class="fas {{ $user->isAdmin() ? 'fa-shield-alt text-amber-600' : 'fa-id-badge text-blue-600' }}"></i>
                         <span>{{ $user->isAdmin() ? 'Administrator Sistem' : 'Petugas Layanan & Sirkulasi' }}</span>
                     </p>
-                @endif
 
-                <!-- ROLE BADGE -->
-                <div class="mb-4">
-                    @if($user->role === 'admin')
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200 shadow-2xs">
-                            <i class="fas fa-shield-alt text-amber-600"></i>
-                            <span>Admin Perpustakaan</span>
-                        </span>
-                    @elseif($user->role === 'petugas')
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200 shadow-2xs">
-                            <i class="fas fa-id-badge text-blue-600"></i>
-                            <span>Petugas Perpustakaan</span>
-                        </span>
-                    @else
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-2xs">
-                            <i class="fas fa-user-graduate text-emerald-600"></i>
-                            <span>Pengunjung / Mahasiswa</span>
-                        </span>
+                    <!-- ROLE BADGE UNTUK STAF -->
+                    <div class="mb-4">
+                        @if($user->role === 'admin')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200 shadow-2xs">
+                                <i class="fas fa-shield-alt text-amber-600"></i>
+                                <span>Admin Perpustakaan</span>
+                            </span>
+                        @elseif($user->role === 'petugas')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200 shadow-2xs">
+                                <i class="fas fa-id-badge text-blue-600"></i>
+                                <span>Petugas Perpustakaan</span>
+                            </span>
+                        @endif
+                    </div>
+                @else
+                    @if($user->memberBarcode)
+                        <!-- LIHAT KARTU ANGGOTA BUTTON (SATU-SATUNYA TOMBOL DI KIRI) -->
+                        <button type="button" 
+                                onclick="openCardModal()" 
+                                class="w-full max-w-[220px] mb-3 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 hover:shadow-md active:scale-95 cursor-pointer">
+                            <i class="fas fa-id-card text-sm"></i>
+                            <span>Lihat Kartu Anggota</span>
+                        </button>
                     @endif
-                </div>
-
-                @if($user->isPengunjung() && $user->memberBarcode)
-                    <!-- LIHAT KARTU ANGGOTA BUTTON (KHUSUS MAHASISWA) -->
-                    <button type="button" 
-                            onclick="openCardModal()" 
-                            class="w-full max-w-[220px] mb-3 px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 hover:shadow-md active:scale-95 cursor-pointer">
-                        <i class="fas fa-id-card text-sm"></i>
-                        <span>Lihat Kartu Anggota</span>
-                    </button>
                 @endif
 
                 <!-- GOOGLE OAUTH INDICATOR -->
@@ -175,33 +137,6 @@
                                 </div>
                             </div>
 
-                            <!-- STATUS KARTU ANGGOTA / BARCODE -->
-                            <div class="flex items-start gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 mt-0.5">
-                                    <i class="fas fa-id-card text-sm"></i>
-                                </div>
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-xs text-slate-500 font-medium">Kartu Anggota Digital</p>
-                                    <div class="mt-1 flex flex-wrap items-center gap-2">
-                                        @if($user->memberBarcode)
-                                            <span class="inline-flex items-center text-teal-700 font-mono text-xs font-semibold bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200">
-                                                <i class="fas fa-check-circle mr-1 text-teal-500"></i>
-                                                {{ $user->memberBarcode->barcode_code }}
-                                            </span>
-                                            <button type="button" 
-                                                    onclick="openCardModal()" 
-                                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-2xs transition-all active:scale-95 cursor-pointer"
-                                                    title="Lihat Kartu Anggota Digital">
-                                                <i class="fas fa-eye text-[10px]"></i>
-                                                <span>Lihat Kartu</span>
-                                            </button>
-                                        @else
-                                            <span class="text-xs text-slate-400">Belum di-generate</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- KEAMANAN PASSWORD -->
                             <div class="flex items-start gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 mt-0.5">
@@ -216,8 +151,8 @@
                                 </div>
                             </div>
 
-                            <!-- ALAMAT -->
-                            <div class="flex items-start gap-3 sm:col-span-2">
+                            <!-- ALAMAT DOMISILI -->
+                            <div class="flex items-start gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 mt-0.5">
                                     <i class="fas fa-map-marker-alt text-sm"></i>
                                 </div>
