@@ -84,9 +84,16 @@
                                     @foreach($recentLoans as $loan)
                                         <div class="flex items-center justify-between py-2 sm:py-3 border-b border-slate-100">
                                             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-                                                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                                                    <i class="fas fa-user text-blue-500 text-xs sm:text-base"></i>
-                                                </div>
+                                                @if(!empty($loan->user->avatar))
+                                                    <img src="{{ $loan->user->getAvatarUrl() }}" 
+                                                         alt="{{ $loan->user->name }}" 
+                                                         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode($loan->user->name) }}&background=0F2854&color=ffffff&bold=true'"
+                                                         class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover shrink-0 border border-slate-200 shadow-2xs">
+                                                @else
+                                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                                                        <i class="fas fa-user text-blue-500 text-xs sm:text-base"></i>
+                                                    </div>
+                                                @endif
                                                 <div class="min-w-0">
                                                     <p class="font-medium text-slate-800 text-sm sm:text-base truncate">{{ $loan->user->name }}</p>
                                                     <p class="text-xs text-slate-500 truncate">{{ $loan->book->title }}</p>
@@ -162,9 +169,16 @@
                                         @endphp
                                         <div class="flex items-center justify-between py-2 sm:py-3 border-b border-slate-100">
                                             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-                                                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
-                                                    <i class="fas fa-exclamation-circle text-red-500 text-xs sm:text-base"></i>
-                                                </div>
+                                                @if(!empty($loan->user->avatar))
+                                                    <img src="{{ $loan->user->getAvatarUrl() }}" 
+                                                         alt="{{ $loan->user->name }}" 
+                                                         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode($loan->user->name) }}&background=0F2854&color=ffffff&bold=true'"
+                                                         class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover shrink-0 border border-red-200 shadow-2xs">
+                                                @else
+                                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+                                                        <i class="fas fa-exclamation-circle text-red-500 text-xs sm:text-base"></i>
+                                                    </div>
+                                                @endif
                                                 <div class="min-w-0">
                                                     <p class="font-medium text-slate-800 text-sm sm:text-base truncate">{{ $loan->user->name }}</p>
                                                     <p class="text-xs text-slate-500 truncate">{{ $loan->book->title }}</p>

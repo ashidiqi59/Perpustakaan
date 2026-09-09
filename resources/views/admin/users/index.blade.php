@@ -214,7 +214,12 @@
                                 <!-- NAMA -->
                                 <td class="px-4 py-3.5">
                                     <div class="flex items-center gap-3">
-                                        @if($user->role === 'admin')
+                                        @if(!empty($user->avatar))
+                                            <img src="{{ $user->getAvatarUrl() }}" 
+                                                 alt="{{ $user->name }}" 
+                                                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=10b981&color=ffffff&bold=true'"
+                                                 class="w-9 h-9 rounded-full object-cover shrink-0 border border-slate-200 shadow-sm">
+                                        @elseif($user->role === 'admin')
                                             <div class="w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200 shadow-sm">
                                                 <i class="fas fa-shield-alt text-sm"></i>
                                             </div>

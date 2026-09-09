@@ -126,9 +126,21 @@
                                                     {{ $loans->firstItem() + $index }}
                                                 </td>
                                                 <td class="px-3 py-3">
-                                                    <div class="min-w-0">
-                                                        <p class="font-medium text-slate-800 text-xs sm:text-sm truncate">{{ $loan->user->name }}</p>
-                                                        <p class="text-xs text-slate-500">{{ $loan->user->npm }}</p>
+                                                    <div class="flex items-center gap-2.5 min-w-0">
+                                                        @if(!empty($loan->user->avatar))
+                                                            <img src="{{ $loan->user->getAvatarUrl() }}" 
+                                                                 alt="{{ $loan->user->name }}" 
+                                                                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode($loan->user->name) }}&background=0F2854&color=ffffff&bold=true'"
+                                                                 class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover shrink-0 border border-slate-200 shadow-2xs">
+                                                        @else
+                                                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 text-xs font-semibold">
+                                                                {{ strtoupper(substr($loan->user->name, 0, 1)) }}
+                                                            </div>
+                                                        @endif
+                                                        <div class="min-w-0">
+                                                            <p class="font-medium text-slate-800 text-xs sm:text-sm truncate">{{ $loan->user->name }}</p>
+                                                            <p class="text-xs text-slate-500">{{ $loan->user->npm ?: '-' }}</p>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td class="px-3 py-3 hidden md:table-cell">
