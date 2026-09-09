@@ -45,11 +45,16 @@ class DashboardController extends Controller
             ->where('due_date', '<', today())
             ->update(['status' => Loan::STATUS_TERLAMBAT]);
 
+        // 4. Pastikan peminjaman yang sudah ada tanggal pengembaliannya berstatus dikembalikan
+        Loan::whereNotNull('return_date')
+            ->where('status', '!=', Loan::STATUS_DIKEMBALIKAN)
+            ->update(['status' => Loan::STATUS_DIKEMBALIKAN]);
+
         // Get counts for stat cards
         $totalBooks = Book::count();
         $totalUsers = User::count();
-        $activeLoans = Loan::where('status', Loan::STATUS_PEMINJAMAN)->count();
-        $overdueLoans = Loan::where('status', Loan::STATUS_TERLAMBAT)->count();
+        $activeLoans = Loan::where('status', Loan::STATUS_PEMINJAMAN)->whereNull('return_date')->count();
+        $overdueLoans = Loan::where('status', Loan::STATUS_TERLAMBAT)->whereNull('return_date')->count();
 
         // Get recent loans (latest 5) - diurutkan berdasarkan updated_at agar data terbaru muncul di atas
         $recentLoans = Loan::with(['user', 'book'])
@@ -57,23 +62,28 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Get overdue loans (5 loans) - yang berstatus terlambat
+        // Get overdue loans (5 loans) - yang masih dipinjam dan berstatus terlambat
         $overdueLoansList = Loan::with(['user', 'book'])
             ->where('status', Loan::STATUS_TERLAMBAT)
+            ->whereNull('return_date')
             ->orderBy('due_date', 'asc')
             ->take(5)
             ->get();
 
-        // Get currently borrowed books (5 loans) - yang berstatus peminjaman
+        // Get currently borrowed books (5 loans) - yang masih aktif dipinjam
         $borrowedBooks = Loan::with(['user', 'book'])
             ->where('status', Loan::STATUS_PEMINJAMAN)
+            ->whereNull('return_date')
             ->orderBy('due_date', 'asc')
             ->take(5)
             ->get();
 
         // Get returned/completed loans (5 loans)
         $returnedBooks = Loan::with(['user', 'book'])
-            ->where('status', Loan::STATUS_DIKEMBALIKAN)
+            ->where(function($q) {
+                $q->where('status', Loan::STATUS_DIKEMBALIKAN)
+                  ->orWhereNotNull('return_date');
+            })
             ->orderBy('return_date', 'desc')
             ->take(5)
             ->get();

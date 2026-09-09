@@ -107,9 +107,15 @@
                                                         <i class="fas fa-book-reader text-[10px]"></i> Dipinjam
                                                     </span>
                                                 @elseif($actualStatus === 'dikembalikan')
-                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">
-                                                        <i class="fas fa-check-circle text-[10px]"></i> Selesai
-                                                    </span>
+                                                    @if($loan->isReturnedLate())
+                                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+                                                            <i class="fas fa-check-circle text-[10px] text-amber-600"></i> Selesai (Terlambat)
+                                                        </span>
+                                                    @else
+                                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                                            <i class="fas fa-check-circle text-[10px]"></i> Selesai (Tepat Waktu)
+                                                        </span>
+                                                    @endif
                                                 @elseif($actualStatus === 'terlambat')
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-700 border border-rose-200">
                                                         <i class="fas fa-exclamation-triangle text-[10px]"></i> Terlambat
@@ -248,8 +254,12 @@
                                                 </div>
                                             </div>
                                             <div class="text-right shrink-0">
-                                                <span class="text-xs text-green-600 font-medium">Dikembalikan</span>
-                                                <p class="text-xs text-slate-400">{{ $loan->return_date->format('d/m/Y') }}</p>
+                                                @if($loan->isReturnedLate())
+                                                    <span class="text-xs text-amber-600 font-medium">Terlambat ({{ $loan->getDaysLate() }} hari)</span>
+                                                @else
+                                                    <span class="text-xs text-green-600 font-medium">Tepat Waktu</span>
+                                                @endif
+                                                <p class="text-xs text-slate-400">{{ $loan->return_date ? $loan->return_date->format('d/m/Y') : '-' }}</p>
                                             </div>
                                         </div>
                                     @endforeach

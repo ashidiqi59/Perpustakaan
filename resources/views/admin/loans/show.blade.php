@@ -35,9 +35,15 @@
                                             <i class="fas fa-undo mr-1 sm:mr-2"></i>Menunggu Pengembalian
                                         </span>
                                     @elseif($actualStatus === 'dikembalikan')
-                                        <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-green-100 text-green-700 rounded-full font-medium text-sm">
-                                            <i class="fas fa-check-circle mr-1 sm:mr-2"></i>Sudah Dikembalikan
-                                        </span>
+                                        @if($loan->isReturnedLate())
+                                            <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-amber-100 text-amber-800 rounded-full font-medium text-sm">
+                                                <i class="fas fa-check-circle mr-1 sm:mr-2"></i>Dikembalikan (Terlambat)
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-green-100 text-green-700 rounded-full font-medium text-sm">
+                                                <i class="fas fa-check-circle mr-1 sm:mr-2"></i>Sudah Dikembalikan (Tepat Waktu)
+                                            </span>
+                                        @endif
                                     @elseif($actualStatus === 'terlambat')
                                         <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-red-100 text-red-700 rounded-full font-medium text-sm">
                                             <i class="fas fa-exclamation-circle mr-1 sm:mr-2"></i>Terlambat
@@ -51,6 +57,10 @@
                                 @if($actualStatus === 'terlambat')
                                     <div class="text-left sm:text-right">
                                         <p class="text-red-600 font-semibold text-lg">{{ $loan->getDaysLate() }} hari terlambat</p>
+                                    </div>
+                                @elseif($loan->isReturnedLate())
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-amber-600 font-semibold text-lg">{{ $loan->getDaysLate() }} hari terlambat saat dikembalikan</p>
                                     </div>
                                 @endif
                             </div>
@@ -148,12 +158,12 @@
                                     </div>
                                     <div class="border-l-4 border-green-500 pl-3 sm:pl-4">
                                         <p class="text-xs sm:text-sm text-slate-500 mb-1">Status</p>
-                                        @if($loan->return_date->isAfter($loan->due_date))
-                                            <p class="font-semibold text-red-600 text-sm sm:text-base">Terlambat</p>
-                                            <p class="text-xs text-red-500 mt-1">{{ $loan->return_date->diffInDays($loan->due_date) }} hari setelah tenggat</p>
+                                        @if($loan->isReturnedLate())
+                                            <p class="font-semibold text-amber-600 text-sm sm:text-base">Terlambat</p>
+                                            <p class="text-xs text-amber-500 mt-1">{{ $loan->getDaysLate() }} hari setelah tenggat</p>
                                         @else
                                             <p class="font-semibold text-green-600 text-sm sm:text-base">Tepat Waktu</p>
-                                            <p class="text-xs text-green-500 mt-1">{{ $loan->due_date->diffInDays($loan->return_date) }} hari sebelum tenggat</p>
+                                            <p class="text-xs text-green-500 mt-1">{{ abs($loan->due_date->diffInDays($loan->return_date)) }} hari sebelum tenggat</p>
                                         @endif
                                     </div>
                                 </div>

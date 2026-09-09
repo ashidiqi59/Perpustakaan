@@ -160,9 +160,15 @@
                                                             <i class="fas fa-undo"></i> Mau Kembali
                                                         </span>
                                                     @elseif($actualStatus === 'dikembalikan')
-                                                        <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
-                                                            Kembali
-                                                        </span>
+                                                        @if($loan->isReturnedLate())
+                                                            <span class="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full font-medium whitespace-nowrap">
+                                                                Kembali (Terlambat)
+                                                            </span>
+                                                        @else
+                                                            <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium whitespace-nowrap">
+                                                                Kembali
+                                                            </span>
+                                                        @endif
                                                     @elseif($actualStatus === 'terlambat')
                                                         <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
                                                             Terlambat

@@ -288,19 +288,19 @@ class LoanController extends Controller
         $oldStatus = $loan->status;
 
         // Determine status
-        $status = $loan->status;
-        if ($validated['return_date']) {
-            $returnDate = Carbon::parse($validated['return_date']);
-            $dueDate    = Carbon::parse($validated['due_date']);
-            $status     = $returnDate->isAfter($dueDate) ? Loan::STATUS_TERLAMBAT : Loan::STATUS_DIKEMBALIKAN;
+        if (!empty($validated['return_date'])) {
+            $status = Loan::STATUS_DIKEMBALIKAN;
         } else {
             $dueDate = Carbon::parse($validated['due_date']);
-            if ($dueDate->isBefore(now())) {
+            if ($dueDate->isBefore(today())) {
                 $status = Loan::STATUS_TERLAMBAT;
             } else {
                 $status = Loan::STATUS_PEMINJAMAN;
             }
         }
+
+        $wasReturned = !empty($loan->return_date);
+        $nowReturned = !empty($validated['return_date']);
 
         $validated['status'] = $status;
         $loan->update($validated);
@@ -314,10 +314,14 @@ class LoanController extends Controller
         }
 
         // Increment stock if returned (was not returned before)
-        $wasActive   = in_array($oldStatus, [Loan::STATUS_PEMINJAMAN, Loan::STATUS_TERLAMBAT, Loan::STATUS_MENUNGGU_PENGEMBALIAN]);
-        $nowReturned = $status === Loan::STATUS_DIKEMBALIKAN;
-        if ($wasActive && $nowReturned) {
-            $loan->book->increment('stock');
+        $wasActive = in_array($oldStatus, [Loan::STATUS_PEMINJAMAN, Loan::STATUS_TERLAMBAT, Loan::STATUS_MENUNGGU_PENGEMBALIAN, Loan::STATUS_MENUNGGU_KONFIRMASI]);
+        if ($wasActive && !$wasReturned && $nowReturned) {
+            $loan->book?->increment('stock');
+        }
+
+        // Decrement stock if un-returned (was returned before but return_date is now cleared)
+        if ($wasReturned && !$nowReturned) {
+            $loan->book?->decrement('stock');
         }
 
         return redirect()->route('admin.loans.index')

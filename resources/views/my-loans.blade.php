@@ -269,7 +269,7 @@
                                                 @endif
                                             @elseif($status === 'dikembalikan')
                                                 <span class="status-pill status-dikembalikan">
-                                                    <i class="fas fa-check-circle"></i> Dikembalikan
+                                                    <i class="fas fa-check-circle"></i> {{ $loan->isReturnedLate() ? 'Dikembalikan (Terlambat)' : 'Dikembalikan' }}
                                                 </span>
                                                 @if($loan->return_date)
                                                     <p class="text-xs text-gray-500 mt-1">{{ $loan->return_date->format('d/m/Y') }}</p>

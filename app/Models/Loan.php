@@ -224,16 +224,32 @@ class Loan extends Model
     }
 
     /**
-     * Get days late (for display purposes)
+     * Check if the returned loan was returned after the due date.
+     */
+    public function isReturnedLate(): bool
+    {
+        return $this->return_date !== null && $this->due_date !== null && $this->return_date->isAfter($this->due_date);
+    }
+
+    /**
+     * Check if the returned loan was returned on or before the due date.
+     */
+    public function isReturnedOnTime(): bool
+    {
+        return $this->return_date !== null && $this->due_date !== null && $this->return_date->lte($this->due_date);
+    }
+
+    /**
+     * Get days late (for display purposes, always positive integer)
      */
     public function getDaysLate(): int
     {
-        if ($this->return_date !== null && $this->return_date->isAfter($this->due_date)) {
-            return $this->return_date->diffInDays($this->due_date);
+        if ($this->return_date !== null && $this->due_date !== null && $this->return_date->isAfter($this->due_date)) {
+            return (int) abs($this->due_date->diffInDays($this->return_date));
         }
 
-        if ($this->due_date->isBefore(today())) {
-            return today()->diffInDays($this->due_date);
+        if ($this->due_date && $this->due_date->isBefore(today())) {
+            return (int) abs($this->due_date->diffInDays(today()));
         }
 
         return 0;

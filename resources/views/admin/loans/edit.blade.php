@@ -93,18 +93,36 @@
                                     <label class="block text-sm font-medium text-slate-700 mb-2">
                                         <i class="fas fa-flag mr-2"></i>Status
                                     </label>
-                                    <div class="w-full px-4 py-2.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-600 text-sm">
-                                        @if($loan->getActualStatus() === 'peminjaman')
-                                            <span class="text-amber-700 font-medium">
-                                                <i class="fas fa-hourglass-half mr-2"></i>Peminjaman Aktif
+                                    <div id="status-preview-box" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-600 text-sm">
+                                        @if($loan->return_date)
+                                            @if($loan->isReturnedLate())
+                                                <span class="text-amber-700 font-medium flex items-center gap-2">
+                                                    <i class="fas fa-exclamation-triangle text-amber-600"></i> Dikembalikan (Terlambat {{ $loan->getDaysLate() }} hari)
+                                                </span>
+                                            @else
+                                                <span class="text-green-700 font-medium flex items-center gap-2">
+                                                    <i class="fas fa-check-circle text-green-600"></i> Dikembalikan (Tepat Waktu)
+                                                </span>
+                                            @endif
+                                        @elseif($loan->getActualStatus() === 'terlambat')
+                                            <span class="text-red-700 font-medium flex items-center gap-2">
+                                                <i class="fas fa-exclamation-circle text-red-600"></i> Terlambat (Belum Dikembalikan, {{ $loan->getDaysLate() }} hari)
                                             </span>
-                                        @elseif($loan->getActualStatus() === 'dikembalikan')
-                                            <span class="text-green-700 font-medium">
-                                                <i class="fas fa-check-circle mr-2"></i>Dikembalikan (Tepat Waktu)
+                                        @elseif($loan->getActualStatus() === 'peminjaman')
+                                            <span class="text-blue-700 font-medium flex items-center gap-2">
+                                                <i class="fas fa-hourglass-half text-blue-600"></i> Peminjaman Aktif
+                                            </span>
+                                        @elseif($loan->getActualStatus() === 'menunggu_konfirmasi')
+                                            <span class="text-amber-700 font-medium flex items-center gap-2">
+                                                <i class="fas fa-clock text-amber-600"></i> Menunggu Konfirmasi
+                                            </span>
+                                        @elseif($loan->getActualStatus() === 'menunggu_pengembalian')
+                                            <span class="text-purple-700 font-medium flex items-center gap-2">
+                                                <i class="fas fa-undo text-purple-600"></i> Menunggu Pengembalian
                                             </span>
                                         @else
-                                            <span class="text-red-700 font-medium">
-                                                <i class="fas fa-exclamation-circle mr-2"></i>Terlambat
+                                            <span class="text-slate-600 font-medium flex items-center gap-2">
+                                                <i class="fas fa-ban text-slate-500"></i> Hangus
                                             </span>
                                         @endif
                                     </div>
@@ -130,5 +148,46 @@
                             </form>
                         </div>
                     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dueInput = document.querySelector('input[name="due_date"]');
+        const returnInput = document.querySelector('input[name="return_date"]');
+        const statusContainer = document.getElementById('status-preview-box');
+
+        function updateStatusPreview() {
+            if (!dueInput || !statusContainer) return;
+
+            const dueDateVal = dueInput.value;
+            const returnDateVal = returnInput ? returnInput.value : '';
+
+            if (returnDateVal && dueDateVal) {
+                const returnDate = new Date(returnDateVal + 'T00:00:00');
+                const dueDate = new Date(dueDateVal + 'T00:00:00');
+                const diffDays = Math.round((returnDate - dueDate) / (1000 * 60 * 60 * 24));
+
+                if (diffDays > 0) {
+                    statusContainer.innerHTML = `<span class="text-amber-700 font-medium flex items-center gap-2"><i class="fas fa-exclamation-triangle text-amber-600"></i> Dikembalikan (Terlambat ${diffDays} hari)</span>`;
+                } else {
+                    statusContainer.innerHTML = `<span class="text-green-700 font-medium flex items-center gap-2"><i class="fas fa-check-circle text-green-600"></i> Dikembalikan (Tepat Waktu)</span>`;
+                }
+            } else if (dueDateVal) {
+                const dueDate = new Date(dueDateVal + 'T00:00:00');
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const diffDays = Math.round((today - dueDate) / (1000 * 60 * 60 * 24));
+
+                if (diffDays > 0) {
+                    statusContainer.innerHTML = `<span class="text-red-700 font-medium flex items-center gap-2"><i class="fas fa-exclamation-circle text-red-600"></i> Terlambat (Belum Dikembalikan, ${diffDays} hari)</span>`;
+                } else {
+                    statusContainer.innerHTML = `<span class="text-blue-700 font-medium flex items-center gap-2"><i class="fas fa-hourglass-half text-blue-600"></i> Peminjaman Aktif</span>`;
+                }
+            }
+        }
+
+        if (dueInput) dueInput.addEventListener('change', updateStatusPreview);
+        if (returnInput) returnInput.addEventListener('change', updateStatusPreview);
+    });
+    </script>
 @endsection
 
