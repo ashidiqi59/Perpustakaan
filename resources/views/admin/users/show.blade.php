@@ -78,16 +78,9 @@
                                 <p class="text-xs text-slate-500">Rincian akun dinas pengelola dan operator sistem perpustakaan</p>
                             @endif
                         </div>
-                        @if($user->isPengunjung())
-                            <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs inline-flex items-center gap-1.5" title="Nomor Identitas Anggota Perpustakaan">
-                                <i class="fas fa-id-card text-blue-500"></i>
-                                <span>ID: {{ $user->memberBarcode?->barcode_code ?? ('MEMBER-' . $user->id) }}</span>
-                            </span>
-                        @else
-                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
-                                ID: #{{ $user->id }}
-                            </span>
-                        @endif
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+                            ID: #{{ $user->id }}
+                        </span>
                     </div>
 
                     @if($user->isPengunjung())
@@ -137,17 +130,16 @@
                                 </div>
                             </div>
 
-                            <!-- KEAMANAN PASSWORD -->
+                            <!-- ID MEMBER -->
                             <div class="flex items-start gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 mt-0.5">
-                                    <i class="fas fa-lock text-sm"></i>
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="fas fa-id-badge text-sm"></i>
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="text-xs text-slate-500 font-medium">Kata Sandi (Password)</p>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-sm font-mono text-slate-400 select-none tracking-widest">••••••••••••</span>
-                                        <span class="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-medium">Terenkripsi Aman</span>
-                                    </div>
+                                    <p class="text-xs text-slate-500 font-medium">ID Member</p>
+                                    <p class="text-sm font-semibold font-mono text-blue-700 tracking-wide">
+                                        {{ $user->memberBarcode?->barcode_code ?? ('MEMBER-' . $user->id) }}
+                                    </p>
                                 </div>
                             </div>
 
