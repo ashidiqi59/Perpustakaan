@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Perpustakaan</title>
   <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     @import url("https://fonts.googleapis.com/css?family=Montserrat:400,700");
 
@@ -565,54 +566,113 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 40, 84, 0.6);
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 99999;
+      padding: 16px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .popup-overlay.active {
+      opacity: 1;
     }
 
     .popup-box {
-      background: #fff;
-      padding: 2.5em;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 400px;
+      background: #ffffff;
+      padding: 32px 28px 26px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 380px;
       text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      animation: popupScale 0.3s ease;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(226, 232, 240, 0.9);
+      transform: scale(0.9) translateY(10px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .popup-overlay.active .popup-box {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    .popup-icon-wrapper {
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .popup-icon-wrapper.error {
+      background: #FEF2F2;
+      border: 1.5px solid #FECACA;
+      color: #EF4444;
+      box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.25);
+    }
+
+    .popup-icon-wrapper.success {
+      background: #ECFDF5;
+      border: 1.5px solid #A7F3D0;
+      color: #10B981;
+      box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.25);
+    }
+
+    .popup-icon-wrapper.info {
+      background: #EFF6FF;
+      border: 1.5px solid #BFDBFE;
+      color: #3B82F6;
+      box-shadow: 0 8px 20px -6px rgba(59, 130, 246, 0.25);
     }
 
     .popup-box h2 {
-      font-size: 2.2em;
-      color: #0F2854;
-      margin-bottom: 0.5em;
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0F172A;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
     }
 
     .popup-box p {
-      font-size: 1.4em;
-      color: #333;
-      margin-bottom: 1.5em;
+      font-size: 1.35rem;
+      color: #64748B;
+      line-height: 1.55;
+      margin: 0 0 24px;
+      word-break: break-word;
     }
 
     .popup-box button {
-      border-radius: 30px;
-      padding: 0.7em 2em;
-      background: linear-gradient(-45deg, #0F2854, #4988C4);
+      width: 100%;
+      border-radius: 14px;
+      padding: 13px 20px;
+      background: linear-gradient(135deg, #0F2854 0%, #1C4D8D 100%);
       border: none;
-      color: white;
-      font-weight: bold;
+      color: #ffffff;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px -4px rgba(15, 40, 84, 0.4);
+      transition: all 0.2s ease;
+      outline: none;
     }
 
-    @keyframes popupScale {
-      from {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
+    .popup-box button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px -4px rgba(15, 40, 84, 0.5);
+      background: linear-gradient(135deg, #163B75 0%, #2563EB 100%);
+    }
+
+    .popup-box button:active {
+      transform: translateY(0);
     }
 
     /* Mobile responsive adjustments */
@@ -1082,11 +1142,14 @@
       </div>
     </div>
 
-    <div id="popup-alert" class="popup-overlay">
-      <div class="popup-box">
-        <h2 id="popup-title">Oops!</h2>
-        <p id="popup-message">Pesan error di sini</p>
-        <button onclick="closePopup()">OK</button>
+    <div id="popup-alert" class="popup-overlay" onclick="handleOverlayClick(event)">
+      <div class="popup-box" onclick="event.stopPropagation()">
+        <div id="popup-icon-wrapper" class="popup-icon-wrapper error">
+          <i id="popup-icon" class="fas fa-exclamation-circle"></i>
+        </div>
+        <h2 id="popup-title">Error!</h2>
+        <p id="popup-message">Email/NPM atau password salah.</p>
+        <button id="popup-confirm-btn" onclick="closePopup()">OK</button>
       </div>
     </div>
 
@@ -1117,15 +1180,70 @@
       document.getElementById('mobile-login').style.display = 'block';
     }
 
-    function showPopup(title, message) {
-      document.getElementById('popup-title').innerText = title;
-      document.getElementById('popup-message').innerText = message;
-      document.getElementById('popup-alert').style.display = 'flex';
+    function showPopup(title, message, type) {
+      const overlay = document.getElementById('popup-alert');
+      const titleEl = document.getElementById('popup-title');
+      const messageEl = document.getElementById('popup-message');
+      const iconWrapper = document.getElementById('popup-icon-wrapper');
+      const iconEl = document.getElementById('popup-icon');
+      const btnEl = document.getElementById('popup-confirm-btn');
+
+      if (!type) {
+        const lowerTitle = (title || '').toLowerCase();
+        if (lowerTitle.includes('berhasil') || lowerTitle.includes('sukses')) {
+          type = 'success';
+        } else if (lowerTitle.includes('informasi') || lowerTitle.includes('info')) {
+          type = 'info';
+        } else {
+          type = 'error';
+        }
+      }
+
+      titleEl.innerText = title;
+      messageEl.innerText = message;
+
+      if (type === 'success') {
+        iconWrapper.className = 'popup-icon-wrapper success';
+        iconEl.className = 'fas fa-check-circle';
+      } else if (type === 'info') {
+        iconWrapper.className = 'popup-icon-wrapper info';
+        iconEl.className = 'fas fa-info-circle';
+      } else {
+        iconWrapper.className = 'popup-icon-wrapper error';
+        iconEl.className = 'fas fa-exclamation-circle';
+      }
+
+      overlay.style.display = 'flex';
+      requestAnimationFrame(() => {
+        overlay.classList.add('active');
+        if (btnEl) btnEl.focus();
+      });
     }
 
     function closePopup() {
-      document.getElementById('popup-alert').style.display = 'none';
+      const overlay = document.getElementById('popup-alert');
+      if (!overlay) return;
+      overlay.classList.remove('active');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 250);
     }
+
+    function handleOverlayClick(e) {
+      if (e.target && e.target.id === 'popup-alert') {
+        closePopup();
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      const overlay = document.getElementById('popup-alert');
+      if (overlay && overlay.classList.contains('active')) {
+        if (e.key === 'Escape' || e.key === 'Enter') {
+          e.preventDefault();
+          closePopup();
+        }
+      }
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
       @if(session('success'))
