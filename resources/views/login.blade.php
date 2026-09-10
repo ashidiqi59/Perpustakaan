@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url("https://fonts.googleapis.com/css?family=Montserrat:400,700");
+    @import url("https://fonts.googleapis.com/css?family=Montserrat:400,600,700");
 
     *, *::after, *::before {
       margin: 0;
@@ -35,205 +35,15 @@
       perspective: 1500px;
     }
 
-    h1 {
-      font-weight: 700;
-      font-size: 3.5em;
-      text-align: center;
-    }
-
-    .version {
-      position: absolute;
-      bottom: 1em;
-      right: 2em;
-      border-radius: 40px;
-      background: #ff4b2b;
-      color: #fff;
-      font-size: 1em;
-      font-weight: bold;
-      padding: 0.8em 2em;
-      letter-spacing: 1px;
-      transition: transform 80ms ease-in;
-    }
-
-    form input {
-      background: #eee;
-      border: none;
-      padding: 12px 15px;
-      margin: 8px 0;
-      width: 100%;
-      font-size: 1.4em;
-    }
-
-    .password-wrapper {
-      position: relative;
-      margin: 8px 0;
-    }
-
-    .password-wrapper input {
-      padding-right: 50px;
-      margin: 0 !important;
-      width: 100%;
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      background: none !important;
-      border: none !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-      font-size: 1.2em;
-      width: auto !important;
-      height: auto !important;
-      z-index: 10;
-    }
-
-    .password-toggle:hover {
-      color: #333;
-    }
-
-    .password-toggle:active {
-      transform: translateY(-50%) scale(0.95) !important;
-    }
-
-    .password-toggle:focus {
-      outline: none;
-    }
-
-    @media (max-width: 768px) {
-      .password-toggle:hover {
-        transform: translateY(-50%) !important;
-      }
-    }
-
-    .password-toggle svg {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2.5;
-    }
-
-    span {
-      color: #333;
-      font-size: 1.4em;
-      display: inline-block;
-      margin: 15px auto;
-      font-weight: 100;
-    }
-
-    .remember-container {
-      float: left;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .remember-container input[type="checkbox"] {
-      width: 1.2em;
-      height: 1.2em;
-      margin-right: 8px;
-      cursor: pointer;
-    }
-
-    span.remember-text {
-      margin: 0;
-      font-size: 1.2em;
-    }
-
-    span.forget {
-      float: right;
-    }
-
-    span.clearfix {
-      clear: both;
-      display: table;
-    }
-
-    span.loginwith {
-      display: block;
-      width: 100%;
-      margin-top: 1em;
-      white-space: nowrap;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    span.loginwith::before {
-      content: "";
-      display: inline-block;
-      width: 42%;
-      height: 1px;
-      background: #aaa;
-      vertical-align: middle;
-      margin-right: 5%;
-    }
-
-    span.loginwith::after {
-      content: "";
-      display: inline-block;
-      width: 45%;
-      height: 1px;
-      background: #aaa;
-      vertical-align: middle;
-      margin-left: 5%;
-    }
-
-    span.copy {
-      display: block;
-      position: absolute;
-      bottom: 0;
-      font-size: 1em;
-    }
-
-    button {
-      display: block;
-      margin: 1em auto;
-      border-radius: 40px;
-      border: 1px solid black;
-      background: linear-gradient(-45deg, #0F2854 30%, #4988C4 100%) no-repeat 0 0/200%;
-      color: #fff;
-      font-size: 1.2em;
-      font-weight: bold;
-      padding: 0.8em 2em;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      transition: transform 80ms ease-in;
-    }
-
-    button svg {
-      vertical-align: middle;
-    }
-
-    button:hover {
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: scale(0.95);
-    }
-
-    button:focus {
-      outline: none;
-    }
-
     #container {
       width: 95%;
       max-width: 800px;
       height: 570px;
       position: relative;
       border-radius: 20px;
-      box-shadow: 0 14px 28px -10px rgba(0, 0, 0, 0.1), 0 10px 10px -10px rgba(0, 0, 0, 0.02);
+      box-shadow: 0 14px 28px -10px rgba(0, 0, 0, 0.12), 0 10px 10px -10px rgba(0, 0, 0, 0.04);
       transform-style: preserve-3d;
+      background: #ffffff;
     }
 
     #container > div {
@@ -250,16 +60,208 @@
 
     .content {
       width: 100%;
-      padding: 1.5em 3.2em;
+      padding: 1.8em 3.2em;
       text-align: center;
+      box-sizing: border-box;
     }
 
+    .register .content {
+      padding: 1.2em 3em;
+    }
+
+    .login {
+      left: 0;
+      background: #ffffff;
+      border-radius: 20px 0 0 20px;
+    }
+
+    .register {
+      right: 0;
+      z-index: 1;
+      border-radius: 0 20px 20px 0;
+      background: #ffffff;
+    }
+
+    .login h1, .register h1 {
+      font-weight: 700;
+      font-size: 3.2em;
+      color: #0F2854;
+      text-align: center;
+      margin-bottom: 0.3em;
+    }
+
+    .register h1 {
+      font-size: 2.8em;
+      margin-bottom: 0.2em;
+    }
+
+    /* Clean, tasteful inputs */
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="password"] {
+      background: #f1f3f5;
+      border: 1px solid #e1e4e8;
+      border-radius: 8px;
+      padding: 11px 14px;
+      margin: 6px 0;
+      width: 100%;
+      font-size: 1.35em;
+      color: #333;
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .register form input[type="text"],
+    .register form input[type="email"],
+    .register form input[type="password"] {
+      padding: 8px 12px;
+      margin: 3.5px 0;
+      font-size: 1.25em;
+      border-radius: 7px;
+    }
+
+    form input[type="text"]:focus,
+    form input[type="email"]:focus,
+    form input[type="password"]:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: #0F2854;
+      box-shadow: 0 0 0 2px rgba(15, 40, 84, 0.1);
+    }
+
+    .password-wrapper {
+      position: relative;
+      margin: 6px 0;
+      width: 100%;
+    }
+
+    .register .password-wrapper {
+      margin: 3.5px 0;
+    }
+
+    .password-wrapper input {
+      padding-right: 48px !important;
+      margin: 0 !important;
+      width: 100%;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      background: none !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      font-size: 1.2em;
+      width: auto !important;
+      height: auto !important;
+      z-index: 10;
+      transition: color 0.2s ease;
+    }
+
+    .password-toggle:hover {
+      color: #0F2854;
+    }
+
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    /* Checkbox & text */
+    .remember-container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin: 8px 0 10px 0;
+    }
+
+    .register .remember-container {
+      margin: 5px 0 6px 0;
+    }
+
+    .remember-container input[type="checkbox"] {
+      width: 1.3em;
+      height: 1.3em;
+      margin-right: 8px;
+      cursor: pointer;
+      accent-color: #0F2854;
+    }
+
+    span.remember-text {
+      margin: 0;
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    span.clearfix {
+      clear: both;
+      display: table;
+    }
+
+    /* Submit buttons on card (Desktop & Mobile) */
+    .login button[type="submit"],
+    .register button[type="submit"],
+    .mobile-card button[type="submit"] {
+      display: block;
+      width: 100%;
+      margin: 10px auto 6px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(-45deg, #0F2854 30%, #3574b5 100%);
+      color: #fff;
+      font-size: 1.25em;
+      font-weight: bold;
+      padding: 12px 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(15, 40, 84, 0.2);
+      transition: opacity 0.2s ease, transform 0.08s ease;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+
+    .register button[type="submit"] {
+      padding: 9px 18px;
+      margin: 6px auto 4px;
+      font-size: 1.15em;
+    }
+
+    .login button[type="submit"]:hover,
+    .register button[type="submit"]:hover,
+    .mobile-card button[type="submit"]:hover {
+      opacity: 0.92;
+    }
+
+    .login button[type="submit"]:active,
+    .register button[type="submit"]:active,
+    .mobile-card button[type="submit"]:active {
+      transform: scale(0.98);
+    }
+
+    /* Divider */
     .divider-or {
       display: flex;
       align-items: center;
       text-align: center;
-      margin: 10px 0 6px 0;
+      margin: 8px 0 6px 0;
       width: 100%;
+    }
+
+    .register .divider-or {
+      margin: 4px 0 3px 0;
     }
 
     .divider-or::before,
@@ -277,6 +279,7 @@
       font-weight: 500;
     }
 
+    /* Google Button */
     .btn-google {
       display: flex !important;
       align-items: center;
@@ -286,28 +289,27 @@
       background: #ffffff !important;
       color: #374151 !important;
       border: 1px solid #d1d5db !important;
-      border-radius: 40px !important;
-      padding: 10px 16px !important;
-      font-size: 1.25em !important;
+      border-radius: 8px !important;
+      padding: 9px 16px !important;
+      font-size: 1.2em !important;
       font-weight: 600 !important;
       text-decoration: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      transition: all 0.2s ease;
-      margin: 6px 0 10px 0 !important;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      transition: background 0.2s ease, border-color 0.2s ease;
+      margin: 6px 0 8px 0 !important;
       box-sizing: border-box;
       cursor: pointer;
+      font-family: inherit;
+    }
+
+    .register .btn-google {
+      padding: 7.5px 14px !important;
+      margin: 3px 0 4px 0 !important;
     }
 
     .btn-google:hover {
       background: #f9fafb !important;
       border-color: #9ca3af !important;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.09);
-      transform: translateY(-1px);
-      color: #111827 !important;
-    }
-
-    .btn-google:active {
-      transform: translateY(0);
     }
 
     .btn-google svg {
@@ -322,43 +324,22 @@
       font-weight: 600 !important;
     }
 
-    .content p {
-      font-size: 1.4em;
+    .kembali {
+      display: block;
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #0F2854;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s ease;
     }
 
-    .login {
-      left: 0;
-      background: #FAFAFA;
-      border-radius: 20px 0 0 20px;
+    .kembali:hover {
+      opacity: 0.75;
+      text-decoration: underline;
     }
 
-    .login button {
-      border-radius: 0px;
-      width: 100%;
-    }
-
-    .login svg {
-      margin: 1em;
-      stroke: #999;
-    }
-
-    .register {
-      right: 0;
-      z-index: 1;
-      border-radius: 0 20px 20px 0;
-      background: #FAFAFA;
-    }
-
-    .register button {
-      border-radius: 0px;
-      width: 100%;
-    }
-
-    .register svg {
-      margin: 1em;
-      stroke: #999;
-    }
-
+    /* 3D Animated Flip Pages */
     .page {
       right: 0;
       color: #fff;
@@ -369,23 +350,65 @@
       transition: animation 1s linear, -webkit-animation 1s linear;
     }
 
-    .page button {
-      border-color: #fff;
-      background: transparent;
-    }
-
-    .page p {
-      margin: 2em auto;
-    }
-
     .front {
-      background: linear-gradient(-45deg, #0F2854 30%, #4988C4 100%) no-repeat 0 0/200%;
+      background: linear-gradient(-45deg, #0F2854 30%, #3574b5 100%) no-repeat 0 0/200%;
       z-index: 3;
     }
 
     .back {
-      background: linear-gradient(135deg, #4988C4 0%, #0F2854 100%) no-repeat 0 0/200%;
+      background: linear-gradient(135deg, #3574b5 0%, #0F2854 100%) no-repeat 0 0/200%;
       z-index: 2;
+    }
+
+    .page .content > svg {
+      margin-bottom: 1em;
+      stroke: #fff;
+    }
+
+    .page h1 {
+      color: #fff;
+      font-size: 3.2em;
+      font-weight: 700;
+      margin-bottom: 0.3em;
+    }
+
+    .page p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.3em;
+      line-height: 1.5;
+      margin: 1.5em auto;
+      max-width: 290px;
+    }
+
+    .page button {
+      border: 2px solid #fff;
+      border-radius: 40px;
+      background: transparent;
+      color: #fff;
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 0.8em 2em;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.08s ease;
+      font-family: inherit;
+    }
+
+    .page button svg {
+      stroke: #fff;
+      vertical-align: middle;
+    }
+
+    .page button:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .page button:active {
+      transform: scale(0.96);
     }
 
     .back .content {
@@ -524,7 +547,7 @@
         transform: scale(0.99);
       }
       to {
-        opacity: 0;
+        opacity: 0.99;
         transform: scale(0.8);
       }
     }
@@ -555,11 +578,6 @@
       color: #060;
     }
 
-    .kembali {
-      display: block;
-      margin-top: 1em;
-      font-size: 1.2em;
-    }
     .popup-overlay {
       position: fixed;
       top: 0;
@@ -685,12 +703,7 @@
         align-items: center;
         justify-content: center;
         perspective: none;
-        background: linear-gradient(-45deg, #0F2854 0%, #1a3a6e 50%, #4988C4 100%);
-      }
-
-      h1 {
-        font-size: 2.2em;
-        color: #0F2854;
+        background: #e9ebee;
       }
 
       /* Hide the flip animation container on mobile */
@@ -706,9 +719,9 @@
 
       /* Mobile header section - matching desktop overlay style */
       .mobile-header {
-        background: linear-gradient(-45deg, #0F2854 30%, #4988C4 100%);
-        border-radius: 24px 24px 0 0;
-        padding: 2.5em 2em;
+        background: linear-gradient(-45deg, #0F2854 30%, #3574b5 100%);
+        border-radius: 20px 20px 0 0;
+        padding: 2.2em 2em;
         text-align: center;
         color: #fff;
       }
@@ -717,12 +730,12 @@
         width: 64px;
         height: 64px;
         stroke: #fff;
-        margin-bottom: 1em;
+        margin-bottom: 0.8em;
       }
 
       .mobile-header h1 {
         color: #fff;
-        font-size: 1.8em;
+        font-size: 2em;
         margin-bottom: 0.3em;
       }
 
@@ -732,13 +745,13 @@
         margin: 0;
       }
 
-      /* Mobile card style - matching desktop form panel style */
+      /* Mobile card style */
       .mobile-card {
-        background: #FAFAFA;
-        border-radius: 0 0 24px 24px;
+        background: #ffffff;
+        border-radius: 0 0 20px 20px;
         padding: 2em;
         width: 100%;
-        box-shadow: 0 20px 60px -15px rgba(15, 40, 84, 0.35);
+        box-shadow: 0 14px 28px -10px rgba(0, 0, 0, 0.1);
       }
 
       .mobile-card .content {
@@ -747,107 +760,32 @@
 
       .mobile-card h1 {
         color: #0F2854;
-        font-size: 1.8em;
+        font-size: 2em;
         margin-bottom: 0.3em;
       }
 
-      form input {
-        font-size: 1.1em;
-        padding: 12px 15px;
-        border-radius: 10px;
-        background: #fff;
-        border: 2px solid #e0e0e0;
-        transition: all 0.3s ease;
-      }
-
-      form input:focus {
-        outline: none;
-        border-color: #4988C4;
-        box-shadow: 0 0 0 3px rgba(73, 136, 196, 0.2);
-      }
-
-      .mobile-card .password-wrapper {
-        position: relative;
-        margin: 8px 0;
-      }
-
-      .mobile-card .password-wrapper input {
-        padding-right: 50px;
-        margin: 0 !important;
-      }
-
-      .mobile-card .password-toggle {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        color: #999;
-        font-size: 1.2em;
-        width: auto !important;
-        height: auto !important;
-        cursor: pointer;
-        z-index: 5;
-        box-shadow: none !important;
-      }
-
-      .mobile-card .password-toggle:hover {
-        color: #333;
-        transform: translateY(-50%) !important;
-        box-shadow: none !important;
-      }
-
-      button {
-        font-size: 1.2em;
-        padding: 0.7em 2em;
-        border-radius: 30px;
-        width: 100%;
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-        background: linear-gradient(-45deg, #0F2854, #4988C4);
-        border: none;
-        box-shadow: 0 4px 15px rgba(15, 40, 84, 0.3);
-      }
-
-      button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(15, 40, 84, 0.4);
-      }
-
-      .remember-container {
-        float: none;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        margin: 0;
-        padding-left: 0;
-      }
-
-      span.clearfix {
-        display: none;
+      .mobile-card button[type="submit"] {
+        width: 100% !important;
+        padding: 12px 20px !important;
+        font-size: 1.25em !important;
+        margin: 12px auto 8px !important;
+        box-sizing: border-box !important;
       }
 
       .mobile-toggle {
         text-align: center;
         margin-top: 1em;
-        font-size: 1em;
+        font-size: 1.1em;
         color: #666;
         padding-top: 1em;
         border-top: 1px solid #e0e0e0;
       }
 
       .mobile-toggle a {
-        color: #4988C4;
+        color: #3574b5;
         font-weight: bold;
         text-decoration: none;
         cursor: pointer;
-        transition: color 0.3s ease;
       }
 
       .mobile-toggle a:hover {
@@ -857,54 +795,11 @@
       .version {
         display: none;
       }
-
-      .kembali {
-        display: block;
-        text-align: center;
-        margin-top: 1.2em;
-        font-size: 1.3em;
-        color: #0F2854;
-        text-decoration: none;
-        transition: color 0.3s ease;
-      }
-
-      .kembali:hover {
-        color: #4988C4;
-      }
     }
 
-    /* Show mobile forms only on mobile */
     @media (min-width: 769px) {
       .mobile-container {
         display: none !important;
-      }
-
-      .login .password-wrapper input {
-        width: 100%;
-        background: #eee;
-        border: none;
-        padding: 12px 15px;
-        padding-right: 50px;
-        font-size: 1.4em;
-        margin: 0 !important;
-      }
-
-      .login .password-toggle {
-        right: 15px;
-      }
-
-      .register .password-wrapper input {
-        width: 100%;
-        background: #eee;
-        border: none;
-        padding: 12px 15px;
-        padding-right: 50px;
-        font-size: 1.4em;
-        margin: 0 !important;
-      }
-
-      .register .password-toggle {
-        right: 15px;
       }
     }
   </style>
