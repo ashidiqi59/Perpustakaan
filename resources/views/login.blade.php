@@ -976,7 +976,7 @@
         <div class="mobile-card">
           <div class="content">
             <h1>Sign Up</h1>
-            <form action="{{ route('auth.register') }}" method="POST" onsubmit="return validateRegister()">
+            <form action="{{ route('auth.register') }}" method="POST" onsubmit="return validateRegister(this)">
               @csrf
               <input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
               <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
@@ -1093,7 +1093,7 @@
       <div class="register">
         <div class="content">
           <h1>Sign Up</h1>
-          <form action="{{ route('auth.register') }}" method="POST" onsubmit="return validateRegister()">
+          <form action="{{ route('auth.register') }}" method="POST" onsubmit="return validateRegister(this)">
             @csrf
             <input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
             <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
@@ -1220,12 +1220,21 @@
       });
     }
 
+    function resetSubmitButtons() {
+      document.querySelectorAll('button[type="submit"]').forEach(btn => {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+      });
+    }
+
     function closePopup() {
       const overlay = document.getElementById('popup-alert');
       if (!overlay) return;
       overlay.classList.remove('active');
       setTimeout(() => {
         overlay.style.display = 'none';
+        resetSubmitButtons();
       }, 250);
     }
 
@@ -1247,86 +1256,105 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       @if(session('success'))
-        showPopup('Berhasil!', '{{ session('success') }}');
+        showPopup('Berhasil!', '{{ session('success') }}', 'success');
       @endif
 
       @if(session('info'))
-        showPopup('Informasi', '{{ session('info') }}');
+        showPopup('Informasi', '{{ session('info') }}', 'info');
       @endif
 
       @if(session('error'))
-        showPopup('Error!', '{{ session('error') }}');
+        showPopup('Error!', '{{ session('error') }}', 'error');
       @endif
     });
 
-    function validateLogin() {
-      // Try desktop form first (within #container .login)
-      let email = document.querySelector('#container .login input[name="email_or_npm"]')?.value;
-      let password = document.querySelector('#container .login input[name="password"]')?.value;
+    function validateLogin(formEl) {
+      if (!formEl) {
+        formEl = event ? event.target.closest('form') : document.querySelector('#container .login form');
+      }
+      // Try current form first
+      let email = formEl?.querySelector('input[name="email_or_npm"]')?.value?.trim();
+      let password = formEl?.querySelector('input[name="password"]')?.value;
       
-      // If not found, try mobile form
+      // Fallback
       if (!email || !password) {
-        email = document.querySelector('#mobile-login input[name="email_or_npm"]')?.value;
-        password = document.querySelector('#mobile-login input[name="password"]')?.value;
+        email = document.querySelector('#container .login input[name="email_or_npm"]')?.value?.trim() ||
+                document.querySelector('#mobile-login input[name="email_or_npm"]')?.value?.trim();
+        password = document.querySelector('#container .login input[name="password"]')?.value ||
+                   document.querySelector('#mobile-login input[name="password"]')?.value;
       }
 
       if (!email || !password) {
+        resetSubmitButtons();
         showPopup(
           'Form belum lengkap',
-          'Email/NPM dan password wajib diisi dulu ya.'
+          'Email/NPM dan password wajib diisi dulu ya.',
+          'error'
         );
         return false;
       }
       return true;
     }
 
-    function validateRegister() {
-      // Try desktop form first (within #container .register)
-      let npm = document.querySelector('#container .register input[name="npm"]')?.value;
-      let name = document.querySelector('#container .register input[name="name"]')?.value;
-      let email = document.querySelector('#container .register input[name="email"]')?.value;
-      let password = document.querySelector('#container .register input[name="password"]')?.value;
-      let passwordConfirm = document.querySelector('#container .register input[name="password_confirmation"]')?.value;
-      let terms = document.querySelector('#container .register input[name="terms"]')?.checked;
+    function validateRegister(formEl) {
+      if (!formEl) {
+        const isMobile = window.innerWidth <= 768 || document.getElementById('mobile-register')?.style.display === 'block';
+        formEl = isMobile ? document.querySelector('#mobile-register form') : document.querySelector('#container .register form');
+      }
+
+      let npm = formEl?.querySelector('input[name="npm"]')?.value?.trim();
+      let name = formEl?.querySelector('input[name="name"]')?.value?.trim();
+      let email = formEl?.querySelector('input[name="email"]')?.value?.trim();
+      let password = formEl?.querySelector('input[name="password"]')?.value;
+      let passwordConfirm = formEl?.querySelector('input[name="password_confirmation"]')?.value;
+      let terms = formEl?.querySelector('input[name="terms"]')?.checked;
       
-      // If not found, try mobile form
+      // Fallback if formEl fields were empty
       if (!npm || !name || !email || !password || !passwordConfirm) {
-        npm = document.querySelector('#mobile-register input[name="npm"]')?.value;
-        name = document.querySelector('#mobile-register input[name="name"]')?.value;
-        email = document.querySelector('#mobile-register input[name="email"]')?.value;
-        password = document.querySelector('#mobile-register input[name="password"]')?.value;
-        passwordConfirm = document.querySelector('#mobile-register input[name="password_confirmation"]')?.value;
-        terms = document.querySelector('#mobile-register input[name="terms"]')?.checked;
+        npm = npm || document.querySelector('#container .register input[name="npm"]')?.value?.trim() || document.querySelector('#mobile-register input[name="npm"]')?.value?.trim();
+        name = name || document.querySelector('#container .register input[name="name"]')?.value?.trim() || document.querySelector('#mobile-register input[name="name"]')?.value?.trim();
+        email = email || document.querySelector('#container .register input[name="email"]')?.value?.trim() || document.querySelector('#mobile-register input[name="email"]')?.value?.trim();
+        password = password || document.querySelector('#container .register input[name="password"]')?.value || document.querySelector('#mobile-register input[name="password"]')?.value;
+        passwordConfirm = passwordConfirm || document.querySelector('#container .register input[name="password_confirmation"]')?.value || document.querySelector('#mobile-register input[name="password_confirmation"]')?.value;
+        terms = terms !== undefined ? terms : (document.querySelector('#container .register input[name="terms"]')?.checked || document.querySelector('#mobile-register input[name="terms"]')?.checked);
       }
 
       if (!npm || !name || !email || !password || !passwordConfirm) {
+        resetSubmitButtons();
         showPopup(
           'Form belum lengkap',
-          'Semua field wajib diisi terlebih dahulu.'
+          'Semua field wajib diisi terlebih dahulu.',
+          'error'
         );
         return false;
       }
 
       if (password.length < 6) {
+        resetSubmitButtons();
         showPopup(
           'Password terlalu pendek',
-          'Password harus minimal 6 karakter.'
+          'Password harus minimal 6 karakter.',
+          'error'
         );
         return false;
       }
 
       if (password !== passwordConfirm) {
+        resetSubmitButtons();
         showPopup(
           'Password tidak sesuai',
-          'Password dan konfirmasi password tidak cocok.'
+          'Password dan konfirmasi password tidak cocok.',
+          'error'
         );
         return false;
       }
 
       if (!terms) {
+        resetSubmitButtons();
         showPopup(
           'Terms tidak diterima',
-          'Anda harus menerima terms dan conditions untuk mendaftar.'
+          'Anda harus menerima terms dan conditions untuk mendaftar.',
+          'error'
         );
         return false;
       }
@@ -1415,17 +1443,29 @@
       attachNpmValidator();
       attachEmailValidator();
 
-      // Cegah double submission akibat double-tap pada layar sentuh HP
+      // Cegah double submission HANYA jika form valid dan tidak dibatalkan validator
       document.querySelectorAll('form').forEach(function(form) {
-        form.addEventListener('submit', function() {
+        form.addEventListener('submit', function(e) {
+          if (e.defaultPrevented) {
+            resetSubmitButtons();
+            return;
+          }
           const btn = form.querySelector('button[type="submit"]');
           if (btn) {
             setTimeout(function() {
-              btn.disabled = true;
-              btn.style.opacity = '0.7';
+              if (!e.defaultPrevented) {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+              }
             }, 50);
           }
         });
+      });
+
+      // Kembalikan tombol ke kondisi aktif setiap kali ada perubahan pada input formulir
+      document.querySelectorAll('input').forEach(function(input) {
+        input.addEventListener('input', resetSubmitButtons);
+        input.addEventListener('change', resetSubmitButtons);
       });
     });
 
