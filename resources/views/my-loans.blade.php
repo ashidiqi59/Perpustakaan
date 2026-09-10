@@ -281,7 +281,7 @@
                                                     <button class="btn-barcode show" onclick="showBarcodeModal('loan', {{ $loan->id }}, '{{ $loan->loan_barcode }}', {{ $loan->getLoanBarcodeRemainingSeconds() }}, '{{ $loan->book->title }}')">
                                                         <i class="fas fa-qrcode"></i> Lihat Barcode
                                                     </button>
-                                                    <form method="POST" action="{{ route('loans.cancel', $loan) }}" style="display:inline" onsubmit="return confirm('Batalkan pengajuan peminjaman ini? Stok buku akan dikembalikan.')">
+                                                    <form method="POST" action="{{ route('loans.cancel', $loan) }}" style="display:inline" data-confirm="Batalkan pengajuan peminjaman untuk buku '{{ $loan->book->title }}'? Stok buku akan dikembalikan." data-confirm-title="Batalkan Peminjaman" data-confirm-btn="Ya, Batalkan">
                                                         @csrf
                                                         <button type="submit" class="btn-barcode cancel">
                                                             <i class="fas fa-times"></i> Batal
@@ -403,7 +403,7 @@
                                         </form>
                                     @endif
                                     @if($status === 'menunggu_konfirmasi')
-                                        <form method="POST" action="{{ route('loans.cancel', $loan) }}" style="display:contents" onsubmit="return confirm('Batalkan pengajuan ini?')">
+                                        <form method="POST" action="{{ route('loans.cancel', $loan) }}" style="display:contents" data-confirm="Batalkan pengajuan peminjaman untuk buku '{{ $loan->book->title }}'? Stok buku akan dikembalikan." data-confirm-title="Batalkan Peminjaman" data-confirm-btn="Ya, Batalkan">
                                             @csrf
                                             <button type="submit" class="btn-barcode cancel">
                                                 <i class="fas fa-times"></i> Batal

@@ -161,3 +161,4 @@
     </header>
 
     <x-toast-notification />
+    <x-confirm-modal />

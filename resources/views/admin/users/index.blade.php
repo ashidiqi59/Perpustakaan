@@ -272,10 +272,12 @@
                                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" 
+                                                <button type="button" 
                                                     class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition-all"
                                                     title="Hapus User"
-                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus user {{ $user->name }}?')">
+                                                    data-confirm="Apakah Anda yakin ingin menghapus user '{{ $user->name }}' ({{ $user->role }})? Tindakan ini tidak dapat dibatalkan."
+                                                    data-confirm-title="Hapus Pengguna"
+                                                    data-confirm-btn="Ya, Hapus Pengguna">
                                                     <i class="fas fa-trash text-xs"></i>
                                                 </button>
                                             </form>

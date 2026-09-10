@@ -201,10 +201,12 @@
                                                         <form action="{{ route('admin.loans.destroy', $loan->id) }}" method="POST" class="inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit"
+                                                            <button type="button"
                                                                 class="p-1.5 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                                                                 title="Hapus"
-                                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data peminjaman ini?')">
+                                                                data-confirm="Apakah Anda yakin ingin menghapus arsip peminjaman buku '{{ $loan->book->title }}' oleh {{ $loan->user->name }}?"
+                                                                data-confirm-title="Hapus Data Peminjaman"
+                                                                data-confirm-btn="Ya, Hapus Data">
                                                                 <i class="fas fa-trash text-xs"></i>
                                                             </button>
                                                         </form>

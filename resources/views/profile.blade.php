@@ -130,7 +130,7 @@
                         <!-- Status Badges & Delete Custom Avatar Option (di area putih) -->
                         <div class="flex flex-wrap items-center justify-center sm:justify-end gap-2 pt-2 sm:pt-4">
                             @if(!empty($user->avatar) && !str_starts_with($user->avatar, 'http'))
-                                <form action="{{ route('profile.avatar.remove') }}" method="POST" class="inline" onsubmit="return confirm('Hapus foto kustom dan kembali ke foto bawaan?')">
+                                <form action="{{ route('profile.avatar.remove') }}" method="POST" class="inline" data-confirm="Hapus foto kustom dan kembali ke foto bawaan?" data-confirm-title="Hapus Foto Kustom" data-confirm-btn="Ya, Hapus Foto">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors border border-gray-200">

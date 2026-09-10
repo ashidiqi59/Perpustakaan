@@ -353,6 +353,7 @@
         </div>
 
         <x-toast-notification />
+        <x-confirm-modal />
 
         @stack('scripts')
     </body>

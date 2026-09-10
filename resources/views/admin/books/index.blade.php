@@ -112,10 +112,12 @@
                                                         <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST" class="inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" 
+                                                            <button type="button" 
                                                                 class="p-1.5 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                                                                 title="Hapus"
-                                                                onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
+                                                                data-confirm="Apakah Anda yakin ingin menghapus buku '{{ $book->title }}'? Tindakan ini tidak dapat dibatalkan."
+                                                                data-confirm-title="Hapus Buku"
+                                                                data-confirm-btn="Ya, Hapus Buku">
                                                                 <i class="fas fa-trash text-xs"></i>
                                                             </button>
                                                         </form>
