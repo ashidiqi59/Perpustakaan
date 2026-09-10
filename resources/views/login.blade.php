@@ -66,7 +66,7 @@
     }
 
     .register .content {
-      padding: 1.2em 3em;
+      padding: 1.6em 3.2em;
     }
 
     .login {
@@ -92,7 +92,7 @@
 
     .register h1 {
       font-size: 2.8em;
-      margin-bottom: 0.2em;
+      margin-bottom: 0.35em;
     }
 
     /* Clean, tasteful inputs */
@@ -115,10 +115,10 @@
     .register form input[type="text"],
     .register form input[type="email"],
     .register form input[type="password"] {
-      padding: 8px 12px;
-      margin: 3.5px 0;
-      font-size: 1.25em;
-      border-radius: 7px;
+      padding: 10px 14px;
+      margin: 5.5px 0;
+      font-size: 1.3em;
+      border-radius: 8px;
     }
 
     form input[type="text"]:focus,
@@ -137,7 +137,7 @@
     }
 
     .register .password-wrapper {
-      margin: 3.5px 0;
+      margin: 5.5px 0;
     }
 
     .password-wrapper input {
@@ -187,10 +187,6 @@
       margin: 8px 0 10px 0;
     }
 
-    .register .remember-container {
-      margin: 5px 0 6px 0;
-    }
-
     .remember-container input[type="checkbox"] {
       width: 1.3em;
       height: 1.3em;
@@ -234,9 +230,9 @@
     }
 
     .register button[type="submit"] {
-      padding: 9px 18px;
-      margin: 6px auto 4px;
-      font-size: 1.15em;
+      padding: 11px 20px;
+      margin: 14px auto 4px;
+      font-size: 1.2em;
     }
 
     .login button[type="submit"]:hover,
@@ -256,24 +252,24 @@
       display: flex;
       align-items: center;
       text-align: center;
-      margin: 8px 0 6px 0;
+      margin: 10px 0;
       width: 100%;
     }
 
     .register .divider-or {
-      margin: 4px 0 3px 0;
+      margin: 10px 0;
     }
 
     .divider-or::before,
     .divider-or::after {
       content: '';
       flex: 1;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1.5px solid #e2e8f0;
     }
 
     .divider-or span {
-      padding: 0 10px;
-      color: #888;
+      padding: 0 12px;
+      color: #94a3b8;
       font-size: 1.1em;
       margin: 0;
       font-weight: 500;
@@ -284,32 +280,34 @@
       display: flex !important;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
       width: 100%;
       background: #ffffff !important;
-      color: #374151 !important;
-      border: 1px solid #d1d5db !important;
-      border-radius: 8px !important;
-      padding: 9px 16px !important;
-      font-size: 1.2em !important;
+      color: #2d3748 !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 40px !important;
+      padding: 10px 20px !important;
+      font-size: 1.25em !important;
       font-weight: 600 !important;
       text-decoration: none;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-      transition: background 0.2s ease, border-color 0.2s ease;
-      margin: 6px 0 8px 0 !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+      margin: 6px 0 6px 0 !important;
       box-sizing: border-box;
       cursor: pointer;
       font-family: inherit;
     }
 
     .register .btn-google {
-      padding: 7.5px 14px !important;
-      margin: 3px 0 4px 0 !important;
+      padding: 9.5px 18px !important;
+      margin: 4px 0 6px 0 !important;
     }
 
     .btn-google:hover {
-      background: #f9fafb !important;
-      border-color: #9ca3af !important;
+      background: #f8fafc !important;
+      border-color: #94a3b8 !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+      transform: translateY(-1px);
     }
 
     .btn-google svg {
@@ -325,18 +323,22 @@
     }
 
     .kembali {
-      display: block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       margin-top: 10px;
-      font-size: 1.2em;
+      font-size: 1.25em;
       color: #0F2854;
       text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.2s ease;
+      font-weight: 600;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .kembali:hover {
       opacity: 0.75;
       text-decoration: underline;
+      transform: translateX(-3px);
     }
 
     /* 3D Animated Flip Pages */
@@ -812,17 +814,31 @@
       <div id="mobile-login">
         <div class="mobile-header">
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          <h1>Welcome Back!</h1>
-          <p>To keep connected with us please login with your personal info</p>
+          <h1>Selamat Datang!</h1>
+          <p>Silakan masuk dengan akun Anda untuk mengakses layanan perpustakaan</p>
         </div>
         <div class="mobile-card">
           <div class="content">
-            <h1>Log In</h1>
+            <h1>Masuk</h1>
             <form action="{{ route('auth.login') }}" method="POST">
               @csrf
+              <a href="{{ route('auth.google') }}" class="btn-google">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span>Masuk dengan Google</span>
+              </a>
+
+              <div class="divider-or">
+                <span>atau</span>
+              </div>
+
               <input type="text" name="email_or_npm" placeholder="Email atau NPM" value="{{ old('email_or_npm') }}">
               <div class="password-wrapper">
-                <input type="password" name="password" placeholder="Password" style="width: 100%; padding-right: 50px;">
+                <input type="password" name="password" placeholder="Kata Sandi" style="width: 100%; padding-right: 50px;">
                 <button type="button" class="password-toggle" onclick="togglePassword(this)">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -833,26 +849,13 @@
 
               <label class="remember-container">
                 <input type="checkbox" name="remember" id="remember">
-                <span class="remember-text">Remember me</span>
+                <span class="remember-text">Ingat saya</span>
               </label>
 
               <span class="clearfix"></span>
-              <button type="submit" onclick="return validateLogin()">Log In</button>
+              <button type="submit" onclick="return validateLogin()">Masuk</button>
 
-              <div class="divider-or">
-                <span>atau</span>
-              </div>
-              <a href="{{ route('auth.google') }}" class="btn-google">
-                <svg viewBox="0 0 24 24" width="18" height="18">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                </svg>
-                <span>Masuk dengan Google</span>
-              </a>
-
-              <a href="{{url('/')}}" class="kembali">Kembali ke Dashboard</a>
+              <a href="{{url('/')}}" class="kembali">&larr; Kembali ke Beranda</a>
             </form>
 
             <div class="mobile-toggle">
@@ -865,49 +868,16 @@
       <div id="mobile-register" style="display: none;">
         <div class="mobile-header">
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-          <h1>Hello, friend!</h1>
-          <p>Enter your personal details and start journey with us</p>
+          <h1>Halo, Sahabat!</h1>
+          <p>Daftarkan diri Anda dan mulai nikmati layanan perpustakaan</p>
         </div>
         <div class="mobile-card">
           <div class="content">
-            <h1>Sign Up</h1>
+            <h1>Daftar Akun</h1>
             <form action="{{ route('auth.register') }}" method="POST" onsubmit="return validateRegister(this)">
               @csrf
-              <input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
-              <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
-              <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-              <div class="password-wrapper">
-                <input type="password" name="password" placeholder="Password" style="width: 100%; padding-right: 50px;" required>
-                <button type="button" class="password-toggle" onclick="togglePassword(this)">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </button>
-              </div>
-              <div class="password-wrapper">
-                <input type="password" name="password_confirmation" placeholder="Confirm Password" style="width: 100%; padding-right: 50px;" required>
-                <button type="button" class="password-toggle" onclick="togglePassword(this)">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </button>
-              </div>
-
-              <label class="remember-container">
-                <input type="checkbox" name="terms" id="terms" required>
-                <span class="remember-text">I accept terms</span>
-              </label>
-
-              <span class="clearfix"></span>
-              <button type="submit">Register</button>
-
-              <div class="divider-or">
-                <span>atau</span>
-              </div>
               <a href="{{ route('auth.google') }}" class="btn-google">
-                <svg viewBox="0 0 24 24" width="18" height="18">
+                <svg viewBox="0 0 24 24" width="20" height="20">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
@@ -915,10 +885,38 @@
                 </svg>
                 <span>Daftar dengan Google</span>
               </a>
+
+              <div class="divider-or">
+                <span>atau</span>
+              </div>
+
+              <input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
+              <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
+              <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+              <div class="password-wrapper">
+                <input type="password" name="password" placeholder="Kata Sandi" style="width: 100%; padding-right: 50px;" required>
+                <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+              <div class="password-wrapper">
+                <input type="password" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" style="width: 100%; padding-right: 50px;" required>
+                <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+
+              <button type="submit">Daftar Sekarang</button>
             </form>
 
             <div class="mobile-toggle">
-              <p>Sudah punya akun? <a onclick="showMobileLogin()">Log In</a></p>
+              <p>Sudah punya akun? <a onclick="showMobileLogin()">Masuk</a></p>
             </div>
           </div>
         </div>
@@ -929,12 +927,26 @@
     <div id="container">
       <div class="login">
         <div class="content">
-          <h1>Log In</h1>
+          <h1>Masuk</h1>
           <form action="{{ route('auth.login') }}" method="POST">
             @csrf
+            <a href="{{ route('auth.google') }}" class="btn-google">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Masuk dengan Google</span>
+            </a>
+
+            <div class="divider-or">
+              <span>atau</span>
+            </div>
+
             <input type="text" name="email_or_npm" placeholder="Email atau NPM" value="{{ old('email_or_npm') }}">
             <div class="password-wrapper">
-              <input type="password" name="password" placeholder="Password" style="width: 100%; padding-right: 50px;">
+              <input type="password" name="password" placeholder="Kata Sandi" style="width: 100%; padding-right: 50px;">
               <button type="button" class="password-toggle" onclick="togglePassword(this)">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -945,86 +957,40 @@
 
             <label class="remember-container">
               <input type="checkbox" name="remember" id="remember">
-              <span class="remember-text">Remember me</span>
+              <span class="remember-text">Ingat saya</span>
             </label>
 
             <span class="clearfix"></span>
 
-            <button type="submit" onclick="return validateLogin()">Log In</button>
+            <button type="submit" onclick="return validateLogin()">Masuk</button>
 
-            <div class="divider-or">
-              <span>atau</span>
-            </div>
-            <a href="{{ route('auth.google') }}" class="btn-google">
-              <svg viewBox="0 0 24 24" width="18" height="18">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-              </svg>
-              <span>Masuk dengan Google</span>
-            </a>
-
-            <a href="{{url('/')}}" class="kembali">Kembali ke Dashboard</a>
+            <a href="{{url('/')}}" class="kembali">&larr; Kembali ke Beranda</a>
           </form>
         </div>
       </div>
       <div class="page front">
         <div class="content">
           <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          <h1>Welcome Back!</h1>
-          <p>To keep connected with us please login with your personal info</p>
-          <button type="button" id="register">Register <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><line x1="8" y1="12" x2="16" y2="12"/></svg></button>
+          <h1>Selamat Datang!</h1>
+          <p>Silakan masuk dengan akun Anda untuk mengakses layanan perpustakaan</p>
+          <button type="button" id="register">Daftar <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><line x1="8" y1="12" x2="16" y2="12"/></svg></button>
         </div>
       </div>
       <div class="page back">
         <div class="content">
           <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-          <h1>Hello, friend!</h1>
-          <p>Enter your personal details and start journey with us</p>
-          <button type="button" id="login"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg> Log In</button>
+          <h1>Halo, Sahabat!</h1>
+          <p>Daftarkan diri Anda dan mulai nikmati layanan perpustakaan</p>
+          <button type="button" id="login"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg> Masuk</button>
         </div>
       </div>
       <div class="register">
         <div class="content">
-          <h1>Sign Up</h1>
+          <h1>Daftar Akun</h1>
           <form action="{{ route('auth.register') }}" method="POST" onsubmit="return validateRegister(this)">
             @csrf
-            <input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
-            <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
-            <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-            <div class="password-wrapper">
-              <input type="password" name="password" placeholder="Password" style="width: 100%; padding-right: 50px;" required>
-              <button type="button" class="password-toggle" onclick="togglePassword(this)">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              </button>
-            </div>
-            <div class="password-wrapper">
-              <input type="password" name="password_confirmation" placeholder="Confirm Password" style="width: 100%; padding-right: 50px;" required>
-              <button type="button" class="password-toggle" onclick="togglePassword(this)">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              </button>
-            </div>
-
-            <label class="remember-container">
-              <input type="checkbox" name="terms" id="terms" required>
-              <span class="remember-text">I accept terms</span>
-            </label>
-
-            <span class="clearfix"></span>
-            <button type="submit">Register</button>
-
-            <div class="divider-or">
-              <span>atau</span>
-            </div>
             <a href="{{ route('auth.google') }}" class="btn-google">
-              <svg viewBox="0 0 24 24" width="18" height="18">
+              <svg viewBox="0 0 24 24" width="20" height="20">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
@@ -1032,6 +998,34 @@
               </svg>
               <span>Daftar dengan Google</span>
             </a>
+
+            <div class="divider-or">
+              <span>atau</span>
+            </div>
+
+            <input type="text" name="npm" placeholder="NPM" value="{{ old('npm') }}" required>
+            <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
+            <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+            <div class="password-wrapper">
+              <input type="password" name="password" placeholder="Kata Sandi" style="width: 100%; padding-right: 50px;" required>
+              <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <div class="password-wrapper">
+              <input type="password" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" style="width: 100%; padding-right: 50px;" required>
+              <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+
+            <button type="submit">Daftar Sekarang</button>
           </form>
         </div>
       </div>
@@ -1202,7 +1196,6 @@
       let email = formEl?.querySelector('input[name="email"]')?.value?.trim();
       let password = formEl?.querySelector('input[name="password"]')?.value;
       let passwordConfirm = formEl?.querySelector('input[name="password_confirmation"]')?.value;
-      let terms = formEl?.querySelector('input[name="terms"]')?.checked;
       
       // Fallback if formEl fields were empty
       if (!npm || !name || !email || !password || !passwordConfirm) {
@@ -1211,7 +1204,6 @@
         email = email || document.querySelector('#container .register input[name="email"]')?.value?.trim() || document.querySelector('#mobile-register input[name="email"]')?.value?.trim();
         password = password || document.querySelector('#container .register input[name="password"]')?.value || document.querySelector('#mobile-register input[name="password"]')?.value;
         passwordConfirm = passwordConfirm || document.querySelector('#container .register input[name="password_confirmation"]')?.value || document.querySelector('#mobile-register input[name="password_confirmation"]')?.value;
-        terms = terms !== undefined ? terms : (document.querySelector('#container .register input[name="terms"]')?.checked || document.querySelector('#mobile-register input[name="terms"]')?.checked);
       }
 
       if (!npm || !name || !email || !password || !passwordConfirm) {
@@ -1239,16 +1231,6 @@
         showPopup(
           'Password tidak sesuai',
           'Password dan konfirmasi password tidak cocok.',
-          'error'
-        );
-        return false;
-      }
-
-      if (!terms) {
-        resetSubmitButtons();
-        showPopup(
-          'Terms tidak diterima',
-          'Anda harus menerima terms dan conditions untuk mendaftar.',
           'error'
         );
         return false;
