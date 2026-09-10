@@ -116,15 +116,20 @@
                             <span>Role Pengguna</span>
                             <span class="text-rose-500">*</span>
                         </label>
-                        <select name="role" id="role-select" required
-                            class="w-full px-4 py-2.5 text-sm bg-slate-50/60 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-slate-800 font-medium cursor-pointer">
-                            <option value="">Pilih Role</option>
-                            @if($action === 'create')
-                                <option value="admin" {{ old('role', $user?->role) == 'admin' ? 'selected' : '' }}>Admin (Administrator)</option>
-                            @endif
-                            <option value="petugas" {{ old('role', $user?->role) == 'petugas' ? 'selected' : '' }}>Petugas (Scanner Barcode & Sirkulasi)</option>
-                            <option value="pengunjung" {{ old('role', $user?->role ?? 'pengunjung') == 'pengunjung' ? 'selected' : '' }}>Pengunjung (Mahasiswa / Anggota)</option>
-                        </select>
+                        <div class="relative">
+                            <select name="role" id="role-select" required
+                                class="w-full appearance-none pl-4 pr-10 py-2.5 text-sm bg-slate-50/60 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-slate-800 font-medium cursor-pointer">
+                                <option value="">Pilih Role</option>
+                                @if($action === 'create')
+                                    <option value="admin" {{ old('role', $user?->role) == 'admin' ? 'selected' : '' }}>Admin (Administrator)</option>
+                                @endif
+                                <option value="petugas" {{ old('role', $user?->role) == 'petugas' ? 'selected' : '' }}>Petugas (Scanner Barcode & Sirkulasi)</option>
+                                <option value="pengunjung" {{ old('role', $user?->role ?? 'pengunjung') == 'pengunjung' ? 'selected' : '' }}>Pengunjung (Mahasiswa / Anggota)</option>
+                            </select>
+                            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 flex items-center">
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </span>
+                        </div>
                         @if($action === 'create')
                             <p class="text-xs text-slate-500 mt-1.5 flex items-center gap-1.5">
                                 <i class="fas fa-info-circle text-blue-500"></i>

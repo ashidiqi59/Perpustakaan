@@ -115,13 +115,13 @@
             {{-- Format Badges --}}
             <div class="flex flex-wrap items-center gap-1.5 text-xs font-medium">
                 <span class="px-2.5 py-1 bg-violet-100 text-violet-700 rounded-lg text-[11px] font-semibold border border-violet-200" title="Check-In Presensi">
-                    <i class="fas fa-id-card mr-1"></i> MEMBER-
+                    <i class="fas fa-id-card mr-1"></i> MEMBER
                 </span>
                 <span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-[11px] font-semibold border border-emerald-200" title="Peminjaman Buku">
-                    <i class="fas fa-book mr-1"></i> PINJAM-
+                    <i class="fas fa-book mr-1"></i> PINJAM
                 </span>
                 <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-lg text-[11px] font-semibold border border-blue-200" title="Pengembalian Buku">
-                    <i class="fas fa-undo mr-1"></i> KEMBALI-
+                    <i class="fas fa-undo mr-1"></i> KEMBALI
                 </span>
             </div>
         </div>

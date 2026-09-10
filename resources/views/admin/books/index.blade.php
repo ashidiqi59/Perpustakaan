@@ -30,23 +30,28 @@
                                             <i id="search-icon" class="fas fa-search text-sm"></i>
                                         </div>
                                         <input type="text" id="admin-books-search" name="search" value="{{ $search }}" autocomplete="off" placeholder="Ketik judul, penulis, atau ISBN untuk langsung mencari..." 
-                                            class="w-full pl-9 pr-8 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/30">
+                                            class="w-full h-10 pl-9 pr-8 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/30">
                                         <button type="button" id="clear-search-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 {{ $search ? '' : 'hidden' }}" title="Hapus pencarian">
                                             <i class="fas fa-times-circle text-xs"></i>
                                         </button>
                                     </div>
                                 </div>
-                                <div class="w-full sm:w-56">
-                                    <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Kategori</label>
-                                    <select id="admin-books-category" name="category" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer">
-                                        <option value="">Semua Kategori</option>
-                                        @foreach($categories as $cat)
-                                            <option value="{{ $cat }}" {{ $category == $cat ? 'selected' : '' }}>{{ $cat }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="w-full sm:w-64">
+                                    <label for="admin-books-category" class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Kategori</label>
+                                    <div class="relative">
+                                        <select id="admin-books-category" name="category" class="w-full h-10 appearance-none pl-3.5 pr-8 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer transition-all">
+                                            <option value="">Semua Kategori</option>
+                                            @foreach($categories as $cat)
+                                                <option value="{{ $cat }}" {{ $category == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                                            @endforeach
+                                        </select>
+                                        <span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 flex items-center">
+                                            <i class="fas fa-chevron-down text-xs"></i>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div id="reset-btn-container" class="{{ ($search || $category) ? '' : 'hidden' }} flex items-center gap-2 w-full sm:w-auto">
-                                    <button type="button" id="reset-filter-btn" class="flex-1 sm:flex-none px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5" title="Reset filter">
+                                    <button type="button" id="reset-filter-btn" class="w-full sm:w-auto h-10 px-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5" title="Reset filter">
                                         <i class="fas fa-undo text-xs"></i>
                                         <span>Reset</span>
                                     </button>

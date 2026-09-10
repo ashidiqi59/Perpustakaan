@@ -126,14 +126,14 @@
                     </div>
                     <input type="text" id="admin-users-search" name="search" value="{{ $search }}" autocomplete="off"
                         placeholder="Ketik nama, NPM, atau email untuk langsung mencari..." 
-                        class="w-full pl-9 pr-8 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-slate-50/50">
+                        class="w-full h-10 pl-9 pr-8 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-slate-50/50">
                     <button type="button" id="clear-search-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 {{ $search ? '' : 'hidden' }}" title="Hapus pencarian">
                         <i class="fas fa-times-circle text-xs"></i>
                     </button>
                 </div>
 
                 <div id="reset-btn-container" class="{{ ($search || $role !== 'all') ? '' : 'hidden' }} flex items-center gap-2 w-full sm:w-auto">
-                    <a href="{{ route('admin.users.index') }}" id="reset-filter-btn" class="flex-1 sm:flex-none px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5" title="Reset filter">
+                    <a href="{{ route('admin.users.index') }}" id="reset-filter-btn" class="w-full sm:w-auto h-10 px-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5" title="Reset filter">
                         <i class="fas fa-undo text-xs"></i>
                         <span>Reset</span>
                     </a>

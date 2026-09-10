@@ -48,7 +48,7 @@
                     <i class="fas fa-calendar mr-1 text-violet-500"></i> Filter Tanggal
                 </label>
                 <input type="date" id="attendance-date" name="date" value="{{ $date }}"
-                       class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-white cursor-pointer">
+                       class="w-full h-10 px-3 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-white cursor-pointer">
             </div>
 
             <div class="flex-1 w-full">
@@ -58,7 +58,7 @@
                 <div class="relative">
                     <input type="text" id="attendance-name" name="name" value="{{ $name }}" autocomplete="off"
                            placeholder="Ketik nama anggota untuk langsung mencari..."
-                           class="w-full pl-3 pr-8 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
+                           class="w-full h-10 pl-3 pr-8 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
                     <button type="button" id="clear-attendance-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 {{ $name ? '' : 'hidden' }}" title="Hapus nama">
                         <i class="fas fa-times-circle text-xs"></i>
                     </button>
@@ -69,7 +69,7 @@
 
             <div id="reset-btn-container" class="{{ (request()->has('filter') || request()->hasAny(['date', 'name'])) ? '' : 'hidden' }} flex gap-2 w-full sm:w-auto">
                 <a href="{{ route('admin.attendance.index') }}" id="reset-filter-btn"
-                   class="flex-1 sm:flex-none px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                   class="w-full sm:w-auto h-10 px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
                     <i class="fas fa-undo"></i> Reset
                 </a>
             </div>
