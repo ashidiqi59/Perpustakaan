@@ -65,28 +65,27 @@
 
     {{-- FILTER & SEARCH BAR --}}
     <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4 mb-6">
-        <form method="GET" action="{{ route('petugas.scanner.presensi') }}" class="flex flex-col sm:flex-row gap-3 items-center">
+        <form id="scanner-presensi-form" method="GET" action="{{ route('petugas.scanner.presensi') }}" class="flex flex-col sm:flex-row gap-3 items-center">
             <div class="relative flex-1 w-full">
-                <i class="fas fa-search absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input type="text" name="search" value="{{ $search }}"
-                       placeholder="Cari berdasarkan nama anggota, NPM, atau prodi..."
-                       class="w-full pl-9 pr-4 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent">
+                <i id="search-icon" class="fas fa-search absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input type="text" id="scanner-presensi-search" name="search" value="{{ $search }}" autocomplete="off"
+                       placeholder="Ketik nama anggota, NPM, atau prodi untuk langsung mencari..."
+                       class="w-full pl-9 pr-8 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent">
+                <button type="button" id="clear-search-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 {{ $search ? '' : 'hidden' }}" title="Hapus pencarian">
+                    <i class="fas fa-times-circle text-xs"></i>
+                </button>
             </div>
-            <button type="submit"
-                    class="w-full sm:w-auto px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition-colors shrink-0">
-                <i class="fas fa-search mr-1"></i> Cari
-            </button>
-            @if($search)
-                <a href="{{ route('petugas.scanner.presensi') }}"
-                   class="w-full sm:w-auto px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-medium rounded-xl transition-colors text-center shrink-0">
-                    Reset
+            <div id="reset-btn-container" class="{{ $search ? '' : 'hidden' }} w-full sm:w-auto">
+                <a href="{{ route('petugas.scanner.presensi') }}" id="reset-filter-btn"
+                   class="w-full sm:w-auto px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-medium rounded-xl transition-colors flex items-center justify-center gap-1">
+                    <i class="fas fa-undo text-xs"></i> Reset
                 </a>
-            @endif
+            </div>
         </form>
     </div>
 
     {{-- ATTENDANCE TABLE --}}
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div id="scanner-presensi-table-wrapper" class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
         <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
             <h3 class="text-sm font-bold text-slate-800">Daftar Kehadiran Anggota</h3>
             <span class="px-2.5 py-1 bg-violet-100 text-violet-700 rounded-full font-bold text-xs">
@@ -162,5 +161,127 @@
             </div>
         @endif
     </div>
-
 @endsection
+
+@push('scripts')
+<script>
+    (function() {
+        var searchInput = document.getElementById('scanner-presensi-search');
+        var clearBtn = document.getElementById('clear-search-btn');
+        var resetContainer = document.getElementById('reset-btn-container');
+        var searchIcon = document.getElementById('search-icon');
+        var tableWrapper = document.getElementById('scanner-presensi-table-wrapper');
+        var form = document.getElementById('scanner-presensi-form');
+
+        var debounceTimer = null;
+        var activeController = null;
+
+        function updateResetVisibility() {
+            var hasFilter = searchInput && searchInput.value.trim().length > 0;
+            if (resetContainer) {
+                if (hasFilter) resetContainer.classList.remove('hidden');
+                else resetContainer.classList.add('hidden');
+            }
+            if (clearBtn && searchInput) {
+                if (hasFilter) clearBtn.classList.remove('hidden');
+                else clearBtn.classList.add('hidden');
+            }
+        }
+
+        function performSearch(pageUrl) {
+            updateResetVisibility();
+
+            if (searchIcon) searchIcon.className = 'fas fa-circle-notch fa-spin text-violet-500 absolute left-3.5 top-1/2 transform -translate-y-1/2 text-xs';
+            if (tableWrapper) {
+                tableWrapper.style.transition = 'opacity 0.2s ease';
+                tableWrapper.style.opacity = '0.5';
+            }
+
+            if (activeController) activeController.abort();
+            activeController = new AbortController();
+
+            var url;
+            if (pageUrl) {
+                url = new URL(pageUrl, window.location.origin);
+            } else {
+                url = new URL('{{ route('petugas.scanner.presensi') }}', window.location.origin);
+                var q = searchInput ? searchInput.value.trim() : '';
+                if (q) url.searchParams.set('search', q);
+            }
+
+            fetch(url.toString(), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                signal: activeController.signal
+            })
+            .then(function(res) { return res.text(); })
+            .then(function(html) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, 'text/html');
+                var newWrapper = doc.getElementById('scanner-presensi-table-wrapper');
+                if (newWrapper && tableWrapper) {
+                    tableWrapper.innerHTML = newWrapper.innerHTML;
+                    bindPaginationLinks();
+                }
+                window.history.replaceState({}, '', url.toString());
+            })
+            .catch(function(err) {
+                if (err.name !== 'AbortError') console.error(err);
+            })
+            .finally(function() {
+                if (searchIcon) searchIcon.className = 'fas fa-search absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs';
+                if (tableWrapper) tableWrapper.style.opacity = '1';
+            });
+        }
+
+        function bindPaginationLinks() {
+            if (!tableWrapper) return;
+            var links = tableWrapper.querySelectorAll('nav a');
+            links.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        performSearch(href);
+                    }
+                });
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(performSearch, 300);
+            });
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    clearTimeout(debounceTimer);
+                    performSearch();
+                }
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                if (searchInput) {
+                    searchInput.value = '';
+                    clearBtn.classList.add('hidden');
+                    searchInput.focus();
+                }
+                clearTimeout(debounceTimer);
+                performSearch();
+            });
+        }
+
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                clearTimeout(debounceTimer);
+                performSearch();
+            });
+        }
+
+        bindPaginationLinks();
+    })();
+</script>
+@endpush

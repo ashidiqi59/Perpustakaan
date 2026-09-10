@@ -104,33 +104,32 @@
 
     <!-- FILTER & SEARCH -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4">
-        <form action="{{ route('admin.featured-books.index') }}" method="GET" class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-            <input type="hidden" name="status" value="{{ $status }}">
+        <form id="featured-search-form" action="{{ route('admin.featured-books.index') }}" method="GET" class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+            <input type="hidden" id="featured-status-input" name="status" value="{{ $status }}">
 
             <div class="flex items-center gap-2 flex-1 max-w-full md:max-w-md">
                 <div class="relative flex-1">
-                    <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                    <input type="text" name="search" value="{{ $search }}" placeholder="Cari judul, penulis, ISBN..." 
-                           class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-slate-50/30">
+                    <i id="featured-search-icon" class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="featured-books-search" name="search" value="{{ $search }}" autocomplete="off" placeholder="Ketik judul, penulis, ISBN untuk langsung mencari..." 
+                           class="w-full pl-9 pr-8 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-slate-50/30">
+                    <button type="button" id="clear-featured-search-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 {{ $search ? '' : 'hidden' }}" title="Hapus pencarian">
+                        <i class="fas fa-times-circle text-xs"></i>
+                    </button>
                 </div>
-                <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 shrink-0 shadow-sm">
-                    <i class="fas fa-search text-xs"></i>
-                    <span>Cari</span>
-                </button>
             </div>
 
             <div class="flex items-center gap-2 justify-between sm:justify-end overflow-x-auto pb-1 sm:pb-0">
                 <div class="flex bg-slate-100 p-1 rounded-lg text-xs font-medium shrink-0">
                     <a href="{{ route('admin.featured-books.index', ['status' => 'all', 'search' => $search]) }}"
-                       class="px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'all' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}">
+                       class="status-tab px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'all' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}" data-status="all">
                         Semua ({{ $totalBooks }})
                     </a>
                     <a href="{{ route('admin.featured-books.index', ['status' => 'featured', 'search' => $search]) }}"
-                       class="px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'featured' ? 'bg-amber-500 text-white shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}">
+                       class="status-tab px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'featured' ? 'bg-amber-500 text-white shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}" data-status="featured">
                         Beranda ({{ $featuredCount }})
                     </a>
                     <a href="{{ route('admin.featured-books.index', ['status' => 'not_featured', 'search' => $search]) }}"
-                       class="px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'not_featured' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}">
+                       class="status-tab px-2.5 sm:px-3 py-1.5 rounded-md transition-colors {{ $status === 'not_featured' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-800' }}" data-status="not_featured">
                         Bukan Beranda ({{ $totalBooks - $featuredCount }})
                     </a>
                 </div>
@@ -145,7 +144,7 @@
     </div>
 
     <!-- TABLE LIST BUKU -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div id="featured-books-table-wrapper" class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-sm">
                 <thead>
@@ -458,5 +457,122 @@
             if (row) row.click();
         });
     @endif
+
+    // Live Auto Search
+    (function() {
+        var searchInput = document.getElementById('featured-books-search');
+        var statusInput = document.getElementById('featured-status-input');
+        var clearBtn = document.getElementById('clear-featured-search-btn');
+        var searchIcon = document.getElementById('featured-search-icon');
+        var tableWrapper = document.getElementById('featured-books-table-wrapper');
+        var form = document.getElementById('featured-search-form');
+
+        var debounceTimer = null;
+        var activeController = null;
+
+        function updateClearBtn() {
+            if (clearBtn && searchInput) {
+                if (searchInput.value.trim().length > 0) clearBtn.classList.remove('hidden');
+                else clearBtn.classList.add('hidden');
+            }
+        }
+
+        function performSearch(pageUrl) {
+            updateClearBtn();
+
+            if (searchIcon) searchIcon.className = 'fas fa-circle-notch fa-spin text-amber-500 absolute left-3.5 top-1/2 -translate-y-1/2 text-sm';
+            if (tableWrapper) {
+                tableWrapper.style.transition = 'opacity 0.2s ease';
+                tableWrapper.style.opacity = '0.5';
+            }
+
+            if (activeController) activeController.abort();
+            activeController = new AbortController();
+
+            var url;
+            if (pageUrl) {
+                url = new URL(pageUrl, window.location.origin);
+            } else {
+                url = new URL('{{ route('admin.featured-books.index') }}', window.location.origin);
+                var q = searchInput ? searchInput.value.trim() : '';
+                var st = statusInput ? statusInput.value : 'all';
+                if (q) url.searchParams.set('search', q);
+                if (st && st !== 'all') url.searchParams.set('status', st);
+            }
+
+            fetch(url.toString(), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                signal: activeController.signal
+            })
+            .then(function(res) { return res.text(); })
+            .then(function(html) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, 'text/html');
+                var newWrapper = doc.getElementById('featured-books-table-wrapper');
+                if (newWrapper && tableWrapper) {
+                    tableWrapper.innerHTML = newWrapper.innerHTML;
+                    bindPaginationLinks();
+                }
+                window.history.replaceState({}, '', url.toString());
+            })
+            .catch(function(err) {
+                if (err.name !== 'AbortError') console.error(err);
+            })
+            .finally(function() {
+                if (searchIcon) searchIcon.className = 'fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm';
+                if (tableWrapper) tableWrapper.style.opacity = '1';
+            });
+        }
+
+        function bindPaginationLinks() {
+            if (!tableWrapper) return;
+            var links = tableWrapper.querySelectorAll('nav a');
+            links.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        performSearch(href);
+                    }
+                });
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(performSearch, 300);
+            });
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    clearTimeout(debounceTimer);
+                    performSearch();
+                }
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                if (searchInput) {
+                    searchInput.value = '';
+                    clearBtn.classList.add('hidden');
+                    searchInput.focus();
+                }
+                clearTimeout(debounceTimer);
+                performSearch();
+            });
+        }
+
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                clearTimeout(debounceTimer);
+                performSearch();
+            });
+        }
+
+        bindPaginationLinks();
+    })();
 </script>
 @endsection

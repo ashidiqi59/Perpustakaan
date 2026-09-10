@@ -47,38 +47,37 @@
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5">
                     <i class="fas fa-calendar mr-1 text-violet-500"></i> Filter Tanggal
                 </label>
-                <input type="date" name="date" value="{{ $date }}"
-                       class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
+                <input type="date" id="attendance-date" name="date" value="{{ $date }}"
+                       class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-white cursor-pointer">
             </div>
 
             <div class="flex-1 w-full">
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5">
-                    <i class="fas fa-search mr-1 text-violet-500"></i> Cari Nama
+                    <i id="search-icon" class="fas fa-search mr-1 text-violet-500"></i> Cari Nama
                 </label>
-                <input type="text" name="name" value="{{ $name }}"
-                       placeholder="Nama anggota..."
-                       class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
+                <div class="relative">
+                    <input type="text" id="attendance-name" name="name" value="{{ $name }}" autocomplete="off"
+                           placeholder="Ketik nama anggota untuk langsung mencari..."
+                           class="w-full pl-3 pr-8 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
+                    <button type="button" id="clear-attendance-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 {{ $name ? '' : 'hidden' }}" title="Hapus nama">
+                        <i class="fas fa-times-circle text-xs"></i>
+                    </button>
+                </div>
             </div>
 
             <input type="hidden" name="filter" value="1">
 
-            <div class="flex gap-2 w-full sm:w-auto">
-                <button type="submit"
-                        class="flex-1 sm:flex-none px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
-                    <i class="fas fa-search"></i> Cari
-                </button>
-                @if(request()->has('filter') || request()->hasAny(['date', 'name']))
-                    <a href="{{ route('admin.attendance.index') }}"
-                       class="flex-1 sm:flex-none px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
-                        <i class="fas fa-undo"></i> Reset
-                    </a>
-                @endif
+            <div id="reset-btn-container" class="{{ (request()->has('filter') || request()->hasAny(['date', 'name'])) ? '' : 'hidden' }} flex gap-2 w-full sm:w-auto">
+                <a href="{{ route('admin.attendance.index') }}" id="reset-filter-btn"
+                   class="flex-1 sm:flex-none px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                    <i class="fas fa-undo"></i> Reset
+                </a>
             </div>
         </form>
     </div>
 
     {{-- TABLE --}}
-    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200/80">
+    <div id="attendance-table-wrapper" class="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200/80">
         <div class="px-4 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between gap-3">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 bg-violet-600 rounded-lg flex items-center justify-center text-white">
@@ -174,5 +173,130 @@
             </div>
         @endif
     </div>
-
 @endsection
+
+@push('scripts')
+<script>
+    (function() {
+        var dateInput = document.getElementById('attendance-date');
+        var nameInput = document.getElementById('attendance-name');
+        var clearBtn = document.getElementById('clear-attendance-btn');
+        var resetContainer = document.getElementById('reset-btn-container');
+        var searchIcon = document.getElementById('search-icon');
+        var tableWrapper = document.getElementById('attendance-table-wrapper');
+
+        var debounceTimer = null;
+        var activeController = null;
+
+        function updateResetVisibility() {
+            var today = new Date().toISOString().slice(0, 10);
+            var hasFilter = (nameInput && nameInput.value.trim().length > 0) || (dateInput && dateInput.value !== today);
+            if (resetContainer) {
+                if (hasFilter) resetContainer.classList.remove('hidden');
+                else resetContainer.classList.add('hidden');
+            }
+            if (clearBtn && nameInput) {
+                if (nameInput.value.trim().length > 0) clearBtn.classList.remove('hidden');
+                else clearBtn.classList.add('hidden');
+            }
+        }
+
+        function performSearch(pageUrl) {
+            updateResetVisibility();
+
+            if (searchIcon) searchIcon.className = 'fas fa-circle-notch fa-spin mr-1 text-violet-500';
+            if (tableWrapper) {
+                tableWrapper.style.transition = 'opacity 0.2s ease';
+                tableWrapper.style.opacity = '0.5';
+            }
+
+            if (activeController) activeController.abort();
+            activeController = new AbortController();
+
+            var url;
+            if (pageUrl) {
+                url = new URL(pageUrl, window.location.origin);
+            } else {
+                url = new URL('{{ route('admin.attendance.index') }}', window.location.origin);
+                var d = dateInput ? dateInput.value : '';
+                var n = nameInput ? nameInput.value.trim() : '';
+                if (d) url.searchParams.set('date', d);
+                if (n) url.searchParams.set('name', n);
+                url.searchParams.set('filter', '1');
+            }
+
+            fetch(url.toString(), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                signal: activeController.signal
+            })
+            .then(function(res) { return res.text(); })
+            .then(function(html) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, 'text/html');
+                var newWrapper = doc.getElementById('attendance-table-wrapper');
+                if (newWrapper && tableWrapper) {
+                    tableWrapper.innerHTML = newWrapper.innerHTML;
+                    bindPaginationLinks();
+                }
+                window.history.replaceState({}, '', url.toString());
+            })
+            .catch(function(err) {
+                if (err.name !== 'AbortError') console.error(err);
+            })
+            .finally(function() {
+                if (searchIcon) searchIcon.className = 'fas fa-search mr-1 text-violet-500';
+                if (tableWrapper) tableWrapper.style.opacity = '1';
+            });
+        }
+
+        function bindPaginationLinks() {
+            if (!tableWrapper) return;
+            var links = tableWrapper.querySelectorAll('nav a');
+            links.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        performSearch(href);
+                    }
+                });
+            });
+        }
+
+        if (nameInput) {
+            nameInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(performSearch, 300);
+            });
+            nameInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    clearTimeout(debounceTimer);
+                    performSearch();
+                }
+            });
+        }
+
+        if (dateInput) {
+            dateInput.addEventListener('change', function() {
+                clearTimeout(debounceTimer);
+                performSearch();
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                if (nameInput) {
+                    nameInput.value = '';
+                    clearBtn.classList.add('hidden');
+                    nameInput.focus();
+                }
+                clearTimeout(debounceTimer);
+                performSearch();
+            });
+        }
+
+        bindPaginationLinks();
+    })();
+</script>
+@endpush
