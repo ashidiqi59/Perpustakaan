@@ -86,13 +86,6 @@
                 <p class="text-xs sm:text-base text-gray-600">Catatan kehadiran Anda di perpustakaan</p>
             </div>
 
-            {{-- Alert --}}
-            @if(session('success'))
-                <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-6">
-                    <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
-                </div>
-            @endif
-
             {{-- ── MINI KARTU ANGGOTA + STATS ── --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
 

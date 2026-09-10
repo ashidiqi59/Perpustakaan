@@ -282,6 +282,7 @@
                 </div>
             </main>
         </div>
+        <x-toast-notification />
         @stack('scripts')
     </body>
 </html>

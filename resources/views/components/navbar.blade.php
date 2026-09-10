@@ -160,3 +160,4 @@
         </div>
     </header>
 
+    <x-toast-notification />

@@ -12,13 +12,6 @@
 @endsection
 
 @section('content')
-                    <!-- ALERT MESSAGES -->
-                    @if(session('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-3 rounded mb-4 text-sm">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
                     <!-- SEARCH & FILTER -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4 sm:p-5 mb-6">
                         <form action="{{ route('admin.books.index') }}" method="GET" id="searchForm" class="space-y-3">

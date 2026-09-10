@@ -41,34 +41,6 @@
     <main class="flex-grow pt-6 sm:pt-8 pb-16">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
-            <!-- Alerts -->
-            @if(session('success'))
-                <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-5 py-4 rounded-xl mb-6 flex items-start space-x-3 shadow-sm">
-                    <i class="fas fa-check-circle text-emerald-600 text-lg mt-0.5"></i>
-                    <div>
-                        <p class="font-semibold text-sm">{{ session('success') }}</p>
-                    </div>
-                </div>
-            @endif
-
-            @if(session('info'))
-                <div class="bg-blue-50 border border-blue-200 text-blue-800 px-5 py-4 rounded-xl mb-6 flex items-start space-x-3 shadow-sm">
-                    <i class="fas fa-info-circle text-blue-600 text-lg mt-0.5"></i>
-                    <div>
-                        <p class="font-semibold text-sm">{{ session('info') }}</p>
-                    </div>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="bg-red-50 border border-red-200 text-red-800 px-5 py-4 rounded-xl mb-6 flex items-start space-x-3 shadow-sm">
-                    <i class="fas fa-exclamation-circle text-red-600 text-lg mt-0.5"></i>
-                    <div>
-                        <p class="font-semibold text-sm">{{ session('error') }}</p>
-                    </div>
-                </div>
-            @endif
-
             @if(isset($errors) && $errors->any())
                 <div class="bg-red-50 border border-red-200 text-red-800 px-5 py-4 rounded-xl mb-6 shadow-sm">
                     <div class="flex items-center space-x-2 font-semibold text-sm mb-2">

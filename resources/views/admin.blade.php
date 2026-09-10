@@ -4,32 +4,6 @@
 @section('subtitle', 'Selamat datang, ' . Auth::user()->name)
 
 @section('content')
-    {{-- ALERT FLASH MESSAGES --}}
-    @if(session('info'))
-        <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-info-circle text-blue-500 text-base shrink-0"></i>
-            <span>{{ session('info') }}</span>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-exclamation-circle text-rose-500 text-base shrink-0"></i>
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
-    @if(session('warning'))
-        <div class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-exclamation-triangle text-amber-500 text-base shrink-0"></i>
-            <span>{{ session('warning') }}</span>
-        </div>
-    @endif
-    @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-check-circle text-emerald-500 text-base shrink-0"></i>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-
     <!-- STAT CARDS (STYLE PERSIS BUKU BERANDA) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">

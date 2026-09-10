@@ -6,31 +6,6 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- ALERT MESSAGES -->
-    @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-300 text-emerald-800 px-4 py-3 rounded-xl flex items-center justify-between shadow-sm animate-fade-in">
-            <div class="flex items-center gap-2.5">
-                <i class="fas fa-check-circle text-emerald-500 text-lg"></i>
-                <span class="text-sm font-medium">{{ session('success') }}</span>
-            </div>
-            <button type="button" onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="bg-rose-50 border border-rose-300 text-rose-800 px-4 py-3 rounded-xl flex items-center justify-between shadow-sm animate-fade-in">
-            <div class="flex items-center gap-2.5">
-                <i class="fas fa-exclamation-triangle text-rose-500 text-lg"></i>
-                <span class="text-sm font-medium">{{ session('error') }}</span>
-            </div>
-            <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    @endif
-
     @if($errors->any())
         <div class="bg-rose-50 border border-rose-300 text-rose-800 px-4 py-3 rounded-xl shadow-sm">
             <div class="flex items-center gap-2 mb-2 font-medium text-sm">

@@ -12,13 +12,6 @@
 @endsection
 
 @section('content')
-                    <!-- ALERT MESSAGES -->
-                    @if(session('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-3 rounded mb-4 text-sm">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
                     <!-- STATS CARDS -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between transition-all duration-200 hover:shadow-md">

@@ -11,21 +11,6 @@
 @endsection
 
 @section('content')
-    <!-- ALERT MESSAGES -->
-    @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-300 text-emerald-800 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-check-circle text-emerald-500 text-base"></i>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="bg-red-50 border border-red-300 text-red-800 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-exclamation-circle text-red-500 text-base"></i>
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
-
     <!-- STATS CARDS (KELOMPOK USER) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <!-- ADMIN -->

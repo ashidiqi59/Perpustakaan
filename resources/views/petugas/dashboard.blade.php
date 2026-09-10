@@ -4,27 +4,6 @@
 @section('subtitle', 'Smart Scanner serbaguna: otomatis mendeteksi Presensi, Peminjaman, & Pengembalian')
 
 @section('content')
-
-    {{-- ALERT MESSAGES --}}
-    @if(session('info'))
-        <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-xl mb-4 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-info-circle text-blue-500 text-base shrink-0"></i>
-            <span>{{ session('info') }}</span>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl mb-4 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-exclamation-circle text-rose-500 text-base shrink-0"></i>
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
-    @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl mb-4 text-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-check-circle text-emerald-500 text-base shrink-0"></i>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-
     {{-- STATS CARDS --}}
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
         {{-- Pengunjung Hari Ini --}}
