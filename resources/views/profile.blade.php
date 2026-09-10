@@ -613,7 +613,7 @@
                             <div class="pt-4 flex justify-end">
                                 <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2">
                                     <i class="fas fa-save"></i>
-                                    <span>Simpan Perubahan Biodata</span>
+                                    <span>Simpan</span>
                                 </button>
                             </div>
                         </form>

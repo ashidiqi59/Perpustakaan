@@ -14,6 +14,8 @@
         * { font-family: 'Inter', sans-serif; }
         body { background-color: #F9FAFB; color: #1F2937; }
         .library-primary { color: #2563EB; }
+        .bg-library-primary { background-color: #2563EB; }
+        .bg-library-light { background-color: #EFF6FF; }
 
         /* QR Modal */
         .qr-modal-overlay {
@@ -316,6 +318,8 @@
 
         </div>
     </div>
+
+    @include('components.footer')
 
     {{-- Modal Kartu Penuh & Modal QR Presensi (Reusable Component) --}}
     @include('components.member-card-modals')

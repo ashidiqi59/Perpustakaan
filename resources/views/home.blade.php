@@ -797,7 +797,7 @@
                                         <i class="fas fa-envelope text-xs"></i>
                                     </div>
                                     <div>
-                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email</p>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email Layanan</p>
                                         <p class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">info@perpustakaan.ac.id</p>
                                     </div>
                                 </div>
