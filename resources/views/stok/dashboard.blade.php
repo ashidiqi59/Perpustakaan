@@ -19,16 +19,9 @@
             <span>{{ session('success') }}</span>
         </div>
     @endif
-    @if(session('error'))
-        <div class="mb-4 flex items-center gap-3 bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl">
-            <i class="fas fa-exclamation-circle text-rose-500"></i>
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
 
     {{-- STAT CARDS --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {{-- Total Judul --}}
         <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Judul</p>
@@ -39,7 +32,6 @@
             </div>
         </div>
 
-        {{-- Total Stok --}}
         <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Stok</p>
@@ -50,8 +42,8 @@
             </div>
         </div>
 
-        {{-- Stok Rendah --}}
-        <a href="{{ route('stok.books.index', ['filter' => 'low']) }}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between hover:border-amber-300 hover:shadow-md transition-all">
+        <a href="{{ route('stok.books.index', ['filter' => 'low']) }}"
+           class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between hover:border-amber-300 hover:shadow-md transition-all">
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Stok Rendah</p>
                 <h3 class="text-2xl font-bold text-amber-500 mt-1">{{ $lowStockCount }} <span class="text-sm font-normal text-slate-400">Judul</span></h3>
@@ -62,39 +54,43 @@
             </div>
         </a>
 
-        {{-- Stok Habis --}}
-        <a href="{{ route('stok.books.index', ['filter' => 'out']) }}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between hover:border-rose-300 hover:shadow-md transition-all">
+        <a href="{{ route('stok.books.index', ['filter' => 'out']) }}"
+           class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between hover:border-red-300 hover:shadow-md transition-all">
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Stok Habis</p>
-                <h3 class="text-2xl font-bold text-rose-600 mt-1">{{ $outOfStockCount }} <span class="text-sm font-normal text-slate-400">Judul</span></h3>
+                <h3 class="text-2xl font-bold text-red-600 mt-1">{{ $outOfStockCount }} <span class="text-sm font-normal text-slate-400">Judul</span></h3>
                 <p class="text-[10px] text-slate-400 mt-0.5">Stok = 0</p>
             </div>
-            <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center text-rose-600">
+            <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600">
                 <i class="fas fa-times-circle text-xl"></i>
             </div>
         </a>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+    {{-- MAIN PANELS --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
+
         {{-- ── Buku Stok Habis ── --}}
         <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-            <h3 class="text-base sm:text-lg font-semibold text-slate-800 mb-4">
-                <i class="fas fa-times-circle text-rose-500 mr-2"></i>Buku Stok Habis
+            <h3 class="text-base sm:text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-times-circle text-red-500"></i>
+                Buku Stok Habis
                 @if($outOfStockBooks->count() > 0)
-                    <span class="ml-2 text-xs font-bold bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">{{ $outOfStockBooks->count() }}</span>
+                    <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded-full">{{ $outOfStockBooks->count() }}</span>
                 @endif
             </h3>
 
             @if($outOfStockBooks->count() > 0)
-                <div class="space-y-3">
+                <div class="space-y-1">
                     @foreach($outOfStockBooks->take(5) as $book)
-                        <div class="flex items-center justify-between py-2 border-b border-slate-100">
+                        <div class="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
                             <div class="flex items-center gap-3 min-w-0">
                                 @if($book->image)
-                                    <img src="{{ asset($book->image) }}" alt="{{ $book->title }}" class="w-9 h-12 object-cover rounded-md border border-slate-200 shrink-0">
+                                    <img src="{{ asset($book->image) }}" alt="{{ $book->title }}"
+                                         class="w-9 h-12 object-cover rounded shadow-sm shrink-0 border border-slate-200">
                                 @else
-                                    <div class="w-9 h-12 bg-slate-100 rounded-md flex items-center justify-center shrink-0">
-                                        <i class="fas fa-book text-slate-300"></i>
+                                    <div class="w-9 h-12 bg-slate-100 rounded flex items-center justify-center shrink-0">
+                                        <i class="fas fa-book text-slate-300 text-xs"></i>
                                     </div>
                                 @endif
                                 <div class="min-w-0">
@@ -102,49 +98,53 @@
                                     <p class="text-xs text-slate-500 truncate">{{ $book->author ?? '-' }}</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-2 shrink-0">
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-700 border border-rose-200">
-                                    Habis
+                            <div class="flex items-center gap-2 shrink-0 ml-2">
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-200">
+                                    <i class="fas fa-times-circle text-[9px]"></i> Habis
                                 </span>
-                                <a href="{{ route('stok.books.edit', $book) }}" class="text-xs text-blue-600 hover:underline font-medium">Edit</a>
+                                <a href="{{ route('stok.books.edit', $book) }}"
+                                   class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-semibold">Edit</a>
                             </div>
                         </div>
                     @endforeach
-                    @if($outOfStockBooks->count() > 5)
-                        <div class="pt-1 text-center">
-                            <a href="{{ route('stok.books.index', ['filter' => 'out']) }}" class="text-xs text-blue-600 hover:underline font-medium">
-                                Lihat {{ $outOfStockBooks->count() - 5 }} buku lainnya →
-                            </a>
-                        </div>
-                    @endif
+                </div>
+
+                {{-- Link lihat selengkapnya --}}
+                <div class="pt-3 mt-1 text-center">
+                    <a href="{{ route('stok.books.index', ['filter' => 'out']) }}"
+                       class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                        Lihat semua stok habis →
+                    </a>
                 </div>
             @else
-                <div class="py-8 text-center">
+                <div class="py-10 text-center">
                     <i class="fas fa-check-circle text-emerald-400 text-3xl mb-2"></i>
-                    <p class="text-sm text-slate-500 font-medium">Tidak ada buku yang stoknya habis</p>
+                    <p class="text-sm text-slate-500 font-medium">Tidak ada buku yang stoknya habis 🎉</p>
                 </div>
             @endif
         </div>
 
-        {{-- ── Buku Stok Rendah & Distribusi ── --}}
+        {{-- ── Buku Stok Hampir Habis ── --}}
         <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-            <h3 class="text-base sm:text-lg font-semibold text-slate-800 mb-4">
-                <i class="fas fa-exclamation-triangle text-amber-500 mr-2"></i>Stok Hampir Habis
+            <h3 class="text-base sm:text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-exclamation-triangle text-amber-500"></i>
+                Stok Hampir Habis
                 @if($lowStockBooks->count() > 0)
-                    <span class="ml-2 text-xs font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">{{ $lowStockBooks->count() }}</span>
+                    <span class="text-xs font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">{{ $lowStockBooks->count() }}</span>
                 @endif
             </h3>
 
             @if($lowStockBooks->count() > 0)
-                <div class="space-y-3">
+                <div class="space-y-1">
                     @foreach($lowStockBooks->take(5) as $book)
-                        <div class="flex items-center justify-between py-2 border-b border-slate-100">
+                        <div class="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
                             <div class="flex items-center gap-3 min-w-0">
                                 @if($book->image)
-                                    <img src="{{ asset($book->image) }}" alt="{{ $book->title }}" class="w-9 h-12 object-cover rounded-md border border-slate-200 shrink-0">
+                                    <img src="{{ asset($book->image) }}" alt="{{ $book->title }}"
+                                         class="w-9 h-12 object-cover rounded shadow-sm shrink-0 border border-slate-200">
                                 @else
-                                    <div class="w-9 h-12 bg-slate-100 rounded-md flex items-center justify-center shrink-0">
-                                        <i class="fas fa-book text-slate-300"></i>
+                                    <div class="w-9 h-12 bg-slate-100 rounded flex items-center justify-center shrink-0">
+                                        <i class="fas fa-book text-slate-300 text-xs"></i>
                                     </div>
                                 @endif
                                 <div class="min-w-0">
@@ -152,52 +152,125 @@
                                     <p class="text-xs text-slate-500 truncate">{{ $book->author ?? '-' }}</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-2 shrink-0">
+                            <div class="flex items-center gap-2 shrink-0 ml-2">
                                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
-                                    {{ $book->stock }} eks
+                                    <i class="fas fa-exclamation-circle text-[9px]"></i> {{ $book->stock }} eks
                                 </span>
-                                <a href="{{ route('stok.books.edit', $book) }}" class="text-xs text-blue-600 hover:underline font-medium">Edit</a>
+                                <a href="{{ route('stok.books.edit', $book) }}"
+                                   class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-semibold">Edit</a>
                             </div>
                         </div>
                     @endforeach
-                    @if($lowStockBooks->count() > 5)
-                        <div class="pt-1 text-center">
-                            <a href="{{ route('stok.books.index', ['filter' => 'low']) }}" class="text-xs text-blue-600 hover:underline font-medium">
-                                Lihat {{ $lowStockBooks->count() - 5 }} buku lainnya →
-                            </a>
-                        </div>
-                    @endif
+                </div>
+
+                {{-- Link lihat selengkapnya --}}
+                <div class="pt-3 mt-1 text-center">
+                    <a href="{{ route('stok.books.index', ['filter' => 'low']) }}"
+                       class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                        Lihat semua stok hampir habis →
+                    </a>
                 </div>
             @else
-                <div class="py-8 text-center">
+                <div class="py-10 text-center">
                     <i class="fas fa-check-circle text-emerald-400 text-3xl mb-2"></i>
                     <p class="text-sm text-slate-500 font-medium">Semua stok aman (> 3 eksemplar)</p>
                 </div>
             @endif
-
-            {{-- Distribusi Kategori --}}
-            @if($categoryStats->count() > 0)
-                <div class="mt-4 pt-4 border-t border-slate-100">
-                    <h4 class="text-sm font-semibold text-slate-700 mb-3">
-                        <i class="fas fa-tags text-slate-400 mr-1"></i> Distribusi Kategori
-                    </h4>
-                    <div class="space-y-2">
-                        @php $maxStock = $categoryStats->max('total_stock'); @endphp
-                        @foreach($categoryStats->take(5) as $stat)
-                            @php $pct = $maxStock > 0 ? round(($stat->total_stock / $maxStock) * 100) : 0; @endphp
-                            <div>
-                                <div class="flex justify-between text-xs mb-0.5">
-                                    <span class="font-medium text-slate-700 truncate max-w-[150px]">{{ $stat->category }}</span>
-                                    <span class="text-slate-500 shrink-0 ml-2">{{ $stat->total_stock }} eks</span>
-                                </div>
-                                <div class="w-full bg-slate-100 rounded-full h-1.5">
-                                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: {{ $pct }}%"></div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
     </div>
+
+    {{-- ── Distribusi Kategori ── --}}
+    @if($categoryStats->count() > 0)
+    <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+        <h3 class="text-base sm:text-lg font-semibold text-slate-800 mb-5 flex items-center gap-2">
+            <i class="fas fa-chart-pie text-blue-500"></i>
+            Distribusi Kategori
+            <span class="text-xs font-normal text-slate-400 ml-1">Stok per kategori</span>
+        </h3>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+            {{-- Donut Chart --}}
+            <div class="flex justify-center items-center">
+                <div class="relative" style="width:220px;height:220px;">
+                    <canvas id="categoryDonutChart"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <span class="text-2xl font-bold text-slate-800">{{ $totalStock }}</span>
+                        <span class="text-xs text-slate-400">Total Stok</span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Bar list --}}
+            <div class="space-y-3">
+                @php $maxStock = $categoryStats->max('total_stock'); @endphp
+                @foreach($categoryStats->take(7) as $i => $stat)
+                    @php
+                        $pct = $maxStock > 0 ? round(($stat->total_stock / $maxStock) * 100) : 0;
+                        $colors = ['bg-blue-500','bg-emerald-500','bg-amber-500','bg-purple-500','bg-rose-500','bg-indigo-500','bg-cyan-500'];
+                        $color  = $colors[$i % count($colors)];
+                    @endphp
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full {{ $color }} shrink-0"></span>
+                                <span class="text-sm font-medium text-slate-700 truncate max-w-[140px]">{{ $stat->category }}</span>
+                                <span class="text-xs text-slate-400">{{ $stat->total_titles }} judul</span>
+                            </div>
+                            <span class="text-sm font-semibold text-slate-600 shrink-0">{{ number_format($stat->total_stock) }} eks</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2">
+                            <div class="{{ $color }} h-2 rounded-full transition-all duration-700" style="width: {{ $pct }}%"></div>
+                        </div>
+                    </div>
+                @endforeach
+
+                @if($categoryStats->count() > 7)
+                    <p class="text-xs text-slate-400 text-center pt-1">+ {{ $categoryStats->count() - 7 }} kategori lainnya</p>
+                @endif
+            </div>
+        </div>
+    </div>
+    @endif
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var ctx = document.getElementById('categoryDonutChart');
+    if (!ctx) return;
+
+    var labels = @json($categoryStats->take(7)->pluck('category'));
+    var data   = @json($categoryStats->take(7)->pluck('total_stock'));
+    var colors = ['#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444','#6366f1','#06b6d4'];
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                hoverOffset: 6,
+            }]
+        },
+        options: {
+            responsive: false,
+            cutout: '68%',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            return ' ' + ctx.label + ': ' + ctx.parsed.toLocaleString() + ' eks';
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+@endpush
