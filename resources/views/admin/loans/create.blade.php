@@ -1,19 +1,37 @@
-@extends('layouts.admin')
+@php
+    $isPetugasMode = (auth()->check() && auth()->user()->isPetugas()) || request()->routeIs('petugas.*');
+@endphp
+@extends($isPetugasMode ? 'layouts.petugas' : 'layouts.admin')
 
-@section('title', 'Tambah Peminjaman')
-@section('subtitle', 'Catat peminjaman buku baru')
+@section('title', $isPetugasMode ? 'Peminjaman Manual (Tanpa HP)' : 'Tambah Peminjaman')
+@section('subtitle', $isPetugasMode ? 'Bantu buatkan pinjaman buku untuk pengunjung yang tidak membawa atau tidak memiliki smartphone' : 'Catat peminjaman buku baru')
 
 @section('content')
     <div class="max-w-2xl mx-auto">
+        @if($isPetugasMode)
+            {{-- Info Banner Khusus Petugas --}}
+            <div class="mb-5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/90 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 shadow-xs">
+                <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-900 flex items-center justify-center text-lg shrink-0 font-bold shadow-sm">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <div class="flex-1 text-xs sm:text-sm">
+                    <h4 class="font-bold text-slate-800">Layanan Pinjam Langsung (Tanpa Aplikasi / HP)</h4>
+                    <p class="text-slate-600 mt-0.5 leading-relaxed">
+                        Peminjaman ini akan <strong>langsung aktif (Dipinjam)</strong> seketika setelah disimpan tanpa perlu tiket barcode dari HP pengunjung. Pastikan buku fisik diserahkan kepada peminjam.
+                    </p>
+                </div>
+            </div>
+        @endif
+
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
             <!-- Header Banner -->
             <div class="p-5 sm:p-6 bg-gradient-to-r from-slate-50 via-slate-50 to-blue-50/40 border-b border-slate-200/80 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xl shrink-0 shadow-sm shadow-blue-500/20">
-                    <i class="fas fa-book-reader"></i>
+                <div class="w-12 h-12 rounded-xl {{ $isPetugasMode ? 'bg-amber-500 text-slate-900 shadow-amber-500/20' : 'bg-blue-500 text-white shadow-blue-500/20' }} flex items-center justify-center text-xl shrink-0 shadow-sm">
+                    <i class="fas {{ $isPetugasMode ? 'fa-hand-holding-heart' : 'fa-book-reader' }}"></i>
                 </div>
                 <div>
-                    <h3 class="text-base sm:text-lg font-bold text-slate-800">Formulir Peminjaman Buku</h3>
-                    <p class="text-xs sm:text-sm text-slate-500">Cari anggota peminjam dan buku yang ingin dipinjam</p>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800">{{ $isPetugasMode ? 'Formulir Peminjaman Manual' : 'Formulir Peminjaman Buku' }}</h3>
+                    <p class="text-xs sm:text-sm text-slate-500">{{ $isPetugasMode ? 'Cari nama pengunjung terdaftar dan buku yang dipinjam' : 'Cari anggota peminjam dan buku yang ingin dipinjam' }}</p>
                 </div>
             </div>
 
@@ -34,7 +52,7 @@
                     </div>
                 @endif
 
-                <form id="loan-form" action="{{ route('admin.loans.store') }}" method="POST" class="space-y-5">
+                <form id="loan-form" action="{{ $isPetugasMode ? route('petugas.loans.store') : route('admin.loans.store') }}" method="POST" class="space-y-5">
                     @csrf
 
                     <!-- PEMINJAM (SEARCHABLE COMBOBOX) -->
@@ -234,16 +252,16 @@
 
                     <!-- FORM ACTIONS -->
                     <div class="pt-4 border-t border-slate-200/80 flex flex-col-reverse sm:flex-row justify-end items-center gap-3">
-                        <a href="{{ route('admin.loans.index') }}" 
+                        <a href="{{ $isPetugasMode ? route('petugas.dashboard') : route('admin.loans.index') }}" 
                            class="w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 text-sm font-medium rounded-xl border border-slate-300 shadow-2xs transition-all flex items-center justify-center gap-2 cursor-pointer">
                             <i class="fas fa-times text-xs text-slate-400"></i>
                             <span>Batal</span>
                         </a>
 
                         <button type="submit" 
-                                class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-98 text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r {{ $isPetugasMode ? 'from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-900 font-bold' : 'from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold' }} active:scale-98 text-sm rounded-xl shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer">
                             <i class="fas fa-save"></i>
-                            <span>Simpan Peminjaman</span>
+                            <span>{{ $isPetugasMode ? 'Catat & Pinjamkan Buku' : 'Simpan Peminjaman' }}</span>
                         </button>
                     </div>
                 </form>

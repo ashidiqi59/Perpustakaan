@@ -58,6 +58,12 @@ Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->gro
 
     // Presensi / Kartu Anggota
     Route::post('/api/scan-member', [AttendanceController::class, 'apiScan'])->name('api.scan-member');
+
+    // Bantuan Pengunjung: Buat Akun & Pinjaman Manual (Menggunakan Controller & View Admin)
+    Route::get('/pengunjung/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/pengunjung', [UserController::class, 'store'])->name('users.store');
+    Route::get('/loans/create', [LoanController::class, 'adminCreate'])->name('loans.create');
+    Route::post('/loans', [LoanController::class, 'adminStore'])->name('loans.store');
 });
 
 // ============================================================

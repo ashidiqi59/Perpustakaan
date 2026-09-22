@@ -73,6 +73,41 @@
     </div>
 
     {{-- ══════════════════════════════════════════════════════════════════════ --}}
+    {{-- ══ BANTUAN PENGUNJUNG TANPA HP / BELUM MEMILIKI AKUN ═════════════════ --}}
+    {{-- ══════════════════════════════════════════════════════════════════════ --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <a href="{{ route('petugas.loans.create') }}" class="group bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-white border border-amber-200/90 hover:border-amber-400 p-4 rounded-2xl flex items-center justify-between transition-all hover:shadow-md bg-white">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-amber-500 text-slate-900 flex items-center justify-center text-lg font-bold shadow-sm group-hover:scale-105 transition-transform shrink-0">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-800 group-hover:text-amber-700 transition-colors">Bantu Pinjamkan Buku (Tanpa HP)</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">Catat pinjaman manual langsung aktif bagi pengunjung tanpa smartphone</p>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-amber-100 group-hover:bg-amber-500 text-amber-700 group-hover:text-slate-900 flex items-center justify-center text-xs transition-colors shrink-0 ml-2">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+
+        <a href="{{ route('petugas.users.create') }}" class="group bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-white border border-emerald-200/90 hover:border-emerald-400 p-4 rounded-2xl flex items-center justify-between transition-all hover:shadow-md bg-white">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold shadow-sm group-hover:scale-105 transition-transform shrink-0">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">Buatkan Akun Pengunjung Baru</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">Daftarkan akun anggota baru & langsung aktifkan kartu digital</p>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-emerald-100 group-hover:bg-emerald-600 text-emerald-700 group-hover:text-white flex items-center justify-center text-xs transition-colors shrink-0 ml-2">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+    </div>
+
+    {{-- ══════════════════════════════════════════════════════════════════════ --}}
     {{-- ══ SMART UNIVERSAL SCANNER (1 SCANNER UNTUK SEMUA JENIS BARCODE) ══ --}}
     {{-- ══════════════════════════════════════════════════════════════════════ --}}
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden mb-6">

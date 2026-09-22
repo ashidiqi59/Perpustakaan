@@ -70,13 +70,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $isPetugas = (auth()->check() && auth()->user()->isPetugas()) || $request->routeIs('petugas.*');
+
+        $rules = [
             'npm'      => 'nullable|string|max:20|unique:users,npm',
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
-            'role'     => 'required|in:admin,petugas,petugas_stok,pengunjung',
+            'role'     => $isPetugas ? 'nullable|in:pengunjung' : 'required|in:admin,petugas,petugas_stok,pengunjung',
             'password' => 'required|string|min:6|confirmed',
-        ]);
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -85,12 +89,26 @@ class UserController extends Controller
         }
 
         $data = $validator->validated();
+        if ($isPetugas) {
+            $data['role'] = 'pengunjung';
+        }
+
         if ($data['role'] !== 'pengunjung') {
             $data['npm'] = null;
         }
         $data['password'] = Hash::make($data['password']);
 
-        User::create($data);
+        $newUser = User::create($data);
+
+        // Buat kartu anggota digital otomatis untuk pengunjung
+        if ($newUser->isPengunjung()) {
+            \App\Models\MemberBarcode::getOrCreateForUser($newUser);
+        }
+
+        if ($isPetugas) {
+            return redirect()->route('petugas.dashboard')
+                ->with('success', 'Akun pengunjung ' . $newUser->name . ' berhasil dibuat!');
+        }
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Akun berhasil dibuat!');

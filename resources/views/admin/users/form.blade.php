@@ -1,7 +1,10 @@
-@extends('layouts.admin')
+@php
+    $isPetugasMode = (auth()->check() && auth()->user()->isPetugas()) || request()->routeIs('petugas.*');
+@endphp
+@extends($isPetugasMode ? 'layouts.petugas' : 'layouts.admin')
 
-@section('title', $action === 'create' ? 'Tambah Akun' : 'Edit User')
-@section('subtitle', $action === 'create' ? 'Buat akun petugas atau pengguna baru' : 'Perbarui informasi profil dan hak akses pengguna')
+@section('title', $action === 'create' ? ($isPetugasMode ? 'Buat Akun Pengunjung' : 'Tambah Akun') : 'Edit User')
+@section('subtitle', $action === 'create' ? ($isPetugasMode ? 'Daftarkan pengunjung perpustakaan baru secara langsung' : 'Buat akun petugas atau pengguna baru') : 'Perbarui informasi profil dan hak akses pengguna')
 
 @section('content')
     <div class="max-w-2xl mx-auto">
@@ -22,7 +25,7 @@
             </div>
         @endif
 
-        <form action="{{ $action === 'create' ? route('admin.users.store') : route('admin.users.update', $user->id) }}"
+        <form action="{{ $action === 'create' ? ($isPetugasMode ? route('petugas.users.store') : route('admin.users.store')) : route('admin.users.update', $user->id) }}"
               method="POST"
               class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
             @csrf
@@ -43,15 +46,15 @@
                                 {{ $user->role === 'admin' ? 'bg-amber-500' : ($user->role === 'petugas' ? 'bg-blue-500' : ($user->role === 'petugas_stok' ? 'bg-teal-500' : 'bg-emerald-500')) }}"></span>
                         </div>
                     @else
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/20">
-                            <i class="fas fa-user-plus text-2xl sm:text-3xl"></i>
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br {{ $isPetugasMode ? 'from-emerald-500 to-teal-600 shadow-emerald-500/20' : 'from-blue-500 to-indigo-600 shadow-blue-500/20' }} text-white flex items-center justify-center shrink-0 shadow-sm">
+                            <i class="fas {{ $isPetugasMode ? 'fa-user-graduate' : 'fa-user-plus' }} text-2xl sm:text-3xl"></i>
                         </div>
                     @endif
 
                     <div class="min-w-0 flex-1">
                         @if($action === 'create')
-                            <h3 class="text-lg sm:text-xl font-bold text-slate-800">Buat Akun Baru</h3>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lengkapi formulir di bawah untuk menambahkan pengguna atau staf baru ke sistem</p>
+                            <h3 class="text-lg sm:text-xl font-bold text-slate-800">{{ $isPetugasMode ? 'Daftarkan Pengunjung Baru' : 'Buat Akun Baru' }}</h3>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">{{ $isPetugasMode ? 'Bantu buatkan akun bagi pengunjung yang tidak memiliki HP atau belum terdaftar' : 'Lengkapi formulir di bawah untuk menambahkan pengguna atau staf baru ke sistem' }}</p>
                         @else
                             <div class="flex flex-wrap items-center gap-2 mb-1">
                                 <h3 class="text-lg sm:text-xl font-bold text-slate-900 truncate">{{ $user->name }}</h3>
@@ -88,7 +91,31 @@
             <div class="p-5 sm:p-7 space-y-5">
                 
                 <!-- ROLE SELECTION / DISPLAY -->
-                @if($action === 'edit' && $user?->role === 'admin')
+                @if($isPetugasMode)
+                    <!-- ROLE UNTUK PETUGAS: OTOMATIS PENGUNJUNG -->
+                    <input type="hidden" name="role" value="pengunjung">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+                            Role Pengguna
+                        </label>
+                        <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-50/90 via-emerald-50/50 to-transparent border border-emerald-200/90 flex items-start sm:items-center justify-between gap-3">
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center text-lg shrink-0 shadow-2xs">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-bold text-slate-800">Pengunjung (Mahasiswa / Anggota)</span>
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-200/80 text-emerald-900 border border-emerald-300/50">
+                                            <i class="fas fa-check text-[9px]"></i> Anggota
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-0.5">Pengunjung akan otomatis dibuatkan Kartu Anggota Digital untuk scan presensi dan peminjaman.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @elseif($action === 'edit' && $user?->role === 'admin')
                     <!-- ADMIN ROLE: TERKUNCI (TIDAK BISA DIUBAH) -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
@@ -145,7 +172,7 @@
                 @endif
 
                 <!-- NPM (Hanya untuk Pengunjung / Mahasiswa) -->
-                <div id="npm-field-group" class="{{ in_array(old('role', $user?->role ?? 'pengunjung'), ['admin', 'petugas', 'petugas_stok']) ? 'hidden' : '' }}">
+                <div id="npm-field-group" class="{{ !$isPetugasMode && in_array(old('role', $user?->role ?? 'pengunjung'), ['admin', 'petugas', 'petugas_stok']) ? 'hidden' : '' }}">
                     <label for="npm-input" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">
                         Nomor Pokok Mahasiswa (NPM) <span class="text-rose-500">*</span>
                     </label>
@@ -250,16 +277,16 @@
 
             <!-- FORM ACTIONS BAR -->
             <div class="px-5 py-4 sm:px-7 sm:py-5 bg-slate-50/80 border-t border-slate-200/80 flex flex-col-reverse sm:flex-row justify-end items-center gap-3">
-                <a href="{{ route('admin.users.index') }}" 
+                <a href="{{ $isPetugasMode ? route('petugas.dashboard') : route('admin.users.index') }}" 
                    class="w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 text-sm font-medium rounded-xl border border-slate-300 shadow-2xs transition-all flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fas fa-arrow-left text-xs text-slate-400"></i>
                     <span>Batal</span>
                 </a>
 
                 <button type="submit" 
-                        class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-98 text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer">
-                    <i class="fas fa-{{ $action === 'create' ? 'user-plus' : 'save' }}"></i>
-                    <span>{{ $action === 'create' ? 'Buat Akun' : 'Perbarui User' }}</span>
+                        class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r {{ $isPetugasMode ? 'from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700' : 'from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700' }} active:scale-98 text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer">
+                    <i class="fas fa-{{ $action === 'create' ? ($isPetugasMode ? 'user-check' : 'user-plus') : 'save' }}"></i>
+                    <span>{{ $action === 'create' ? ($isPetugasMode ? 'Daftarkan Pengunjung' : 'Buat Akun') : 'Perbarui User' }}</span>
                 </button>
             </div>
         </form>

@@ -96,26 +96,48 @@ class LoanController extends Controller
     public function adminStore(Request $request)
     {
         $validated = $request->validate([
-            'user_id'  => 'required|exists:users,id',
-            'book_id'  => 'required|exists:books,id',
+            'user_id'   => 'required|exists:users,id',
+            'book_id'   => 'required|exists:books,id',
             'loan_date' => 'required|date',
             'due_date'  => 'required|date|after_or_equal:loan_date',
-            'notes'    => 'nullable|string',
+            'notes'     => 'nullable|string',
         ]);
 
         // Check if book stock is available
         $book = Book::find($validated['book_id']);
         if ($book->stock <= 0) {
-            return back()->withErrors(['book_id' => 'Stok buku tidak tersedia']);
+            return back()->withInput()->withErrors(['book_id' => 'Stok buku tidak tersedia']);
         }
 
-        // Admin creates loan directly as active (bypass barcode flow)
+        // Check if user already has an active loan for this book
+        $existingLoan = Loan::where('user_id', $validated['user_id'])
+            ->where('book_id', $validated['book_id'])
+            ->whereIn('status', [
+                Loan::STATUS_MENUNGGU_KONFIRMASI,
+                Loan::STATUS_PEMINJAMAN,
+                Loan::STATUS_TERLAMBAT,
+                Loan::STATUS_MENUNGGU_PENGEMBALIAN,
+            ])
+            ->first();
+
+        if ($existingLoan) {
+            return back()->withInput()->withErrors(['book_id' => 'Pengunjung ini masih memiliki pinjaman aktif untuk buku ini.']);
+        }
+
+        // Creates loan directly as active (bypass barcode flow for visitors without smartphone)
         $loan = Loan::create(array_merge($validated, [
             'status' => Loan::STATUS_PEMINJAMAN,
         ]));
 
         // Reduce book stock immediately
         $book->decrement('stock');
+
+        $isPetugas = (auth()->check() && auth()->user()->isPetugas()) || $request->routeIs('petugas.*');
+
+        if ($isPetugas) {
+            return redirect()->route('petugas.dashboard')
+                ->with('success', 'Peminjaman manual untuk ' . ($loan->user->name ?? 'Pengunjung') . ' (' . $book->title . ') berhasil dicatat!');
+        }
 
         return redirect()->route('admin.loans.index')
             ->with('success', 'Peminjaman berhasil ditambahkan');

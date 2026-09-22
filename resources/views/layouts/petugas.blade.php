@@ -292,6 +292,19 @@
                         <span class="nav-text">Presensi Pengunjung</span>
                     </a>
 
+                    <div class="border-t border-slate-700/60 my-2"></div>
+                    <p class="nav-text text-[10px] text-slate-400 px-4 py-1 uppercase font-semibold tracking-wider">Layanan Pengunjung</p>
+
+                    <a href="{{ route('petugas.loans.create') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors {{ request()->routeIs('petugas.loans.create') ? 'bg-amber-500 text-slate-900 font-semibold shadow-sm' : 'text-slate-300 hover:bg-slate-800' }}">
+                        <i class="fas fa-hand-holding-heart w-5 text-center"></i>
+                        <span class="nav-text">Pinjaman Manual (Tanpa HP)</span>
+                    </a>
+
+                    <a href="{{ route('petugas.users.create') }}" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors {{ request()->routeIs('petugas.users.create') ? 'bg-emerald-600 text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-slate-800' }}">
+                        <i class="fas fa-user-plus w-5 text-center"></i>
+                        <span class="nav-text">Buat Akun Pengunjung</span>
+                    </a>
+
                     @if(auth()->user()->isAdmin())
                         <div class="border-t border-slate-700 my-2"></div>
                         <p class="nav-text text-xs text-slate-500 px-4 py-1 uppercase font-semibold tracking-wider">Admin</p>
