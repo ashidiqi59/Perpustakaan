@@ -63,10 +63,6 @@ class Loan extends Model
         return $this->belongsTo(Book::class);
     }
 
-    // =========================================================================
-    // BARCODE GENERATION
-    // =========================================================================
-
     /**
      * Generate a unique loan barcode token and set expiry.
      * Called when user submits borrow request.

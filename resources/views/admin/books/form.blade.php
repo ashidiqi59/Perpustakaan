@@ -3,6 +3,8 @@
 @section('title', $action == 'create' ? 'Tambah Buku Baru' : 'Edit Buku')
 @section('subtitle', $action == 'create' ? 'Tambahkan buku baru ke koleksi' : 'Perbarui informasi buku')
 
+@php $rp = $routePrefix ?? 'admin'; @endphp
+
 @section('content')
                     <!-- ALERT MESSAGES -->
                     @if($errors->any())
@@ -15,7 +17,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ $action == 'create' ? route('admin.books.store') : route('admin.books.update', $book->id) }}" 
+                    <form action="{{ $action == 'create' ? route($rp.'.books.store') : route($rp.'.books.update', $book->id) }}" 
                           method="POST" 
                           enctype="multipart/form-data"
                           class="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -210,7 +212,7 @@
 
                         <!-- FORM ACTIONS -->
                         <div class="px-4 py-3 sm:px-6 sm:py-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-                            <a href="{{ route('admin.books.index') }}" class="px-4 py-2 bg-slate-500 text-white text-sm rounded-lg hover:bg-slate-600 transition-colors text-center">
+                            <a href="{{ route($rp.'.books.index') }}" class="px-4 py-2 bg-slate-500 text-white text-sm rounded-lg hover:bg-slate-600 transition-colors text-center">
                                 Batal
                             </a>
                             <button type="submit" class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2">

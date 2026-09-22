@@ -19,7 +19,7 @@ class UserController extends Controller
         
         $query = User::query();
         
-        if ($role && in_array($role, ['admin', 'petugas', 'pengunjung'])) {
+        if ($role && in_array($role, ['admin', 'petugas', 'petugas_stok', 'pengunjung'])) {
             $query->where('role', $role);
         }
         
@@ -33,18 +33,20 @@ class UserController extends Controller
         
         // Count totals for each group
         $counts = [
-            'all'        => User::count(),
-            'admin'      => User::where('role', 'admin')->count(),
-            'petugas'    => User::where('role', 'petugas')->count(),
-            'pengunjung' => User::where('role', 'pengunjung')->count(),
+            'all'          => User::count(),
+            'admin'        => User::where('role', 'admin')->count(),
+            'petugas'      => User::where('role', 'petugas')->count(),
+            'petugas_stok' => User::where('role', 'petugas_stok')->count(),
+            'pengunjung'   => User::where('role', 'pengunjung')->count(),
         ];
         
-        // Sort with Admin first, then Petugas, then Pengunjung
+        // Sort with Admin first, then Petugas, then Petugas Stok, then Pengunjung
         $users = $query->orderByRaw("CASE 
             WHEN role = 'admin' THEN 1 
             WHEN role = 'petugas' THEN 2 
-            WHEN role = 'pengunjung' THEN 3 
-            ELSE 4 END")
+            WHEN role = 'petugas_stok' THEN 3
+            WHEN role = 'pengunjung' THEN 4 
+            ELSE 5 END")
             ->latest('id')
             ->paginate(10)
             ->withQueryString();
@@ -72,7 +74,7 @@ class UserController extends Controller
             'npm'      => 'nullable|string|max:20|unique:users,npm',
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
-            'role'     => 'required|in:admin,petugas,pengunjung',
+            'role'     => 'required|in:admin,petugas,petugas_stok,pengunjung',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
@@ -148,7 +150,7 @@ class UserController extends Controller
             'npm'      => 'nullable|string|max:20|unique:users,npm,' . $user->id,
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email,' . $user->id,
-            'role'     => 'required|in:admin,petugas,pengunjung',
+            'role'     => 'required|in:admin,petugas,petugas_stok,pengunjung',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 

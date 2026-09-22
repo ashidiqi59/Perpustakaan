@@ -12,9 +12,10 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    const ROLE_ADMIN     = 'admin';
-    const ROLE_PETUGAS   = 'petugas';
-    const ROLE_PENGUNJUNG = 'pengunjung';
+    const ROLE_ADMIN         = 'admin';
+    const ROLE_PETUGAS       = 'petugas';
+    const ROLE_PETUGAS_STOK  = 'petugas_stok';
+    const ROLE_PENGUNJUNG    = 'pengunjung';
 
     /**
      * The attributes that are mass assignable.
@@ -44,11 +45,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is petugas (staff/operator)
+     * Check if user is petugas (staff/operator - scanner barcode)
      */
     public function isPetugas(): bool
     {
         return $this->role === self::ROLE_PETUGAS;
+    }
+
+    /**
+     * Check if user is petugas_stok (staff khusus manajemen stok buku)
+     */
+    public function isPetugasStok(): bool
+    {
+        return $this->role === self::ROLE_PETUGAS_STOK;
     }
 
     /**
@@ -65,6 +74,14 @@ class User extends Authenticatable
     public function canScan(): bool
     {
         return $this->isPetugas() || $this->isAdmin();
+    }
+
+    /**
+     * Check if user can manage books/stock (admin or petugas_stok)
+     */
+    public function canManageBooks(): bool
+    {
+        return $this->isAdmin() || $this->isPetugasStok();
     }
 
     /**

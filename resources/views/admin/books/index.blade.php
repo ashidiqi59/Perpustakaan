@@ -3,8 +3,10 @@
 @section('title', 'Kelola Buku')
 @section('subtitle', 'Kelola koleksi buku perpustakaan')
 
+@php $rp = $routePrefix ?? 'admin'; @endphp
+
 @section('header-actions')
-    <a href="{{ route('admin.books.create') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-500 text-white text-xs sm:text-sm rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1 sm:gap-2">
+    <a href="{{ route($rp.'.books.create') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-500 text-white text-xs sm:text-sm rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1 sm:gap-2">
         <i class="fas fa-plus"></i>
         <span class="hidden sm:inline">Tambah Buku</span>
         <span class="sm:hidden">Tambah</span>
@@ -14,7 +16,7 @@
 @section('content')
                     <!-- SEARCH & FILTER -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4 sm:p-5 mb-6">
-                        <form action="{{ route('admin.books.index') }}" method="GET" id="searchForm" class="space-y-3">
+                        <form action="{{ route($rp.'.books.index') }}" method="GET" id="searchForm" class="space-y-3">
                             <div class="flex flex-col sm:flex-row gap-3 items-end">
                                 <div class="flex-1 w-full">
                                     <label class="block text-xs sm:text-sm font-medium text-slate-600 mb-1">Cari Buku</label>
@@ -99,17 +101,17 @@
                                                 </td>
                                                 <td class="px-3 py-3">
                                                     <div class="flex items-center justify-center gap-1">
-                                                        <a href="{{ route('admin.books.show', $book->id) }}" 
+                                                        <a href="{{ route($rp.'.books.show', $book->id) }}" 
                                                             class="p-1.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
                                                             title="Detail">
                                                             <i class="fas fa-eye text-xs"></i>
                                                         </a>
-                                                        <a href="{{ route('admin.books.edit', $book->id) }}" 
+                                                        <a href="{{ route($rp.'.books.edit', $book->id) }}" 
                                                             class="p-1.5 text-slate-600 hover:text-amber-600 hover:bg-amber-50 rounded transition-colors"
                                                             title="Edit">
                                                             <i class="fas fa-edit text-xs"></i>
                                                         </a>
-                                                        <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST" class="inline">
+                                                        <form action="{{ route($rp.'.books.destroy', $book->id) }}" method="POST" class="inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="button" 
@@ -147,7 +149,7 @@
                                 </div>
                                 <h3 class="text-base sm:text-lg font-semibold text-slate-800 mb-2">Tidak ada buku</h3>
                                 <p class="text-sm text-slate-500 mb-4">Belum ada buku yang ditambahkan atau sesuai dengan pencarian.</p>
-                                <a href="{{ route('admin.books.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors inline-flex items-center gap-2 text-sm">
+                                <a href="{{ route($rp.'.books.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors inline-flex items-center gap-2 text-sm">
                                     <i class="fas fa-plus"></i>
                                     Tambah Buku Pertama
                                 </a>

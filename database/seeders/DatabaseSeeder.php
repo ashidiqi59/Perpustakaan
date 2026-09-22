@@ -43,6 +43,13 @@ class DatabaseSeeder extends Seeder
             'role'     => User::ROLE_PETUGAS,
         ]);
 
+        User::firstOrCreate(['email' => 'stok@gmail.com'], [
+            'npm'      => null,
+            'name'     => 'Petugas Stok Buku',
+            'password' => bcrypt('Stok1234'),
+            'role'     => User::ROLE_PETUGAS_STOK,
+        ]);
+
         $this->call(BooksSeeder::class);
     }
 }

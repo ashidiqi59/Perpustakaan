@@ -40,7 +40,7 @@
                                  onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=0F2854&color=ffffff&bold=true'"
                                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-white shadow-sm ring-1 ring-slate-200">
                             <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white 
-                                {{ $user->role === 'admin' ? 'bg-amber-500' : ($user->role === 'petugas' ? 'bg-blue-500' : 'bg-emerald-500') }}"></span>
+                                {{ $user->role === 'admin' ? 'bg-amber-500' : ($user->role === 'petugas' ? 'bg-blue-500' : ($user->role === 'petugas_stok' ? 'bg-teal-500' : 'bg-emerald-500')) }}"></span>
                         </div>
                     @else
                         <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/20">
@@ -62,6 +62,10 @@
                                 @elseif($user->role === 'petugas')
                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
                                         <i class="fas fa-id-badge text-blue-600 text-[11px]"></i> Petugas
+                                    </span>
+                                @elseif($user->role === 'petugas_stok')
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 border border-teal-200">
+                                        <i class="fas fa-boxes text-teal-600 text-[11px]"></i> Petugas Stok
                                     </span>
                                 @else
                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
@@ -123,7 +127,8 @@
                                 @if($action === 'create')
                                     <option value="admin" {{ old('role', $user?->role) == 'admin' ? 'selected' : '' }}>Admin (Administrator)</option>
                                 @endif
-                                <option value="petugas" {{ old('role', $user?->role) == 'petugas' ? 'selected' : '' }}>Petugas (Scanner Barcode & Sirkulasi)</option>
+                                <option value="petugas" {{ old('role', $user?->role) == 'petugas' ? 'selected' : '' }}>Petugas (Scanner Barcode &amp; Sirkulasi)</option>
+                                <option value="petugas_stok" {{ old('role', $user?->role) == 'petugas_stok' ? 'selected' : '' }}>Petugas Stok (Manajemen Koleksi Buku)</option>
                                 <option value="pengunjung" {{ old('role', $user?->role ?? 'pengunjung') == 'pengunjung' ? 'selected' : '' }}>Pengunjung (Mahasiswa / Anggota)</option>
                             </select>
                             <span class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 flex items-center">
@@ -133,14 +138,14 @@
                         @if($action === 'create')
                             <p class="text-xs text-slate-500 mt-1.5 flex items-center gap-1.5">
                                 <i class="fas fa-info-circle text-blue-500"></i>
-                                <span>Pilih <strong>Petugas</strong> untuk akun yang bertugas scan barcode peminjaman & pengembalian.</span>
+                                <span>Pilih <strong>Petugas</strong> untuk scanner barcode, atau <strong>Petugas Stok</strong> untuk kelola koleksi buku.</span>
                             </p>
                         @endif
                     </div>
                 @endif
 
                 <!-- NPM (Hanya untuk Pengunjung / Mahasiswa) -->
-                <div id="npm-field-group" class="{{ in_array(old('role', $user?->role ?? 'pengunjung'), ['admin', 'petugas']) ? 'hidden' : '' }}">
+                <div id="npm-field-group" class="{{ in_array(old('role', $user?->role ?? 'pengunjung'), ['admin', 'petugas', 'petugas_stok']) ? 'hidden' : '' }}">
                     <label for="npm-input" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">
                         Nomor Pokok Mahasiswa (NPM) <span class="text-rose-500">*</span>
                     </label>
@@ -269,7 +274,7 @@
         function toggleNpmField() {
             if (!roleSelect || !npmGroup) return;
             const selectedRole = roleSelect.value;
-            if (selectedRole === 'admin' || selectedRole === 'petugas') {
+            if (selectedRole === 'admin' || selectedRole === 'petugas' || selectedRole === 'petugas_stok') {
                 npmGroup.classList.add('hidden');
             } else {
                 npmGroup.classList.remove('hidden');

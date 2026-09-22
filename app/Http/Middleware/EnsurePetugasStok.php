@@ -6,11 +6,11 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureAdmin
+class EnsurePetugasStok
 {
     /**
      * Handle an incoming request.
-     * Only allows access for 'admin' role.
+     * Only allows access for 'petugas_stok' and 'admin' roles.
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -20,19 +20,14 @@ class EnsureAdmin
 
         $user = auth()->user();
 
-        if (!$user->isAdmin()) {
-            if ($user->isPetugas()) {
+        if (!$user->canManageBooks()) {
+            if ($user->canScan()) {
                 return redirect()->route('petugas.dashboard')
-                    ->with('error', 'Akses ditolak. Halaman admin hanya dapat diakses oleh Administrator.');
-            }
-
-            if ($user->isPetugasStok()) {
-                return redirect()->route('stok.dashboard')
-                    ->with('error', 'Akses ditolak. Halaman admin hanya dapat diakses oleh Administrator.');
+                    ->with('error', 'Akses ditolak. Halaman stok buku hanya dapat diakses oleh Petugas Stok atau Administrator.');
             }
 
             return redirect()->route('home')
-                ->with('error', 'Akses ditolak. Halaman admin hanya dapat diakses oleh Administrator.');
+                ->with('error', 'Akses ditolak. Halaman stok buku hanya dapat diakses oleh Petugas Stok atau Administrator.');
         }
 
         return $next($request);

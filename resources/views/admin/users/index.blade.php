@@ -37,6 +37,18 @@
             </div>
         </a>
 
+        <!-- PETUGAS STOK -->
+        <a href="{{ route('admin.users.index', array_filter(['role' => 'petugas_stok', 'search' => $search])) }}"
+           class="bg-white rounded-2xl p-5 shadow-sm border flex items-center justify-between transition-all duration-200 hover:shadow-md {{ $role === 'petugas_stok' ? 'border-teal-400 ring-2 ring-teal-400/25 bg-teal-50/10' : 'border-slate-200/80 hover:border-teal-300' }}">
+            <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Petugas Stok</p>
+                <h3 class="text-2xl font-bold text-teal-600 mt-1">{{ $counts['petugas_stok'] ?? 0 }} <span class="text-sm font-normal text-slate-400">User</span></h3>
+            </div>
+            <div class="w-12 h-12 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 shrink-0">
+                <i class="fas fa-boxes text-xl"></i>
+            </div>
+        </a>
+
         <!-- PENGUNJUNG -->
         <a href="{{ route('admin.users.index', array_filter(['role' => 'pengunjung', 'search' => $search])) }}"
            class="bg-white rounded-2xl p-5 shadow-sm border flex items-center justify-between transition-all duration-200 hover:shadow-md {{ $role === 'pengunjung' ? 'border-emerald-400 ring-2 ring-emerald-400/25 bg-emerald-50/10' : 'border-slate-200/80 hover:border-emerald-300' }}">
@@ -88,6 +100,14 @@
                 <i class="fas fa-id-badge text-blue-500 text-xs"></i>
                 <span>Petugas</span>
                 <span class="px-2 py-0.5 text-xs rounded-full {{ $role === 'petugas' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-blue-800' }}">{{ $counts['petugas'] }}</span>
+            </a>
+
+            <!-- TAB: PETUGAS STOK -->
+            <a href="{{ route('admin.users.index', array_filter(['role' => 'petugas_stok', 'search' => $search])) }}" 
+               class="px-3.5 py-2 text-xs sm:text-sm font-medium rounded-t-lg transition-colors flex items-center gap-2 border-b-2 {{ $role === 'petugas_stok' ? 'border-teal-500 text-teal-800 bg-white font-semibold shadow-sm' : 'border-transparent text-slate-600 hover:text-teal-700 hover:bg-teal-50/50' }}">
+                <i class="fas fa-boxes text-teal-500 text-xs"></i>
+                <span>Petugas Stok</span>
+                <span class="px-2 py-0.5 text-xs rounded-full {{ $role === 'petugas_stok' ? 'bg-teal-500 text-white' : 'bg-teal-100 text-teal-800' }}">{{ $counts['petugas_stok'] ?? 0 }}</span>
             </a>
 
             <!-- TAB: PENGUNJUNG -->
@@ -208,6 +228,10 @@
                                             <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 border border-blue-200 shadow-sm">
                                                 <i class="fas fa-id-badge text-sm"></i>
                                             </div>
+                                        @elseif($user->role === 'petugas_stok')
+                                            <div class="w-9 h-9 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center shrink-0 border border-teal-200 shadow-sm">
+                                                <i class="fas fa-boxes text-sm"></i>
+                                            </div>
                                         @else
                                             <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200 shadow-sm">
                                                 <i class="fas fa-user text-sm"></i>
@@ -235,6 +259,10 @@
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-200 text-xs rounded-full font-semibold">
                                             <i class="fas fa-id-badge text-blue-500"></i> Petugas
                                         </span>
+                                    @elseif($user->role === 'petugas_stok')
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-teal-50 text-teal-700 border border-teal-200 text-xs rounded-full font-semibold">
+                                            <i class="fas fa-boxes text-teal-500"></i> Petugas Stok
+                                        </span>
                                     @else
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs rounded-full font-semibold">
                                             <i class="fas fa-user-graduate text-emerald-500"></i> Pengunjung
@@ -247,9 +275,11 @@
                                     @if($user->role === 'admin')
                                         <span class="text-amber-800 font-medium">Akses Penuh Seluruh Sistem</span>
                                     @elseif($user->role === 'petugas')
-                                        <span class="text-blue-800 font-medium">Scanner Barcode & Sirkulasi</span>
+                                        <span class="text-blue-800 font-medium">Scanner Barcode &amp; Sirkulasi</span>
+                                    @elseif($user->role === 'petugas_stok')
+                                        <span class="text-teal-800 font-medium">Kelola Stok &amp; Koleksi Buku</span>
                                     @else
-                                        <span class="text-emerald-800 font-medium">Katalog & Peminjaman Buku</span>
+                                        <span class="text-emerald-800 font-medium">Katalog &amp; Peminjaman Buku</span>
                                     @endif
                                 </td>
 

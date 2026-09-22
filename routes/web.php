@@ -10,6 +10,7 @@ use App\Http\Controllers\FeaturedBookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\StokController;
 
 // ============================================================
 // Halaman Pengunjung (Public & Anggota Perpustakaan)
@@ -56,6 +57,25 @@ Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->gro
 
     // Presensi / Kartu Anggota
     Route::post('/api/scan-member', [AttendanceController::class, 'apiScan'])->name('api.scan-member');
+});
+
+// ============================================================
+// Petugas Stok Routes (hanya untuk petugas_stok dan admin)
+// ============================================================
+Route::middleware(['auth', 'petugas.stok'])->prefix('stok')->name('stok.')->group(function () {
+    Route::get('/dashboard', [StokController::class, 'dashboard'])->name('dashboard');
+
+    // CRUD Buku
+    Route::get('/buku', [StokController::class, 'index'])->name('books.index');
+    Route::get('/buku/tambah', [StokController::class, 'create'])->name('books.create');
+    Route::post('/buku', [StokController::class, 'store'])->name('books.store');
+    Route::get('/buku/{book}/edit', [StokController::class, 'edit'])->name('books.edit');
+    Route::get('/buku/{book}', [StokController::class, 'show'])->name('books.show');
+    Route::put('/buku/{book}', [StokController::class, 'update'])->name('books.update');
+    Route::delete('/buku/{book}', [StokController::class, 'destroy'])->name('books.destroy');
+
+    // Adjust Stok
+    Route::post('/buku/{book}/stok', [StokController::class, 'adjustStock'])->name('books.adjust-stock');
 });
 
 // ============================================================

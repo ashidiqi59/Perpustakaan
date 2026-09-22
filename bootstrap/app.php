@@ -18,9 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'device_per_page',
         ]);
         $middleware->alias([
-            'petugas' => \App\Http\Middleware\EnsurePetugas::class,
-            'admin' => \App\Http\Middleware\EnsureAdmin::class,
+            'petugas'       => \App\Http\Middleware\EnsurePetugas::class,
+            'admin'         => \App\Http\Middleware\EnsureAdmin::class,
             'prevent.staff' => \App\Http\Middleware\PreventStaffAccess::class,
+            'petugas.stok'  => \App\Http\Middleware\EnsurePetugasStok::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

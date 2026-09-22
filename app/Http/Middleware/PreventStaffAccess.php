@@ -27,6 +27,11 @@ class PreventStaffAccess
                 return redirect()->route('petugas.dashboard')
                     ->with('info', 'Anda dialihkan ke Dashboard Petugas karena akun Petugas tidak mengakses halaman pengunjung.');
             }
+
+            if ($user->isPetugasStok()) {
+                return redirect()->route('stok.dashboard')
+                    ->with('info', 'Anda dialihkan ke Dashboard Stok Buku karena akun Petugas Stok tidak mengakses halaman pengunjung.');
+            }
         }
 
         return $next($request);

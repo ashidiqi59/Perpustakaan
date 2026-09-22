@@ -270,9 +270,15 @@
                     </div>
                     <div class="flex items-center gap-2 sm:gap-4">
                         @yield('header-actions')
-                        <span class="hidden sm:inline-flex px-3 py-1 bg-amber-100 text-amber-700 text-xs sm:text-sm rounded-full font-medium">
-                            <i class="fas fa-shield-alt mr-1"></i>Admin
-                        </span>
+                        @if(auth()->user()?->isPetugasStok())
+                            <span class="hidden sm:inline-flex px-3 py-1 bg-amber-100 text-amber-700 text-xs sm:text-sm rounded-full font-medium">
+                                <i class="fas fa-layer-group mr-1"></i>Petugas Stok
+                            </span>
+                        @else
+                            <span class="hidden sm:inline-flex px-3 py-1 bg-amber-100 text-amber-700 text-xs sm:text-sm rounded-full font-medium">
+                                <i class="fas fa-shield-alt mr-1"></i>Admin
+                            </span>
+                        @endif
                     </div>
                 </header>
 
