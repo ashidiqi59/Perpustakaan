@@ -76,6 +76,10 @@
                 <i class="fas fa-history w-5 text-center"></i>
                 <span class="nav-text">Riwayat Presensi</span>
             </a>
+            <a href="{{ route('admin.statistik') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors {{ request()->routeIs('admin.statistik') ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800' }}">
+                <i class="fas fa-chart-bar w-5 text-center"></i>
+                <span class="nav-text">Statistik</span>
+            </a>
 
             <!-- Divider -->
             <div class="border-t border-slate-700 my-2"></div>

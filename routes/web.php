@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StokController;
+use App\Http\Controllers\StatistikController;
 
 // ============================================================
 // Halaman Pengunjung (Public & Anggota Perpustakaan)
@@ -123,6 +124,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
         // Admin Attendance History (Riwayat Kunjungan)
         Route::get('/attendance', [AttendanceController::class, 'history'])->name('attendance.index');
+
+        // Statistik & Analitik
+        Route::get('/statistik', [StatistikController::class, 'index'])->name('statistik');
     });
 });
 
