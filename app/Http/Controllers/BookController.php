@@ -16,16 +16,17 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search ?? '';
+        $search   = $request->search   ?? '';
         $category = $request->category ?? '';
+        $filter   = $request->filter   ?? ''; // 'low' | 'out'
 
         $query = Book::query();
 
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
+                $q->where('title',  'like', "%{$search}%")
                   ->orWhere('author', 'like', "%{$search}%")
-                  ->orWhere('isbn', 'like', "%{$search}%");
+                  ->orWhere('isbn',   'like', "%{$search}%");
             });
         }
 
@@ -33,10 +34,20 @@ class BookController extends Controller
             $query->where('category', $category);
         }
 
-        $books = $query->latest()->paginate(10);
-        $categories = Book::select('category')->distinct()->pluck('category')->filter();
+        if ($filter === 'low') {
+            $query->where('stock', '<=', 3)->where('stock', '>', 0);
+        } elseif ($filter === 'out') {
+            $query->where('stock', 0);
+        }
 
-        return view('admin.books.index', compact('books', 'categories', 'search', 'category'));
+        $books           = $query->latest()->paginate(10)->withQueryString();
+        $categories      = Book::select('category')->distinct()->pluck('category')->filter();
+        $lowStockCount   = Book::where('stock', '<=', 3)->where('stock', '>', 0)->count();
+        $outOfStockCount = Book::where('stock', 0)->count();
+
+        return view('admin.books.index', compact(
+            'books', 'categories', 'search', 'category', 'filter', 'lowStockCount', 'outOfStockCount'
+        ));
     }
 
     /**

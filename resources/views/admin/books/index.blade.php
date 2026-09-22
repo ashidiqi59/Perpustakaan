@@ -55,6 +55,44 @@
                         </form>
                     </div>
 
+                    {{-- FILTER TABS STOK --}}
+                    @php
+                        $filterVal    = $filter ?? '';
+                        $lowCount     = $lowStockCount   ?? 0;
+                        $outCount     = $outOfStockCount ?? 0;
+                    @endphp
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <a href="{{ route($rp.'.books.index', array_filter(['search' => $search, 'category' => $category])) }}"
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors
+                                  {{ !$filterVal ? 'bg-slate-800 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-400' }}">
+                            <i class="fas fa-list text-[10px]"></i> Semua Buku
+                        </a>
+                        <a href="{{ route($rp.'.books.index', array_filter(['search' => $search, 'category' => $category, 'filter' => 'low'])) }}"
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors
+                                  {{ $filterVal === 'low' ? 'bg-amber-500 text-white' : 'bg-white text-amber-700 border border-amber-200 hover:border-amber-400' }}">
+                            <i class="fas fa-exclamation-circle text-[10px]"></i>
+                            Stok Rendah
+                            @if($lowCount > 0)
+                                <span class="ml-0.5 px-1.5 py-0.5 text-[10px] font-bold rounded-full
+                                             {{ $filterVal === 'low' ? 'bg-amber-400 text-white' : 'bg-amber-100 text-amber-700' }}">
+                                    {{ $lowCount }}
+                                </span>
+                            @endif
+                        </a>
+                        <a href="{{ route($rp.'.books.index', array_filter(['search' => $search, 'category' => $category, 'filter' => 'out'])) }}"
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors
+                                  {{ $filterVal === 'out' ? 'bg-red-500 text-white' : 'bg-white text-red-700 border border-red-200 hover:border-red-400' }}">
+                            <i class="fas fa-times-circle text-[10px]"></i>
+                            Stok Habis
+                            @if($outCount > 0)
+                                <span class="ml-0.5 px-1.5 py-0.5 text-[10px] font-bold rounded-full
+                                             {{ $filterVal === 'out' ? 'bg-red-400 text-white' : 'bg-red-100 text-red-700' }}">
+                                    {{ $outCount }}
+                                </span>
+                            @endif
+                        </a>
+                    </div>
+
                     <!-- BOOKS TABLE -->
                     <div id="books-table-wrapper" class="bg-white rounded-xl shadow-sm overflow-hidden">
                         @if($books->count() > 0)
@@ -211,11 +249,13 @@
             if (pageUrl) {
                 url = new URL(pageUrl, window.location.origin);
             } else {
-                url = new URL('{{ route('admin.books.index') }}', window.location.origin);
+                url = new URL('{{ route($rp.'.books.index') }}', window.location.origin);
                 var q = searchInput ? searchInput.value.trim() : '';
                 var cat = categorySelect ? categorySelect.value : '';
+                var currentFilter = new URLSearchParams(window.location.search).get('filter') || '';
                 if (q) url.searchParams.set('search', q);
                 if (cat) url.searchParams.set('category', cat);
+                if (currentFilter) url.searchParams.set('filter', currentFilter);
             }
 
             fetch(url.toString(), {
