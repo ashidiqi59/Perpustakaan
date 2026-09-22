@@ -95,9 +95,19 @@
                                                     </span>
                                                 </td>
                                                 <td class="px-3 py-3">
-                                                    <span class="px-2 py-1 {{ $book->stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} text-xs rounded-full">
-                                                        {{ $book->stock }}
-                                                    </span>
+                                                    @if($book->stock === 0)
+                                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full border border-red-200" title="Stok Habis">
+                                                            <i class="fas fa-times-circle text-[10px]"></i> Habis
+                                                        </span>
+                                                    @elseif($book->stock <= 3)
+                                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full border border-amber-200" title="Stok Rendah">
+                                                            <i class="fas fa-exclamation-circle text-[10px]"></i> {{ $book->stock }}
+                                                        </span>
+                                                    @else
+                                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200" title="Stok Aman">
+                                                            <i class="fas fa-check-circle text-[10px]"></i> {{ $book->stock }}
+                                                        </span>
+                                                    @endif
                                                 </td>
                                                 <td class="px-3 py-3">
                                                     <div class="flex items-center justify-center gap-1">
